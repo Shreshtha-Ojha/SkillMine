@@ -346,9 +346,9 @@ export default function Home() {
             {/* New Modern Sections */}
             <MemoizedNewHero />
             <MemoizedStatsSection />
-            <MemoizedGitHubWrappedPromo />
-            <MemoizedFeaturesGrid />
             <MemoizedPremiumDeals />
+            <MemoizedFeaturesGrid />
+            <MemoizedGitHubWrappedPromo />
             <MemoizedPrepareSection />
             <MemoizedHowItWorks />
             <MemoizedFAQSection />

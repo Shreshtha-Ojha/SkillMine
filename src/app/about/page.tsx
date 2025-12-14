@@ -143,38 +143,67 @@ export default function AboutPage() {
   const journeySteps = [
     {
       step: 1,
-      icon: Users,
-      title: "Sign Up",
-      description: "Create your free account",
+      icon: Map,
+      title: "Follow Roadmaps",
+      description: "Start with curated learning paths to acquire skills.",
       color: "from-blue-500 to-cyan-500",
+      link: "/explore",
     },
     {
       step: 2,
-      icon: Map,
-      title: "Choose a Roadmap",
-      description: "Pick your learning path",
-      color: "from-purple-500 to-pink-500",
+      icon: CheckCircle,
+      title: "Skill Tests",
+      description: "Assess your skills with real-world coding tests.",
+      color: "from-teal-500 to-green-500",
+      link: "/skill-tests",
     },
     {
       step: 3,
-      icon: CheckCircle,
-      title: "Complete Topics",
-      description: "Learn & mark progress",
-      color: "from-green-500 to-emerald-500",
+      icon: Award,
+      title: "Earn Certificates",
+      description: "Complete roadmaps and score 60% or more to get certified.",
+      color: "from-yellow-500 to-orange-500",
+      link: "/explore",
     },
     {
       step: 4,
-      icon: FileText,
-      title: "Take the Test",
-      description: "40 questions, 30 mins",
-      color: "from-yellow-500 to-orange-500",
+      icon: Users,
+      title: "Interview Experiences",
+      description: "Read and share real interview stories to prepare better.",
+      color: "from-pink-500 to-purple-500",
+      link: "/interview-experiences",
     },
     {
       step: 5,
-      icon: Award,
-      title: "Earn Certificate",
-      description: "Showcase on profile",
-      color: "from-pink-500 to-red-500",
+      icon: FileText,
+      title: "Resume Builder",
+      description: "Create ATS-friendly resumes and improve your chances.",
+      color: "from-indigo-500 to-violet-500",
+      link: "/resume-builder",
+    },
+    {
+      step: 6,
+      icon: FileSearch,
+      title: "ATS Checker",
+      description: "Get AI feedback on your resume to make it better.",
+      color: "from-green-500 to-emerald-500",
+      link: "/ats-checker",
+    },
+    {
+      step: 7,
+      icon: Mic,
+      title: "Mock Interviews",
+      description: "Practice with AI-powered mock interviews to gain confidence.",
+      color: "from-purple-500 to-pink-500",
+      link: "/interview",
+    },
+    {
+      step: 8,
+      icon: Briefcase,
+      title: "Company Problems",
+      description: "Solve premium problems to prepare for top companies.",
+      color: "from-orange-500 to-red-500",
+      link: "/company-problems",
     },
   ];
 
@@ -246,6 +275,96 @@ export default function AboutPage() {
           </p>
         </motion.section>
 
+        {/* User Journey Flow */}
+        <section className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Your Learning Journey
+            </h2>
+            <p className="text-gray-400">
+              From signup to certification in 5 simple steps
+            </p>
+          </motion.div>
+
+          {/* Desktop Flow */}
+          <div className="hidden lg:block relative">
+            <div className="flex justify-between items-start">
+              {journeySteps.map((step, index) => (
+                <motion.div
+                  key={step.step}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex flex-col items-center text-center w-1/5 relative cursor-pointer"
+                  onClick={() => router.push(step.link)}
+                >
+                  {/* Step Number */}
+                  <div
+                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-lg`}
+                  >
+                    <step.icon className="w-8 h-8 text-white" />
+                  </div>
+
+                  {/* Connector Arrow */}
+                  {index < journeySteps.length - 1 && (
+                    <div className="absolute top-8 left-[60%] w-[80%] flex items-center">
+                      <div className="flex-1 h-0.5 bg-gradient-to-r from-white/30 to-white/10" />
+                      <ArrowRight className="w-5 h-5 text-white/30" />
+                    </div>
+                  )}
+
+                  <div className="text-xs text-gray-500 mb-1">
+                    Step {step.step}
+                  </div>
+                  <h4 className="text-white font-semibold mb-1">
+                    {step.title}
+                  </h4>
+                  <p className="text-gray-500 text-sm">{step.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Flow */}
+          <div className="lg:hidden space-y-4">
+            {journeySteps.map((step, index) => (
+              <motion.div
+                key={step.step}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex gap-4"
+              >
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center`}
+                  >
+                    <step.icon className="w-6 h-6 text-white" />
+                  </div>
+                  {index < journeySteps.length - 1 && (
+                    <div className="w-0.5 flex-1 bg-gradient-to-b from-white/30 to-transparent mt-2" />
+                  )}
+                </div>
+                <div className="flex-1 pb-6">
+                  <div className="text-xs text-gray-500 mb-1">
+                    Step {step.step}
+                  </div>
+                  <h4 className="text-white font-semibold">{step.title}</h4>
+                  <p className="text-gray-500 text-sm">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+
         {/* Features Flowchart */}
         <section className="mb-20">
           <motion.div
@@ -312,94 +431,6 @@ export default function AboutPage() {
                       <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-white group-hover:translate-x-1 transition-all" />
                     </motion.div>
                   ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* User Journey Flow */}
-        <section className="mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Your Learning Journey
-            </h2>
-            <p className="text-gray-400">
-              From signup to certification in 5 simple steps
-            </p>
-          </motion.div>
-
-          {/* Desktop Flow */}
-          <div className="hidden lg:block relative">
-            <div className="flex justify-between items-start">
-              {journeySteps.map((step, index) => (
-                <motion.div
-                  key={step.step}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex flex-col items-center text-center w-1/5 relative"
-                >
-                  {/* Step Number */}
-                  <div
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-lg`}
-                  >
-                    <step.icon className="w-8 h-8 text-white" />
-                  </div>
-
-                  {/* Connector Arrow */}
-                  {index < journeySteps.length - 1 && (
-                    <div className="absolute top-8 left-[60%] w-[80%] flex items-center">
-                      <div className="flex-1 h-0.5 bg-gradient-to-r from-white/30 to-white/10" />
-                      <ArrowRight className="w-5 h-5 text-white/30" />
-                    </div>
-                  )}
-
-                  <div className="text-xs text-gray-500 mb-1">
-                    Step {step.step}
-                  </div>
-                  <h4 className="text-white font-semibold mb-1">
-                    {step.title}
-                  </h4>
-                  <p className="text-gray-500 text-sm">{step.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile Flow */}
-          <div className="lg:hidden space-y-4">
-            {journeySteps.map((step, index) => (
-              <motion.div
-                key={step.step}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex gap-4"
-              >
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center`}
-                  >
-                    <step.icon className="w-6 h-6 text-white" />
-                  </div>
-                  {index < journeySteps.length - 1 && (
-                    <div className="w-0.5 flex-1 bg-gradient-to-b from-white/30 to-transparent mt-2" />
-                  )}
-                </div>
-                <div className="flex-1 pb-6">
-                  <div className="text-xs text-gray-500 mb-1">
-                    Step {step.step}
-                  </div>
-                  <h4 className="text-white font-semibold">{step.title}</h4>
-                  <p className="text-gray-500 text-sm">{step.description}</p>
                 </div>
               </motion.div>
             ))}

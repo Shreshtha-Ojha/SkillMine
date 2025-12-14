@@ -92,9 +92,25 @@ export default function PremiumDeals() {
       popular: false,
       link: "/skill-tests"
     },
-
-
-
+    {
+      id: "interview-experiences",
+      title: "Interview Experiences",
+      subtitle: "Real stories from top companies",
+      price: 0,
+      originalPrice: 49,
+      icon: Users,
+      gradient: "from-pink-500 via-purple-500 to-indigo-500",
+      bgGlow: "bg-pink-500/20",
+      borderColor: "border-pink-500/30",
+      features: [
+        "Read and share real interview stories",
+        "Insights from Google, Amazon, Meta, and more",
+        "Community-driven content",
+        "Free to access"
+      ],
+      popular: false,
+      link: "/interview-experiences"
+    },
   ];
 
   return (

@@ -98,13 +98,15 @@ function WorkCard({
 }
 
 /* ------------------ LIVE WORKS SECTION ------------------ */
-export default function LiveWorksSection() {
+type Project = { name: string; desc: string; live: boolean; link: string; cover: string };
+
+export default function LiveWorksSection({ projects }: { projects: Project[] }) {
   return (
     <section id="work" className="w-full px-4 py-20 bg-[#05050a] relative overflow-hidden">
       {/* Minimal grid bg */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-<div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
@@ -151,44 +153,16 @@ export default function LiveWorksSection() {
 
         {/* WORK CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <WorkCard
-            title="Personal Portfolio"
-            tag="Static · Modern UI"
-            href="https://yourportfolio.com"
-            imageSrc="/assets/portfolio.png"
-            description="Next.js & Tailwind"
-          />
-          <WorkCard
-            title="E-commerce Store"
-            tag="Dynamic · Payments"
-            href="https://yourecommerce.com"
-            imageSrc="/assets/linkedin.png"
-            description="Stripe · CMS"
-          />
-          <WorkCard
-            title="CRM Dashboard"
-            tag="Full-stack · Auth + DB"
-            href="https://yourcrm.com"
-            description="MongoDB · Auth"
-          />
-          <WorkCard
-            title="Blog Platform"
-            tag="Content · SEO"
-            href="https://yourblog.com"
-            description="Headless CMS"
-          />
-          <WorkCard
-            title="Resume Builder"
-            tag="Tools · Export PDFs"
-            href="https://resumebuilder.com"
-            description="React · PDF Export"
-          />
-          <WorkCard
-            title="Interview Prep"
-            tag="Practice · Data-Driven"
-            href="https://interviewprep.com"
-            description="SWR · Auth"
-          />
+          {projects.map((project) => (
+            <WorkCard
+              key={project.name}
+              title={project.name}
+              tag={project.desc}
+              href={project.link}
+              imageSrc={project.cover}
+              description={project.live ? "Live" : "Coming Soon"}
+            />
+          ))}
         </div>
       </div>
     </section>

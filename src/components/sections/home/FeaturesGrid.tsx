@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Map, Mic, BarChart3, PenLine, Award, ArrowRight, FileText, Brain } from "lucide-react";
+import { Map, Mic, BarChart3, PenLine, Award, ArrowRight, FileText, Brain, ClipboardList, Users } from "lucide-react";
+import useCurrentUser from "@/lib/useCurrentUser";
 
 const features = [
   {
@@ -53,10 +54,25 @@ const features = [
     link: "/ats-checker",
     color: "from-rose-500 to-pink-500",
   },
+  {
+    icon: ClipboardList,
+    title: "Skill Test",
+    description: "Assess your skills with real-world coding tests",
+    link: "/skill-tests",
+    color: "from-teal-500 to-green-500",
+  },
+  {
+    icon: Users,
+    title: "Interview Experiences",
+    description: "Read and share real interview stories",
+    link: "/interview-experiences",
+    color: "from-pink-500 to-purple-500",
+  },
 ];
 
 export default function FeaturesGrid() {
   const router = useRouter();
+  const user = useCurrentUser();
 
   return (
     <section className="w-full py-24 px-4 bg-[#0a0a0f]">
@@ -99,18 +115,19 @@ export default function FeaturesGrid() {
               </div>
             </button>
           ))}
-          
-          {/* CTA Card */}
-          <div className="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/20 rounded-2xl flex flex-col justify-center">
-            <h3 className="text-lg font-semibold text-white mb-2">Ready to start?</h3>
-            <p className="text-gray-400 text-sm mb-4">Begin your journey today—it's free.</p>
-            <button
-              onClick={() => router.push("/auth/signup")}
-              className="w-fit px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all"
-            >
-              Create Account
-            </button>
-          </div>
+          {/* CTA Card: Only show if not logged in */}
+          {user === null && (
+            <div className="p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/20 rounded-2xl flex flex-col justify-center">
+              <h3 className="text-lg font-semibold text-white mb-2">Ready to start?</h3>
+              <p className="text-gray-400 text-sm mb-4">Begin your journey today—it's free.</p>
+              <button
+                onClick={() => router.push("/auth/signup")}
+                className="w-fit px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all"
+              >
+                Create Account
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>
