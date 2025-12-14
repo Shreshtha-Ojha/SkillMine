@@ -9,7 +9,6 @@ import {
   ArrowRight,
   Zap,
   FileText,
-  MessageSquare,
   Code,
   Trophy,
   Star,
@@ -72,66 +71,9 @@ export default function PremiumDeals() {
       popular: true,
       link: "/company-problems"
     },
-    {
-      id: "mock-interviews",
-      title: "AI Mock Interviews",
-      subtitle: "Unlimited Practice",
-      price: pricing.mockInterviews,
-      originalPrice: 99,
-      icon: MessageSquare,
-      gradient: "from-blue-500 via-cyan-500 to-teal-500",
-      bgGlow: "bg-blue-500/20",
-      borderColor: "border-blue-500/30",
-      features: [
-        "Unlimited mock interviews",
-        "AI-powered feedback",
-        "Technical & behavioral rounds",
-        "Real-time scoring",
-        "Detailed improvement tips"
-      ],
-      popular: false,
-      link: "/interview"
-    },
-    {
-      id: "resume-screening",
-      title: "AI Resume Screening",
-      subtitle: "Get Noticed Faster",
-      price: pricing.resumeScreeningPremium,
-      originalPrice: 49,
-      icon: FileText,
-      gradient: "from-purple-500 via-violet-500 to-indigo-500",
-      bgGlow: "bg-purple-500/20",
-      borderColor: "border-purple-500/30",
-      features: [
-        "AI-powered resume analysis",
-        "ATS compatibility check",
-        "Keyword optimization",
-        "Detailed feedback",
-        "Improvement suggestions"
-      ],
-      popular: false,
-      link: "/resume-screening"
-    },
-    {
-      id: "coding-arena",
-      title: "Coding Arena Access",
-      subtitle: "Premium Contests",
-      price: pricing.topInterviews,
-      originalPrice: 49,
-      icon: Trophy,
-      gradient: "from-green-500 via-emerald-500 to-teal-500",
-      bgGlow: "bg-green-500/20",
-      borderColor: "border-green-500/30",
-      features: [
-        "Access to all premium contests",
-        "Earn certifications",
-        "Leaderboard ranking",
-        "Detailed solutions",
-        "Company-specific tests"
-      ],
-      popular: false,
-      link: "/top-interviews"
-    }
+
+
+
   ];
 
   return (

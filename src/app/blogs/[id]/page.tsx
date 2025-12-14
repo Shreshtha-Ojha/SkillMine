@@ -273,7 +273,7 @@ export default function BlogDetailPage() {
               <img
                 src={blog.coverImage}
                 alt={blog.title}
-                className="w-full h-64 sm:h-80 md:h-96 object-cover"
+                className="w-full h-64 sm:h-80 md:h-96 object-contain object-center bg-black"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
             </div>
@@ -341,7 +341,7 @@ export default function BlogDetailPage() {
             prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-white/5 prose-blockquote:rounded-r-lg prose-blockquote:pl-6 prose-blockquote:py-4 prose-blockquote:italic prose-blockquote:text-gray-300
             prose-ul:text-gray-300 prose-ol:text-gray-300
             prose-li:marker:text-blue-400
-            prose-img:rounded-xl prose-img:shadow-lg
+            prose-img:rounded-xl prose-img:shadow-lg prose-img:object-contain prose-img:object-center
             prose-hr:border-white/10
           ">
             {parse(blog.content)}

@@ -47,6 +47,9 @@ export default function TopInterviewsSection() {
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Available Interviews</h2>
         <p className="text-gray-500 text-sm">{interviews.length} interview{interviews.length !== 1 ? 's' : ''} available</p>
+        <div className="mt-2 inline-flex items-center gap-2 px-3 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-sm text-yellow-400">
+          Using Gemini free plan — 10 requests/day. May be rate-limited or unreliable.
+        </div>
       </div>
 
       {/* Grid */}

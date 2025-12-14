@@ -11,10 +11,10 @@ const certificationSchema = new Schema({
   
   // Test results
   testAttemptId: { type: Schema.Types.ObjectId, ref: "TestAttempt" },
-  score: { type: Number, required: true }, // Total score out of 100
+  score: { type: Number, required: true }, // Total score out of 60
   percentage: { type: Number, required: true },
   mcqScore: { type: Number }, // Out of 60
-  shortAnswerScore: { type: Number }, // Out of 40
+  // shortAnswerScore removed for MCQ-only certifications
   
   // Certificate details
   certificateId: { type: String, required: true, unique: true }, // Unique certificate ID
@@ -26,7 +26,7 @@ const certificationSchema = new Schema({
 
 // Index for efficient queries
 certificationSchema.index({ userId: 1, roadmapId: 1 }, { unique: true });
-certificationSchema.index({ certificateId: 1 });
+// `certificateId` is already unique on the field, avoid duplicate index declaration
 
 if (mongoose.models.Certification) {
   delete mongoose.models.Certification;

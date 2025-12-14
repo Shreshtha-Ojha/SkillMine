@@ -30,10 +30,6 @@ interface MCQQuestion {
   marks: number;
 }
 
-interface ShortAnswerQuestion {
-  question: string;
-  marks: number;
-}
 
 interface Test {
   _id: string;
@@ -43,17 +39,15 @@ interface Test {
   totalMarks: number;
   passingPercentage: number;
   mcqQuestions: MCQQuestion[];
-  shortAnswerQuestions: ShortAnswerQuestion[];
+  // shortAnswerQuestions: ShortAnswerQuestion[];
 }
 
 interface Result {
   mcqScore: number;
-  shortAnswerScore: number;
   totalScore: number;
   percentage: number;
   passed: boolean;
   mcqResults: any[];
-  shortAnswerScores: any[];
 }
 
 // Loading component for Suspense fallback
@@ -81,13 +75,16 @@ function RoadmapTestContent() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [certification, setCertification] = useState<any>(null);
+  const [attemptId, setAttemptId] = useState<string | null>(null);
 
   // Test state
-  const [currentSection, setCurrentSection] = useState<"mcq" | "short">("mcq");
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // Keep a simple section state (default to MCQ). Short-answer removed, but keep this
+  // to avoid runtime references from old code paths.
+  const [currentSection, setCurrentSection] = useState<"mcq" | "short">("mcq");
   const [mcqAnswers, setMcqAnswers] = useState<(number | null)[]>([]);
-  const [shortAnswers, setShortAnswers] = useState<string[]>([]);
-  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
+  // short answers removed for MCQ-only flow
+  const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes in seconds
 
   // Eligibility check
   const [eligibility, setEligibility] = useState<any>(null);
@@ -95,6 +92,8 @@ function RoadmapTestContent() {
   // Profile popup state
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [profileMissing, setProfileMissing] = useState<string[]>([]);
+  const [requestingRetry, setRequestingRetry] = useState(false);
+  const [retryRequested, setRetryRequested] = useState(false);
   
   // Fullscreen and tab switch detection
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -120,14 +119,12 @@ function RoadmapTestContent() {
         if (data.hasAttempted && !data.canRetry) {
           setError("You have already taken this test");
           setResult({
-            mcqScore: data.attempt?.mcqScore || 0,
-            shortAnswerScore: data.attempt?.shortAnswerScore || 0,
-            totalScore: data.attempt?.totalScore || 0,
-            percentage: data.attempt?.percentage || 0,
-            passed: data.attempt?.passed || false,
-            mcqResults: [],
-            shortAnswerScores: data.attempt?.shortAnswerScores || [],
-          });
+              mcqScore: data.attempt?.mcqScore || 0,
+              totalScore: data.attempt?.totalScore || 0,
+              percentage: data.attempt?.percentage || 0,
+              passed: data.attempt?.passed || false,
+              mcqResults: [],
+            });
         } else if (!data.canTakeTest && !data.hasAttempted) {
           if (!data.hasFullDetails) {
             // Show popup instead of error
@@ -169,9 +166,9 @@ function RoadmapTestContent() {
       }
 
       setTest(data.test);
+      setAttemptId(data.attemptId || null);
       setMcqAnswers(new Array(data.test.mcqQuestions.length).fill(null));
-      setShortAnswers(new Array(data.test.shortAnswerQuestions.length).fill(""));
-      setTimeLeft(data.test.duration * 60);
+      setTimeLeft((data.test.duration || 60) * 60);
     } catch (err: any) {
       setError(err.message);
     }
@@ -198,6 +195,13 @@ function RoadmapTestContent() {
   // Exit fullscreen
   const exitFullscreen = useCallback(() => {
     try {
+      // Only attempt to exit if the document is currently in fullscreen
+      const isFull = !!(document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
+      if (!isFull) {
+        setIsFullscreen(false);
+        return;
+      }
+
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if ((document as any).webkitExitFullscreen) {
@@ -279,14 +283,29 @@ function RoadmapTestContent() {
     const newAnswers = [...mcqAnswers];
     newAnswers[currentQuestion] = optionIndex;
     setMcqAnswers(newAnswers);
+    // trigger autosave (debounced)
+    scheduleAutosave(newAnswers);
   };
 
-  // Handle short answer
-  const handleShortAnswer = (answer: string) => {
-    const newAnswers = [...shortAnswers];
-    newAnswers[currentQuestion] = answer;
-    setShortAnswers(newAnswers);
+  // Autosave logic (debounced)
+  const autosaveTimerRef = React.useRef<number | null>(null);
+  const scheduleAutosave = (answers: (number | null)[]) => {
+    if (!attemptId) return; // no attempt to save to
+    if (autosaveTimerRef.current) window.clearTimeout(autosaveTimerRef.current);
+    autosaveTimerRef.current = window.setTimeout(async () => {
+      try {
+        await fetch('/api/roadmap-test/attempt/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attemptId, mcqAnswers: answers }),
+        });
+      } catch (e) {
+        console.log('Autosave failed', e);
+      }
+    }, 1200);
   };
+
+  // short answers removed
 
   // Navigation
   const goToQuestion = (index: number) => {
@@ -294,25 +313,13 @@ function RoadmapTestContent() {
   };
 
   const nextQuestion = () => {
-    if (currentSection === "mcq") {
-      if (currentQuestion < (test?.mcqQuestions.length || 0) - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        setCurrentSection("short");
-        setCurrentQuestion(0);
-      }
-    } else {
-      if (currentQuestion < (test?.shortAnswerQuestions.length || 0) - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-      }
+    if (currentQuestion < (test?.mcqQuestions.length || 0) - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     }
   };
 
   const prevQuestion = () => {
-    if (currentSection === "short" && currentQuestion === 0) {
-      setCurrentSection("mcq");
-      setCurrentQuestion((test?.mcqQuestions.length || 1) - 1);
-    } else if (currentQuestion > 0) {
+    if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
@@ -330,8 +337,8 @@ function RoadmapTestContent() {
         body: JSON.stringify({
           testId: test._id,
           roadmapId: test.roadmapId,
+          attemptId,
           mcqAnswers,
-          shortAnswers,
         }),
       });
 
@@ -369,11 +376,10 @@ function RoadmapTestContent() {
     if (!test || submitting) return;
 
     const unansweredMcq = mcqAnswers.filter((a) => a === null).length;
-    const unansweredShort = shortAnswers.filter((a) => !a.trim()).length;
 
-    if (unansweredMcq > 0 || unansweredShort > 0) {
+    if (unansweredMcq > 0) {
       const confirm = window.confirm(
-        `You have ${unansweredMcq} unanswered MCQs and ${unansweredShort} unanswered short questions. Submit anyway?`
+        `You have ${unansweredMcq} unanswered MCQs. Submit anyway?`
       );
       if (!confirm) return;
     }
@@ -386,8 +392,8 @@ function RoadmapTestContent() {
         body: JSON.stringify({
           testId: test._id,
           roadmapId: test.roadmapId,
+          attemptId,
           mcqAnswers,
-          shortAnswers,
         }),
       });
 
@@ -504,22 +510,18 @@ function RoadmapTestContent() {
                 : "You need at least 60% to pass. Contact admin if you need to retry."}
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
               <div className="p-4 bg-white/5 rounded-xl">
                 <div className="text-3xl font-bold text-white">{result.percentage}%</div>
                 <div className="text-sm text-gray-500">Total Score</div>
               </div>
               <div className="p-4 bg-white/5 rounded-xl">
                 <div className="text-3xl font-bold text-white">{result.totalScore}</div>
-                <div className="text-sm text-gray-500">Out of 100</div>
+                <div className="text-sm text-gray-500">Out of 60</div>
               </div>
               <div className="p-4 bg-white/5 rounded-xl">
                 <div className="text-3xl font-bold text-blue-400">{result.mcqScore}</div>
                 <div className="text-sm text-gray-500">MCQ (60)</div>
-              </div>
-              <div className="p-4 bg-white/5 rounded-xl">
-                <div className="text-3xl font-bold text-purple-400">{result.shortAnswerScore}</div>
-                <div className="text-sm text-gray-500">Short (40)</div>
               </div>
             </div>
 
@@ -536,6 +538,39 @@ function RoadmapTestContent() {
                 >
                   View in Profile
                 </button>
+              </div>
+            )}
+
+            {/* If user already attempted and cannot retry, show contact/request banner */}
+            {eligibility?.hasAttempted && !eligibility?.canRetry && (
+              <div className="p-4 mb-6 bg-yellow-900/10 border border-yellow-500/20 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <div className="flex-1">
+                    <div className="text-sm text-yellow-300 font-semibold">You have already taken this test</div>
+                    <div className="text-xs text-gray-300">Your previous result is shown above. To retake the test, please contact an admin to allow a retry.</div>
+                    <div className="mt-2 flex gap-2">
+                      <a href="/contact-support" className="px-3 py-1 bg-white/5 text-white rounded">Contact Support</a>
+                      <button
+                        onClick={async () => {
+                          try {
+                            setRequestingRetry(true);
+                            const res = await fetch('/api/roadmap-test/request-retry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attemptId: eligibility?.attempt?._id, roadmapId: eligibility?.attempt?.roadmapId }) });
+                            const data = await res.json();
+                            if (!res.ok) throw new Error(data?.error || 'Request failed');
+                            toast.success(data.message || 'Retry request sent to admin');
+                            setRetryRequested(true);
+                          } catch (e: any) {
+                            toast.error(e?.message || 'Failed to request retry');
+                          } finally { setRequestingRetry(false); }
+                        }}
+                        disabled={requestingRetry || retryRequested}
+                        className="px-3 py-1 bg-yellow-500 text-black rounded disabled:opacity-50"
+                      >
+                        {retryRequested ? 'Requested' : requestingRetry ? 'Requesting...' : 'Request Retry'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -666,17 +701,17 @@ function RoadmapTestContent() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-white/5 rounded-xl text-center">
                   <Clock className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">30</div>
+                  <div className="text-2xl font-bold text-white">60</div>
                   <div className="text-xs text-gray-500">Minutes</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-center">
                   <FileText className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">40</div>
+                  <div className="text-2xl font-bold text-white">60</div>
                   <div className="text-xs text-gray-500">Questions</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-center">
                   <Target className="w-6 h-6 text-green-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">100</div>
+                  <div className="text-2xl font-bold text-white">60</div>
                   <div className="text-xs text-gray-500">Total Marks</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-center">
@@ -719,20 +754,12 @@ function RoadmapTestContent() {
                 <div className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-white font-medium">Short Answer</span>
-                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-lg">Section 2</span>
+                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-lg">Removed</span>
                   </div>
                   <div className="space-y-2 text-sm text-gray-400">
                     <div className="flex justify-between">
-                      <span>Number of Questions</span>
-                      <span className="text-white font-medium">10</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Marks per Question</span>
-                      <span className="text-white font-medium">4 marks</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Total Marks</span>
-                      <span className="text-purple-400 font-medium">40 marks</span>
+                      <span>This certification is MCQ-only</span>
+                      <span className="text-white font-medium">—</span>
                     </div>
                   </div>
                 </div>
@@ -754,7 +781,7 @@ function RoadmapTestContent() {
                   <div>
                     <div className="text-white font-medium">Time Limit</div>
                     <div className="text-gray-400 text-sm">
-                      You have exactly 30 minutes. Timer starts immediately when you click "Start Test". Test auto-submits when time runs out.
+                      You have exactly 60 minutes. Timer starts immediately when you click "Start Test". Test auto-submits when time runs out.
                     </div>
                   </div>
                 </div>
@@ -776,10 +803,8 @@ function RoadmapTestContent() {
                     <span className="text-green-400 text-sm font-bold">3</span>
                   </div>
                   <div>
-                    <div className="text-white font-medium">Short Answer Evaluation</div>
-                    <div className="text-gray-400 text-sm">
-                      Short answers are evaluated by AI. Be clear and concise. Partial marks are awarded based on your answer quality.
-                    </div>
+                    <div className="text-white font-medium">Answering Guidelines</div>
+                    <div className="text-gray-400 text-sm">All questions are multiple-choice. Select the option you believe is correct. Each correct answer awards 1 mark.</div>
                   </div>
                 </div>
 
@@ -843,7 +868,7 @@ function RoadmapTestContent() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-white font-semibold mb-1">Ready to begin?</h3>
-                  <p className="text-gray-400 text-sm">Make sure you won't be interrupted for 30 minutes</p>
+                  <p className="text-gray-400 text-sm">Make sure you won't be interrupted for 60 minutes</p>
                 </div>
                 <button
                   onClick={handleStart}
@@ -873,11 +898,10 @@ function RoadmapTestContent() {
   // Test taking UI
   if (!test) return null;
 
-  const currentQuestions = currentSection === "mcq" ? test.mcqQuestions : test.shortAnswerQuestions;
-  const totalQuestions = test.mcqQuestions.length + test.shortAnswerQuestions.length;
+  const currentQuestions = test.mcqQuestions;
+  const totalQuestions = test.mcqQuestions.length;
   const answeredMcq = mcqAnswers.filter((a) => a !== null).length;
-  const answeredShort = shortAnswers.filter((a) => a.trim()).length;
-  const overallProgress = ((answeredMcq + answeredShort) / totalQuestions) * 100;
+  const overallProgress = (answeredMcq / totalQuestions) * 100;
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -925,10 +949,7 @@ function RoadmapTestContent() {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-400">
-                {currentSection === "mcq" ? "MCQ" : "Short Answer"} - Q{currentQuestion + 1}/
-                {currentQuestions.length}
-              </span>
+              <span className="text-sm text-gray-400">MCQ - Q{currentQuestion + 1}/{currentQuestions.length}</span>
               {/* Tab switch warning indicator */}
               {tabSwitchCount > 0 && (
                 <span className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-lg">
@@ -975,17 +996,16 @@ function RoadmapTestContent() {
 
             {/* MCQ Section */}
             <div className="mb-4">
-              <div className="text-xs text-gray-500 mb-2">MCQ ({answeredMcq}/30)</div>
+              <div className="text-xs text-gray-500 mb-2">MCQ ({answeredMcq}/{test.mcqQuestions.length})</div>
               <div className="grid grid-cols-6 gap-1">
                 {test.mcqQuestions.map((_, idx) => (
                   <button
                     key={`mcq-${idx}`}
                     onClick={() => {
-                      setCurrentSection("mcq");
                       setCurrentQuestion(idx);
                     }}
                     className={`w-8 h-8 text-xs rounded flex items-center justify-center transition-colors ${
-                      currentSection === "mcq" && currentQuestion === idx
+                      currentQuestion === idx
                         ? "bg-blue-600 text-white"
                         : mcqAnswers[idx] !== null
                         ? "bg-green-500/20 text-green-400 border border-green-500/30"
@@ -997,56 +1017,22 @@ function RoadmapTestContent() {
                 ))}
               </div>
             </div>
-
-            {/* Short Answer Section */}
-            <div>
-              <div className="text-xs text-gray-500 mb-2">Short Answer ({answeredShort}/10)</div>
-              <div className="grid grid-cols-6 gap-1">
-                {test.shortAnswerQuestions.map((_, idx) => (
-                  <button
-                    key={`short-${idx}`}
-                    onClick={() => {
-                      setCurrentSection("short");
-                      setCurrentQuestion(idx);
-                    }}
-                    className={`w-8 h-8 text-xs rounded flex items-center justify-center transition-colors ${
-                      currentSection === "short" && currentQuestion === idx
-                        ? "bg-purple-600 text-white"
-                        : shortAnswers[idx]?.trim()
-                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                        : "bg-white/5 text-gray-400 hover:bg-white/10"
-                    }`}
-                  >
-                    {idx + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Short answers removed - MCQ-only test */}
           </div>
         </aside>
 
         {/* Main Question Area */}
         <main className="flex-1 min-w-0">
           <motion.div
-            key={`${currentSection}-${currentQuestion}`}
+            key={currentQuestion}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="p-6 sm:p-8 bg-[#111118] border border-white/5 rounded-2xl"
           >
             {/* Question Type Badge */}
             <div className="flex items-center gap-2 mb-4">
-              <span
-                className={`px-3 py-1 text-xs font-medium rounded-full ${
-                  currentSection === "mcq"
-                    ? "bg-blue-500/10 text-blue-400"
-                    : "bg-purple-500/10 text-purple-400"
-                }`}
-              >
-                {currentSection === "mcq" ? "Multiple Choice" : "Short Answer"}
-              </span>
-              <span className="text-xs text-gray-500">
-                {currentSection === "mcq" ? "2 marks" : "4 marks"}
-              </span>
+              <span className="px-3 py-1 text-xs font-medium rounded-full bg-blue-500/10 text-blue-400">Multiple Choice</span>
+              <span className="text-xs text-gray-500">1 mark</span>
             </div>
 
             {/* Question */}
@@ -1055,47 +1041,34 @@ function RoadmapTestContent() {
             </h2>
 
             {/* Answer Options */}
-            {currentSection === "mcq" ? (
-              <div className="space-y-3">
-                {(currentQuestions[currentQuestion] as MCQQuestion).options.map((option, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleMcqAnswer(idx)}
-                    className={`w-full p-4 text-left rounded-xl border transition-all ${
-                      mcqAnswers[currentQuestion] === idx
-                        ? "bg-blue-500/10 border-blue-500/50 text-white"
-                        : "bg-white/5 border-white/5 text-gray-300 hover:bg-white/10 hover:border-white/10"
-                    }`}
-                  >
-                    <span className="font-medium mr-3">
-                      {String.fromCharCode(65 + idx)}.
-                    </span>
-                    {option}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <textarea
-                value={shortAnswers[currentQuestion]}
-                onChange={(e) => handleShortAnswer(e.target.value)}
-                placeholder="Type your answer here..."
-                className="w-full h-48 p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 resize-none focus:outline-none focus:border-purple-500/50 transition-colors"
-              />
-            )}
+            <div className="space-y-3">
+              {(currentQuestions[currentQuestion] as MCQQuestion).options.map((option, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleMcqAnswer(idx)}
+                  className={`w-full p-4 text-left rounded-xl border transition-all ${
+                    mcqAnswers[currentQuestion] === idx
+                      ? "bg-blue-500/10 border-blue-500/50 text-white"
+                      : "bg-white/5 border-white/5 text-gray-300 hover:bg-white/10 hover:border-white/10"
+                  }`}
+                >
+                  <span className="font-medium mr-3">{String.fromCharCode(65 + idx)}.</span>
+                  {option}
+                </button>
+              ))}
+            </div>
 
             {/* Navigation */}
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
               <button
                 onClick={prevQuestion}
-                disabled={currentSection === "mcq" && currentQuestion === 0}
+                disabled={currentQuestion === 0}
                 className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Previous
               </button>
-
-              {currentSection === "short" &&
-              currentQuestion === test.shortAnswerQuestions.length - 1 ? (
+              {currentQuestion === test.mcqQuestions.length - 1 ? (
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
@@ -1119,26 +1092,7 @@ function RoadmapTestContent() {
           {/* Mobile Question Navigator */}
           <div className="lg:hidden mt-6 p-4 bg-[#111118] border border-white/5 rounded-xl">
             <div className="flex gap-4 mb-4">
-              <button
-                onClick={() => setCurrentSection("mcq")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  currentSection === "mcq"
-                    ? "bg-blue-600 text-white"
-                    : "bg-white/5 text-gray-400"
-                }`}
-              >
-                MCQ ({answeredMcq}/30)
-              </button>
-              <button
-                onClick={() => setCurrentSection("short")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  currentSection === "short"
-                    ? "bg-purple-600 text-white"
-                    : "bg-white/5 text-gray-400"
-                }`}
-              >
-                Short ({answeredShort}/10)
-              </button>
+              <button className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors bg-blue-600 text-white`}>MCQ ({answeredMcq}/{test.mcqQuestions.length})</button>
             </div>
             <div className="flex flex-wrap gap-1">
               {currentQuestions.map((_, idx) => (
@@ -1147,14 +1101,8 @@ function RoadmapTestContent() {
                   onClick={() => setCurrentQuestion(idx)}
                   className={`w-8 h-8 text-xs rounded flex items-center justify-center ${
                     currentQuestion === idx
-                      ? currentSection === "mcq"
-                        ? "bg-blue-600 text-white"
-                        : "bg-purple-600 text-white"
-                      : currentSection === "mcq"
-                      ? mcqAnswers[idx] !== null
-                        ? "bg-green-500/20 text-green-400"
-                        : "bg-white/5 text-gray-400"
-                      : shortAnswers[idx]?.trim()
+                      ? "bg-blue-600 text-white"
+                      : mcqAnswers[idx] !== null
                       ? "bg-green-500/20 text-green-400"
                       : "bg-white/5 text-gray-400"
                   }`}

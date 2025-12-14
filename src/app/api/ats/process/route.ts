@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { extractTextFromPDF, extractTextWithOCR } from '@/lib/server/pdfExtract';
 
 function simpleGrammarScore(text: string) {
@@ -40,18 +40,45 @@ export async function POST(req: NextRequest) {
       const ab = await f.arrayBuffer();
       const buf = Buffer.from(ab);
       let res = await extractTextFromPDF(buf) as { text: string; pages: number };
-      resumeText = res.text;
-      pages = res.pages;
+      resumeText = res.text || '';
+      pages = res.pages || 0;
+
+      // If PDF extraction returns very little text, try OCR
       if ((resumeText || '').replace(/\s+/g, '').length < 200) {
         const o: any = await extractTextWithOCR(buf);
         if (o.ocrUnavailable) {
           // OCR not available on this host; keep extracted text (may be empty)
         } else {
-          resumeText = o.text;
-          pages = o.pages;
+          resumeText = o.text || '';
+          pages = o.pages || pages;
           ocrPerformed = true;
         }
       }
+
+      // Fallbacks: try UTF-8 decode or DOCX XML extraction for common docx/text files
+      if ((resumeText || '').replace(/\s+/g, '').length < 80) {
+        try {
+          const maybe = buf.toString('utf8');
+          if ((maybe || '').replace(/\s+/g, '').length > 80) {
+            resumeText = maybe;
+          }
+        } catch (_) {}
+      }
+
+      // If buffer contains DOCX XML-like tags, try to extract <w:t> text nodes
+      try {
+        const asStr = buf.toString('utf8');
+        if (asStr.includes('<w:t')) {
+          const matches = Array.from(asStr.matchAll(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g)).map(m => m[1].replace(/<[^>]+>/g, ''));
+          if (matches.length > 0) {
+            const docxText = matches.join('\n');
+            if (docxText.replace(/\s+/g, '').length > (resumeText || '').replace(/\s+/g, '').length) {
+              resumeText = docxText;
+            }
+          }
+        }
+      } catch (_) {}
+
     } else {
       // Try JSON body: { resumeText, jd }
       const body = await req.json().catch(() => ({}));
@@ -63,8 +90,9 @@ export async function POST(req: NextRequest) {
     const { scoreResume } = await import('@/lib/server/atsScorer');
     const report = scoreResume(resumeText, jd);
 
-    return NextResponse.json({ ...report, extractedTextLength: resumeText.length, ocrPerformed, pages });
+    return NextResponse.json({ ...report, extractedText: resumeText, extractedTextLength: resumeText.length, ocrPerformed, pages });
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || 'processing failed' }, { status: 500 });
   }
 }
+

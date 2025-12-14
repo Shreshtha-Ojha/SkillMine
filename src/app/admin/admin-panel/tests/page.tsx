@@ -22,7 +22,6 @@ interface TestAttempt {
   userId: string;
   roadmapId: string;
   mcqScore: number;
-  shortAnswerScore: number;
   totalScore: number;
   percentage: number;
   passed: boolean;
@@ -85,9 +84,16 @@ export default function TestManagementPage() {
   const handleAllowRetry = async (userId: string, roadmapId: string) => {
     setAllowingRetry(`${userId}-${roadmapId}`);
     try {
-      await axios.post("/api/roadmap-test/admin", { userId, roadmapId });
-      toast.success("User can now retry the test");
-      fetchAttempts(selectedRoadmap || undefined);
+      const res = await axios.post("/api/roadmap-test/admin", { userId, roadmapId });
+      const data = res.data || {};
+      if (data.attempts) {
+        // Update attempts from server response to reflect new canRetry state immediately
+        setAttempts(data.attempts);
+      } else {
+        // fallback: refresh
+        fetchAttempts(selectedRoadmap || undefined);
+      }
+      toast.success(data.message || "User can now retry the test");
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to allow retry");
     }
@@ -307,16 +313,13 @@ export default function TestManagementPage() {
                       <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div className="p-3 bg-white/5 rounded-lg">
                           <div className="text-lg font-semibold text-white">{attempt.totalScore}</div>
-                          <div className="text-xs text-gray-500">Total Score (100)</div>
+                          <div className="text-xs text-gray-500">Total Score (60)</div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg">
                           <div className="text-lg font-semibold text-blue-400">{attempt.mcqScore}</div>
                           <div className="text-xs text-gray-500">MCQ Score (60)</div>
                         </div>
-                        <div className="p-3 bg-white/5 rounded-lg">
-                          <div className="text-lg font-semibold text-purple-400">{attempt.shortAnswerScore}</div>
-                          <div className="text-xs text-gray-500">Short Answer (40)</div>
-                        </div>
+                        {/* Short answers removed for MCQ-only tests */}
                         <div className="p-3 bg-white/5 rounded-lg">
                           <div className="text-lg font-semibold text-gray-400">
                             {new Date(attempt.submittedAt).toLocaleTimeString()}

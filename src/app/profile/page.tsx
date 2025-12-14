@@ -627,7 +627,7 @@ export default function ProfilePage() {
 
 
         {/* Add Coding Profiles CTA (when no profiles exist) */}
-        {!codingProfiles?.github?.username && !codingProfiles?.leetcode?.username && 
+        {/* {!codingProfiles?.github?.username && !codingProfiles?.leetcode?.username && 
          !codingProfiles?.codeforces?.username && !codingProfiles?.codechef?.username && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -650,7 +650,7 @@ export default function ProfilePage() {
               Add Coding Profiles
             </button>
           </motion.div>
-        )}
+        )} */}
 
         {/* Tab Content */}
         {activeTab === 'overview' && (
@@ -1521,7 +1521,7 @@ export default function ProfilePage() {
                     </div>
                     <span className="text-white font-medium">Duration</span>
                   </div>
-                  <p className="text-gray-400 text-sm">30 minutes for each test</p>
+                  <p className="text-gray-400 text-sm">60 minutes for each test</p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
@@ -1532,7 +1532,7 @@ export default function ProfilePage() {
                     </div>
                     <span className="text-white font-medium">Questions</span>
                   </div>
-                  <p className="text-gray-400 text-sm">30 MCQ + 10 Short Answer = 40 Total</p>
+                  <p className="text-gray-400 text-sm">60 MCQ = 60 Total</p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
@@ -1609,7 +1609,6 @@ export default function ProfilePage() {
                         score: attempt.score,
                         percentage: attempt.percentage,
                         mcqScore: attempt.score,
-                        shortAnswerScore: 0,
                         issuedAt: attempt.completedAt,
                         totalMarks: attempt.totalMarks
                       });
@@ -1694,10 +1693,7 @@ export default function ProfilePage() {
                         <div className="text-lg font-bold text-blue-400">{cert.mcqScore || 0}</div>
                         <div className="text-[10px] text-gray-500">MCQ Score</div>
                       </div>
-                      <div className="p-3 bg-white/5 rounded-lg text-center">
-                        <div className="text-lg font-bold text-purple-400">{cert.shortAnswerScore || 0}</div>
-                        <div className="text-[10px] text-gray-500">Short Ans</div>
-                      </div>
+                      {/* Short answers removed for MCQ-only tests */}
                     </div>
 
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
@@ -1746,7 +1742,6 @@ export default function ProfilePage() {
               score: selectedCertificate.score,
               percentage: selectedCertificate.percentage,
               mcqScore: selectedCertificate.mcqScore,
-              shortAnswerScore: selectedCertificate.shortAnswerScore,
               issuedAt: selectedCertificate.issuedAt,
               userName: userData?.fullName || userData?.username || "Student"
             }}

@@ -7,6 +7,7 @@ const adminLinks = [
   { label: "Dashboard", href: "/admin/admin-panel", icon: <FaTachometerAlt /> },
   { label: "Create Roadmap", href: "/admin/admin-panel/roadmap-create", icon: <FaMap /> },
   { label: "Manage Roadmaps", href: "/admin/admin-panel/roadmaps", icon: <FaListAlt /> },
+  { label: "Test Questions", href: "/admin/admin-panel/roadmap-questions", icon: <FaClipboardList /> },
   { label: "Blog Requests", href: "/admin/blog-requests", icon: <FaPenFancy /> },
   { label: "Interview Experiences", href: "/admin/interview-experiences", icon: <FaClipboardList /> },
   { label: "Manage Blogs", href: "/admin/admin-panel/blogs", icon: <FaBlog /> },

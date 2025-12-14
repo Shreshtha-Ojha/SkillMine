@@ -127,30 +127,18 @@ export default function InterviewDashboard() {
   const [remainingFreeInterviews, setRemainingFreeInterviews] = useState<number | string>(1);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [subscriptionPrice, setSubscriptionPrice] = useState(10);
-  const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [checkingSubscription, setCheckingSubscription] = useState(true);
 
-  // Check subscription status on mount
+  // Check subscription status on mount (only to show remaining free interviews info)
   useEffect(() => {
     const checkSubscription = async () => {
       try {
-        const [statusRes, pricingRes] = await Promise.all([
-          fetch("/api/payment/mock-interviews"),
-          fetch("/api/admin/pricing")
-        ]);
-        
+        const statusRes = await fetch("/api/payment/mock-interviews");
         if (statusRes.ok) {
           const data = await statusRes.json();
           setIsSubscribed(data.subscribed || false);
           setCanInterview(data.canInterview !== false);
           setRemainingFreeInterviews(data.remainingFreeInterviews ?? 1);
-        }
-        
-        if (pricingRes.ok) {
-          const pricingData = await pricingRes.json();
-          if (pricingData.pricing?.mockInterviews) {
-            setSubscriptionPrice(pricingData.pricing.mockInterviews);
-          }
         }
       } catch (error) {
         console.error("Error checking subscription:", error);
@@ -158,39 +146,10 @@ export default function InterviewDashboard() {
         setCheckingSubscription(false);
       }
     };
-    
+
     checkSubscription();
   }, []);
 
-  // Handle subscription purchase
-  const handlePurchaseSubscription = async () => {
-    setPurchaseLoading(true);
-    try {
-      const response = await fetch("/api/payment/mock-interviews/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        alert(data.error || "Failed to create payment request. Please try again.");
-        setPurchaseLoading(false);
-        return;
-      }
-      
-      if (data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
-        alert("Payment URL not received. Please try again.");
-        setPurchaseLoading(false);
-      }
-    } catch (error) {
-      console.error("Payment error:", error);
-      alert("Failed to initiate payment. Please try again.");
-      setPurchaseLoading(false);
-    }
-  };
 
   // SpeechRecognition hook
   const {
@@ -563,84 +522,7 @@ export default function InterviewDashboard() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.06),transparent_50%)]" />
       </div>
       
-      {/* Subscription Modal */}
-      {showSubscriptionModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#111118] to-[#1a1a2e] border border-white/10 rounded-2xl p-6 md:p-8 max-w-md w-full">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-              </div>
-              <h2 className="text-xl font-bold text-white mb-2">
-                Daily Limit Reached
-              </h2>
-              <p className="text-gray-400 text-sm mb-6">
-                Free users can do 1 mock interview per day. Upgrade to premium for unlimited interviews!
-              </p>
-              
-              <div className="bg-white/5 rounded-xl p-4 mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-gray-400">Unlimited Interviews</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500 line-through text-sm">₹99</span>
-                    <span className="text-2xl font-bold text-white">₹{subscriptionPrice}</span>
-                  </div>
-                </div>
-                <div className="space-y-2 text-left">
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Unlimited mock interviews daily</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Detailed AI feedback</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
-                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Lifetime access - one-time payment</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={handlePurchaseSubscription}
-                  disabled={purchaseLoading}
-                  className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-400 hover:to-orange-400 transition flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {purchaseLoading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                      </svg>
-                      Get Premium - ₹{subscriptionPrice}
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => setShowSubscriptionModal(false)}
-                  className="text-gray-400 hover:text-white text-sm transition"
-                >
-                  Maybe later
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
       
       <div className="relative z-10 w-full max-w-6xl mx-auto py-6 md:py-12">
         <ResponsiveNavbar onNavigate={(path) => handleNavigation(() => router.push(path))} />
@@ -661,32 +543,10 @@ export default function InterviewDashboard() {
             Practice real interview questions, get instant feedback, and track your progress with our AI-powered system.
           </p>
           
-          {/* Subscription Status Banner */}
+          {/* Gemini Free-Plan Notice */}
           {!checkingSubscription && step === 0 && (
-            <div className="mt-4">
-              {isSubscribed ? (
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-sm text-green-400">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Premium Active - Unlimited Interviews
-                </div>
-              ) : (
-                <div className="inline-flex items-center gap-3 px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-sm">
-                  <span className="text-yellow-400">
-                    {canInterview 
-                      ? `Free: ${remainingFreeInterviews} interview${remainingFreeInterviews === 1 ? '' : 's'} left today`
-                      : "Daily limit reached"
-                    }
-                  </span>
-                  <button
-                    onClick={() => setShowSubscriptionModal(true)}
-                    className="text-xs px-3 py-1 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 rounded-full transition"
-                  >
-                    Upgrade ₹{subscriptionPrice}
-                  </button>
-                </div>
-              )}
+            <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-sm">
+              <span className="text-yellow-400">Using Gemini free plan — 10 requests/day. Service may be rate-limited or unreliable at times.</span>
             </div>
           )}
         </div>

@@ -4,107 +4,12 @@ import Roadmap from "@/models/roadmapModel";
 import User from "@/models/userModel";
 import { NextResponse, NextRequest } from "next/server";
 import { getDataFromToken } from "@/helpers/getToken";
-import { generateContentWithConfig } from "@/lib/gemini";
+
 
 connect();
 
-// Generate test questions using Gemini
-async function generateTestWithGemini(roadmap: any): Promise<{
-  mcqQuestions: any[];
-  shortAnswerQuestions: any[];
-}> {
-  const roadmapContent = roadmap.phases
-    .map((phase: any, idx: number) => {
-      const tasks = phase.tasks.map((t: any) => t.title).join(", ");
-      const assignments = phase.assignments.map((a: any) => a.title).join(", ");
-      return `Phase ${idx + 1}: ${phase.title}\nTopics: ${tasks}\nAssignments: ${assignments}`;
-    })
-    .join("\n\n");
-
-  const prompt = `You are a technical exam generator. Based on the following roadmap for "${roadmap.title}", generate a comprehensive certification test.
-
-ROADMAP CONTENT:
-${roadmapContent}
-
-Generate exactly:
-1. 30 Multiple Choice Questions (MCQ) - each worth 2 marks
-2. 10 Short Answer Questions - each worth 4 marks
-
-For MCQs:
-- Cover all phases proportionally
-- 4 options each (A, B, C, D)
-- Mix difficulty levels (easy, medium, hard)
-- Questions should test understanding, not just memorization
-
-For Short Answer Questions:
-- Questions should require 2-4 sentence answers
-- Test conceptual understanding and application
-- Provide expected answer for evaluation
-
-RESPOND IN THIS EXACT JSON FORMAT (no markdown, no code blocks, just pure JSON):
-{
-  "mcqQuestions": [
-    {
-      "question": "Question text here?",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": 0
-    }
-  ],
-  "shortAnswerQuestions": [
-    {
-      "question": "Question text here?",
-      "expectedAnswer": "Expected answer that covers the key points..."
-    }
-  ]
-}
-
-Important:
-- correctAnswer is the index (0-3) of the correct option
-- Ensure all 30 MCQs and 10 short answer questions are included
-- Questions should be relevant to the roadmap topics
-- Make questions challenging but fair
-- Be creative and generate unique, diverse questions each time`;
-
-  try {
-    const jsonText = await generateContentWithConfig(prompt, {
-      temperature: 0.9, // Higher temperature for more creative/diverse questions
-      maxOutputTokens: 8192,
-    });
-    
-    if (!jsonText) {
-      throw new Error("Invalid response from Gemini");
-    }
-
-    // Clean up the response - remove markdown code blocks if present
-    const cleanedText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-    
-    const parsed = JSON.parse(cleanedText);
-    
-    // Validate the response
-    if (!parsed.mcqQuestions || parsed.mcqQuestions.length < 30) {
-      throw new Error("Not enough MCQ questions generated");
-    }
-    if (!parsed.shortAnswerQuestions || parsed.shortAnswerQuestions.length < 10) {
-      throw new Error("Not enough short answer questions generated");
-    }
-
-    // Add marks to questions
-    const mcqQuestions = parsed.mcqQuestions.slice(0, 30).map((q: any) => ({
-      ...q,
-      marks: 2,
-    }));
-
-    const shortAnswerQuestions = parsed.shortAnswerQuestions.slice(0, 10).map((q: any) => ({
-      ...q,
-      marks: 4,
-    }));
-
-    return { mcqQuestions, shortAnswerQuestions };
-  } catch (error: any) {
-    console.error("Error generating test with Gemini:", error);
-    throw new Error(`Failed to generate test: ${error.message}`);
-  }
-}
+// NOTE: Auto-generation via Gemini has been removed. Admins should provide MCQ questions
+// in the admin panel. The system will pick 60 random MCQs for each user's test attempt.
 
 // POST: Generate or get test for a roadmap
 export async function POST(request: NextRequest) {
@@ -186,59 +91,55 @@ export async function POST(request: NextRequest) {
       test = null;
     }
 
-    // Generate new test if doesn't exist, expired, or admin requested regeneration
-    if (!test || (regenerate && user.isAdmin)) {
-      console.log(`Generating new test for roadmap: ${roadmap.title}`);
-      const { mcqQuestions, shortAnswerQuestions } = await generateTestWithGemini(roadmap);
-      
-      // Set expiration to 4 days from now
-      const expiresAt = new Date(Date.now() + 4 * 24 * 60 * 60 * 1000);
-      
-      if (test && regenerate) {
-        // Update existing test
-        test.mcqQuestions = mcqQuestions;
-        test.shortAnswerQuestions = shortAnswerQuestions;
-        test.lastRegeneratedBy = userId;
-        test.lastRegeneratedAt = new Date();
-        test.generatedAt = new Date();
-        test.expiresAt = expiresAt;
-        await test.save();
-      } else {
-        // Create new test
-        test = await RoadmapTest.create({
-          roadmapId,
-          roadmapTitle: roadmap.title,
-          mcqQuestions,
-          shortAnswerQuestions,
-          expiresAt,
-        });
-      }
+    // If test doesn't exist, inform the user to contact admin to add questions
+    if (!test) {
+      return NextResponse.json({ error: "Test not configured. Contact admin to add MCQ questions for this roadmap." }, { status: 404 });
+    }
+
+    // Ensure enough questions exist
+    if (!test.mcqQuestions || test.mcqQuestions.length < 60) {
+      return NextResponse.json({ error: "Not enough questions configured for this test. Admin must add at least 60 MCQs." }, { status: 400 });
     }
 
     // Return test without correct answers for taking
+    // Select 60 random MCQs for user (without exposing correctAnswer)
+    const shuffled = test.mcqQuestions
+      .map((s: any) => ({ s, sort: Math.random() }))
+      .sort((a: any, b: any) => a.sort - b.sort)
+      .map((x: any) => x.s);
+
+    const selectedMcqs = shuffled.slice(0, 60);
+
     const testForUser = {
       _id: test._id,
       roadmapId: test.roadmapId,
       roadmapTitle: test.roadmapTitle,
-      duration: test.duration,
-      totalMarks: test.totalMarks,
-      passingPercentage: test.passingPercentage,
+      duration: 60,
+      totalMarks: 60,
+      passingPercentage: test.passingPercentage || 60,
       expiresAt: test.expiresAt, // Include expiration for UI if needed
-      mcqQuestions: test.mcqQuestions.map((q: any) => ({
+      mcqQuestions: selectedMcqs.map((q: any) => ({
         question: q.question,
         options: q.options,
-        marks: q.marks,
-      })),
-      shortAnswerQuestions: test.shortAnswerQuestions.map((q: any) => ({
-        question: q.question,
-        marks: q.marks,
+        marks: 1,
       })),
     };
 
+    // Create a draft TestAttempt storing the exact questions shown to the user
+    const attempt = await TestAttempt.create({
+      testId: test._id,
+      userId,
+      roadmapId,
+      mcqSnapshot: selectedMcqs,
+      startedAt: new Date(),
+      canRetry: false,
+    });
+
     return NextResponse.json({
       test: testForUser,
-      message: regenerate ? "Test regenerated successfully" : "Test retrieved successfully",
-      cached: !regenerate && !isExpired, // Indicate if test was from cache
+      attemptId: attempt._id,
+      message: "Test retrieved successfully",
+      cached: !isExpired, // Indicate if test was from cache
       expiresAt: test.expiresAt,
     });
   } catch (error: any) {

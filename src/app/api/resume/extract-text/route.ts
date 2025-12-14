@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractText } from "unpdf";
+import { extractTextWithOCR } from '@/lib/server/pdfExtract';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,20 +24,49 @@ export async function POST(request: NextRequest) {
 
     // Extract text using unpdf
     const result = await extractText(uint8Array, { mergePages: true });
-    
+
     // Handle both array and string response
-    const textContent = Array.isArray(result.text) 
-      ? result.text.join("\n") 
-      : String(result.text || "");
-    
-    console.log(`Extracted ${textContent.length} characters from ${result.totalPages} pages`);
+    let textContent = Array.isArray(result.text) ? result.text.join("\n") : String(result.text || "");
+    let pageCount = result.totalPages || 0;
+
+    console.log(`Extracted ${textContent.length} characters from ${pageCount} pages`);
+
+    // Check if OCR is requested or suggested
+    const useOCR = String(formData.get('useOCR') || '') === '1' || String(formData.get('useOCR') || '').toLowerCase() === 'true';
+    let ocrSuggested = false;
+    let ocrUsed = false;
+    let ocrUnavailable = false;
+
+    if ((textContent || '').replace(/\s+/g, '').length < 200) {
+      ocrSuggested = true;
+    }
+
+    if (useOCR || ocrSuggested && useOCR) {
+      // Try OCR fallback
+      try {
+        const ocrRes: any = await extractTextWithOCR(Buffer.from(uint8Array));
+        if (ocrRes?.ocrUnavailable) {
+          ocrUnavailable = true;
+        } else {
+          textContent = ocrRes.text || textContent;
+          pageCount = ocrRes.pages || pageCount;
+          ocrUsed = true;
+        }
+      } catch (e:any) {
+        console.error('OCR extraction failed:', e?.message || e);
+        ocrUnavailable = true;
+      }
+    }
 
     return NextResponse.json({
       success: true,
       fileName: file.name,
-      pageCount: result.totalPages,
+      pageCount,
       textLength: textContent.length,
       text: textContent,
+      ocrSuggested,
+      ocrUsed,
+      ocrUnavailable,
     });
 
   } catch (error: any) {

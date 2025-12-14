@@ -35,12 +35,12 @@ export function Footer() {
     { name: "Blogs", link: "/blogs", icon: <FaCode className="h-4 w-4" />, color: "text-blue-400" },
     { name: "Roadmaps", link: "/explore", icon: <FaRocket className="h-4 w-4" />, color: "text-purple-400" },
     { name: "Company Problems", link: "/company-problems", icon: <FaGlobe className="h-4 w-4" />, color: "text-cyan-400" },
+    { name: "Interview Experiences", link: "/interview-experiences", icon: <FaUsers className="h-4 w-4" />, color: "text-yellow-400" },
   ];
 
   const features = [
-    { name: "AI Mock Interviews", link: "/interview", icon: <FaRocket className="h-4 w-4" />, color: "text-blue-400" },
     { name: "Resume Builder", link: "/resume-builder", icon: <FaCode className="h-4 w-4" />, color: "text-purple-400" },
-    { name: "AI Resume Screening", link: "/resume-screening", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-cyan-400" },
+    { name: "ATS Checker (Testing)", link: "/ats-checker", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-cyan-400" },
     { name: "Coding Arena", link: "/top-interviews", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-green-400" },
     { name: "GitHub Wrapped", link: "/github-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-gray-400" },
     { name: "Codeforces Wrapped", link: "/codeforces-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-orange-400" },

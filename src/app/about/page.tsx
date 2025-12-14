@@ -99,9 +99,9 @@ export default function AboutPage() {
         },
         {
           icon: FileSearch,
-          title: "AI Resume Screening",
+          title: "ATS Checker",
           description: "Get AI feedback on your resume",
-          link: "/resume-screening",
+          link: "/ats-checker",
         },
         {
           icon: TrendingUp,

@@ -250,8 +250,32 @@ export default function ResumeBuilderPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const resumeRef = useRef<HTMLDivElement>(null);
    const user = useCurrentUser();
+  // Fetch existing resume on mount (registered unconditionally to keep hooks order stable)
+  useEffect(() => {
+    const fetchResume = async () => {
+      try {
+        // If user is not authenticated yet, wait until it is
+        if (!user) return;
+        const response = await axios.get("/api/resume");
+        if (response.data.resume) {
+          setResumeData(response.data.resume);
+        }
+        setIsAuthenticated(true);
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+          router.push("/auth/login-required");
+        } else {
+          console.error("Error fetching resume:", error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
- if (user === undefined) {
+    fetchResume();
+  }, [router, user]);
+
+  if (user === undefined) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div>
@@ -296,28 +320,7 @@ export default function ResumeBuilderPage() {
   }
 
 
-  // Fetch existing resume on mount
-  useEffect(() => {
-    const fetchResume = async () => {
-      try {
-        const response = await axios.get("/api/resume");
-        if (response.data.resume) {
-          setResumeData(response.data.resume);
-        }
-        setIsAuthenticated(true);
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          router.push("/auth/login-required");
-        } else {
-          console.error("Error fetching resume:", error);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchResume();
-  }, [router]);
 
   // Save resume
   const saveResume = async () => {

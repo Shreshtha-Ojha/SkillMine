@@ -91,6 +91,12 @@ const userSchema = new Schema({
             amount: { type: Number },
         }
     },
+    // ATS Checker usage and admin overrides
+    atsChecker: {
+        used: { type: Number, default: 0 },
+        allowedByAdmin: { type: Boolean, default: false },
+        requested: { type: Boolean, default: false }
+    },
     // Daily mock interview tracking
     mockInterviewUsage: {
         date: { type: String }, // YYYY-MM-DD format

@@ -407,7 +407,7 @@ export default function BulkResumeScreeningPage() {
       } else if (response.status === 401 || response.data.error?.toLowerCase()?.includes("login")) {
         // Not authenticated - redirect to login with return URL
         toast.error("Please sign in to complete the purchase");
-        router.push(`/auth/login?returnTo=/resume-screening/bulk`);
+        router.push(`/auth/login?returnTo=/ats-checker`);
       } else {
         toast.error(response.data.error || "Failed to create payment request");
       }
@@ -506,7 +506,7 @@ export default function BulkResumeScreeningPage() {
                 {purchaseLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buy Premium"}
               </button>
               <button
-                onClick={() => router.push('/auth/login?returnTo=/resume-screening/bulk')}
+                onClick={() => router.push('/auth/login?returnTo=/ats-checker')}
                 className="flex-1 px-4 py-2 bg-transparent border border-gray-700 rounded-lg text-white/80 hover:bg-gray-800"
               >
                 Sign in
@@ -965,7 +965,7 @@ export default function BulkResumeScreeningPage() {
                 Screen More Resumes
               </button>
               <button
-                onClick={() => router.push("/resume-screening")}
+                onClick={() => router.push("/ats-checker")}
                 className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors"
               >
                 <FileText className="w-5 h-5" />

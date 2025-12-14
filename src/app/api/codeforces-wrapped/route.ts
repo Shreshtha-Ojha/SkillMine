@@ -180,28 +180,67 @@ Be witty but not mean. Keep taglines under 80 characters. Be encouraging. Return
     const textStr = typeof text === 'string' ? text : '';
     const jsonMatch = textStr?.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        console.warn('Gemini returned invalid JSON for Codeforces Wrapped — falling back');
+      }
     }
   } catch (error) {
     console.error("Gemini error:", error);
   }
+  // Range-based, randomized fallback for Codeforces
+  const solved = stats.problemsSolved || 0;
+  const contests = stats.contestsParticipated || 0;
+  const rating = stats.rating || 0;
+  const change = stats.ratingChange || 0;
+  const best = stats.bestContestRank || 0;
+  const favorite = stats.favoriteTag || 'implementation';
 
-  // Fallback
+  const choice = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+
+  const welcome = () => {
+    if (solved < 20) return choice([`${solved} solves — budding problem-solver.`, `Nice start with ${solved} problems — keep pushing!`]);
+    if (solved < 100) return choice([`${solved} problems — you're making waves.`, `Solid: ${solved} solves this year.`]);
+    return choice([`${solved} problems — CP legend in the making.`, `Incredible: ${solved} solves!`]);
+  };
+
+  const ratingBlurb = () => {
+    if (rating < 1200) return choice([`Rating ${rating}: learning stage — climb ahead!`, `Rating ${rating} — hungry for improvement.`]);
+    if (rating < 1600) return choice([`Rating ${rating}: solidly competent. Keep climbing!`, `Rating ${rating} — steady progress.`]);
+    if (rating < 2000) return choice([`Rating ${rating}: impressive — contest threat.`, `Rating ${rating} — well played.`]);
+    return choice([`Rating ${rating}: elite-level coder!`, `Legend: ${rating} rating — respect.`]);
+  };
+
+  const contestBlurb = () => choice([`${contests} contests — contest warrior.`, `${contests} participations — you love the thrill.`]);
+
+  const problemsBlurb = () => choice([`You shine at ${favorite} problems.`, `${solved} solved — that's commitment.`]);
+
+  const personality = () => choice([`Competitive spirit with a friendly face.`, `Strategic and resilient — contest-ready.`]);
+
+  const funPool = [
+    `Solved ${solved} problems this year — nice cadence.`,
+    `Best contest rank: ${best || 'N/A'} — peak moments matter.`,
+    `Rating change: ${change >= 0 ? '+' : ''}${change} — impactful year.`,
+    `${contests} contests — adrenaline junkie confirmed.`,
+  ];
+
+  const chosenFacts = funPool.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  // Occasionally include a playful Gemini fallback notice
+  const shareNote = Math.random() < 0.2 ? `${choice([`Share and brag — Gemini took a quick nap so here's a backup! 😉`, `Gemini's on a coffee run — fallback content incoming! ☕`])}` : `Share your CP Wrapped — celebrate the grind!`;
+
   return {
     creativeTaglines: {
-      welcome: `${stats.problemsSolved} problems crushed. You're on fire!`,
-      rating: `Rating ${stats.ratingChange >= 0 ? 'up' : 'down'} by ${Math.abs(stats.ratingChange)}. Keep grinding!`,
-      contests: `${stats.contestsParticipated} contests joined. That's dedication!`,
-      problems: `${stats.favoriteTag} is definitely your jam.`,
-      personality: `A true competitive programmer at heart.`,
-      share: `Show off your CP stats!`,
+      welcome: welcome(),
+      rating: ratingBlurb(),
+      contests: contestBlurb(),
+      problems: problemsBlurb(),
+      personality: personality(),
+      share: shareNote,
     },
-    funFacts: [
-      `You solved ${stats.problemsSolved} problems this year!`,
-      `Your best contest rank was ${stats.bestContestRank}.`,
-      `${stats.favoriteTag} problems are your specialty.`,
-    ],
-    coderTitle: stats.rating >= 1900 ? "Contest Master" : stats.rating >= 1400 ? "Rising Star" : "Problem Solver",
+    funFacts: chosenFacts,
+    coderTitle: rating >= 2400 ? "Grandmaster" : rating >= 1900 ? "Candidate Master" : rating >= 1600 ? "Expert" : "Dedicated Coder",
   };
 }
 

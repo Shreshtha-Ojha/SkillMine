@@ -237,6 +237,7 @@ export default function Home() {
       dropdown: [
         { name: "Blogs", link: "/blogs" },
         { name: "Roadmaps", link: "/explore" },
+        { name: "Interview Experiences", link: "/interview-experiences" },
       ],
     },
     {
@@ -251,7 +252,7 @@ export default function Home() {
       name: "Resume",
       dropdown: [
         { name: "Resume Builder", link: "/resume-builder" },
-        { name: "AI Resume Screening", link: "/resume-screening" },
+        { name: "ATS Checker", link: "/ats-checker" },
       ],
     },
     {

@@ -352,7 +352,48 @@ const UserManagement = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-5 border-t border-white/10">
+            <div className="p-5 border-t border-white/10 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-400">ATS Retry Requests</div>
+                <div className="text-sm text-white">Requested: {String((selectedUser as any)?.atsChecker?.requested || false)}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={async ()=>{
+                    try {
+                      const res = await fetch('/api/admin/ats-allow', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: selectedUser._id, allow: true }) });
+                      const j = await res.json();
+                      if (!res.ok) throw new Error(j?.error || 'Failed');
+                      alert('Allowed ATS retry for user');
+                      // refresh users list
+                      const r = await fetch('/api/admin/admin-panel');
+                      const d = await r.json();
+                      setUsers(d.data);
+                      closeModal();
+                    } catch (e:any) { alert(e?.message || 'Failed'); }
+                  }}
+                  className="px-4 py-2 bg-emerald-600 rounded text-sm"
+                >
+                  Allow ATS Retry
+                </button>
+                <button
+                  onClick={async ()=>{
+                    try {
+                      const res = await fetch('/api/admin/ats-allow', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: selectedUser._id, allow: false }) });
+                      const j = await res.json();
+                      if (!res.ok) throw new Error(j?.error || 'Failed');
+                      alert('Revoked ATS retry for user');
+                      const r = await fetch('/api/admin/admin-panel');
+                      const d = await r.json();
+                      setUsers(d.data);
+                      closeModal();
+                    } catch (e:any) { alert(e?.message || 'Failed'); }
+                  }}
+                  className="px-4 py-2 bg-white/5 rounded text-sm"
+                >
+                  Revoke ATS Retry
+                </button>
+              </div>
               <button
                 onClick={closeModal}
                 className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-sm font-medium rounded-lg transition-all"

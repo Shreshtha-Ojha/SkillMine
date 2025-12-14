@@ -383,30 +383,97 @@ Be creative, use modern internet humor, make pop culture references, and be enco
     const textStr = typeof text === 'string' ? text : '';
     const jsonMatch = textStr?.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]);
-      return parsed;
+      try {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return parsed;
+      } catch (e) {
+        console.warn('Gemini returned invalid JSON — falling back to canned content');
+      }
     }
   } catch (error) {
     console.error("Gemini error:", error);
   }
+  // Fallback strategy: craft messages based on stat ranges so output varies meaningfully
+  const reposCount = stats?.newReposCount || stats?.repos?.length || 0;
+  const stars = stats?.totalStars || 0;
+  const commits = stats?.totalCommits || 0;
+  const prCount = stats?.pullRequests || 0;
+  const streak = stats?.longestStreak || 0;
 
-  // Fallback creative content
-  return {
-    creativeTaglines: {
-      welcome: `${stats.totalCommits} commits? Your keyboard needs a vacation! 🏖️`,
-      contributions: `You committed like your rent depended on it. (Does it?)`,
-      languages: `${stats.topLanguages[0]?.name || "Code"} is your love language. Literally.`,
-      repos: `${stats.totalStars} stars! You're basically a GitHub celebrity now.`,
-      openSource: `You're not just coding. You're building the future of the internet.`,
-      personality: `${stats.codingPersona}? Your sleep schedule is... creative.`,
-      share: `Flex your dev stats. You've earned it! 💪`,
-    },
-    funFacts: [
-      `If each commit was a step, you'd have walked ${Math.floor(stats.totalCommits * 0.7)} meters! 🚶`,
-      `Your ${stats.longestStreak} day streak means you coded longer than most New Year's resolutions last.`,
-      `With ${stats.activeDays} active days, you spent ${Math.round((stats.activeDays / 365) * 100)}% of the year pushing code. Work-life balance? Never heard of it.`,
-    ],
+  // Helpers to pick a random element
+  const choice = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+
+  // Welcome lines by repo range
+  const welcomeByRepos = () => {
+    if (reposCount < 5) return choice([`Quiet repo life, huh ${stats.username || 'dev'}? Time to ship something!`, `Not many repos — quality over quantity.`]);
+    if (reposCount <= 15) return choice([`Nice collection of ${reposCount} repos — you're getting around!`, `A tidy ${reposCount} repos. Neat and focused.`]);
+    if (reposCount <= 40) return choice([`${reposCount} repos? You're a prolific little library of awesomeness.`, `Wow — ${reposCount} repos. Do you sleep or just ship?`]);
+    return choice([`${reposCount} repos? Repo hoarder alert!`, `Legendary: ${reposCount} repositories — commit history is a saga.`]);
   };
+
+  // Contributions blurb by commits
+  const contributionsByCommits = () => {
+    if (commits < 100) return choice([`${commits} commits — you're warming up.`, `Small but steady: ${commits} commits. Keep at it.`]);
+    if (commits < 1000) return choice([`${commits} commits — that's solid hustle.`, `Committed: ${commits} times. Respect.`]);
+    if (commits < 3000) return choice([`${commits} commits — commit machine status.`, `Massive: ${commits} commits. Your keyboard must be proud.`]);
+    return choice([`${commits} commits? Are you a code-generating legend?`, `Where do you find the time? ${commits} commits is epic.`]);
+  };
+
+  // Languages blurb
+  const languagesBlurb = () => {
+    const top = stats.topLanguages?.[0]?.name || 'Code';
+    if (!top) return `Language vibes: ${top}`;
+    return choice([`${top} is clearly your emotional support language.`, `Top language: ${top} — chef's kiss.`]);
+  };
+
+  // Repos / stars blurb
+  const reposByStars = () => {
+    if (stars < 10) return choice([`Stars: ${stars}. Stealthy but growing.`, `Stars: ${stars}. Early bloom.`]);
+    if (stars < 100) return choice([`Stars: ${stars}. People noticed — nice!`, `${stars} stars — not bad for hobbyist heroics.`]);
+    if (stars < 500) return choice([`${stars} stars — you're becoming a community favorite.`, `Big flex: ${stars} stars. Nice traction.`]);
+    return choice([`${stars} stars? You're basically internet-famous.`, `Star power: ${stars} — international acclaim incoming.`]);
+  };
+
+  // Open source vibe based on PRs
+  const openSourceByPR = () => {
+    if (prCount < 5) return choice([`PRs: ${prCount}. Contributor-in-training.`, `PRs: ${prCount}. Every expert was once a beginner.`]);
+    if (prCount < 30) return choice([`PRs: ${prCount}. Solid open source participation.`, `Looks like you like collaborating: ${prCount} PRs.`]);
+    return choice([`${prCount} PRs — open source spice level: hot.`, `PR warrior: ${prCount} contributions. You're making waves.`]);
+  };
+
+  // Personality / streak blurbs
+  const personalityByStreak = () => {
+    if (streak < 7) return choice([`Casual coder, fine with weekends off.`, `Short sprints, healthy breaks.`]);
+    if (streak < 30) return choice([`Nice streak: ${streak} days. Consistency wins.`, `You've been coding for ${streak} days straight. Respect.`]);
+    return choice([`Streak legend: ${streak} days. Are you human?`, `${streak} day streak — certified coding machine.`]);
+  };
+
+  // Fun facts variations
+  const funFacts = [
+    `You made ${commits} commits — that's like ${Math.round(commits / 10)} mini achievements.`,
+    `Longest streak: ${streak} days — your calendar must be jealous.`,
+    `Top language: ${stats.topLanguages?.[0]?.name || 'Unknown'} — flair level: high.`,
+    `Most starred repo: ${stats.mostStarredRepo || 'N/A'} — stars: ${stars}.`,
+    `Active days: ${stats.activeDays || 0} — you're no one-day wonder.`,
+    `Pull Requests: ${prCount} — diplomacy through code.`,
+  ];
+
+  // Compose creative taglines by picking a line from each category (with randomness)
+  const creativeTaglines = {
+    welcome: welcomeByRepos(),
+    contributions: contributionsByCommits(),
+    languages: languagesBlurb(),
+    repos: reposByStars(),
+    openSource: openSourceByPR(),
+    personality: personalityByStreak(),
+    share: choice([`Share your Wrapped — flex responsibly.`, `Put that Wrapped on display — it's earned.`]),
+  };
+
+  // Pick 3 distinct fun facts randomly
+  const shuffledFacts = funFacts.sort(() => Math.random() - 0.5);
+  const chosenFacts = shuffledFacts.slice(0, 3);
+
+  return { creativeTaglines, funFacts: chosenFacts };
 }
 
 export async function POST(request: NextRequest) {

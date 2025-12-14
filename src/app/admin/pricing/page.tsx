@@ -138,13 +138,7 @@ export default function PricingManagementPage() {
       icon: Briefcase,
       color: "green",
     },
-    {
-      key: "mockInterviews" as const,
-      label: "Mock Interviews Subscription",
-      description: "Unlimited AI mock interviews per day (free: 1/day)",
-      icon: Mic,
-      color: "yellow",
-    },
+
   ];
 
   const getColorClasses = (color: string) => {

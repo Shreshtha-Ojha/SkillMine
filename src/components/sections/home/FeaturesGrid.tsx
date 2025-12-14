@@ -48,9 +48,9 @@ const features = [
   },
   {
     icon: Brain,
-    title: "AI Resume Screening",
-    description: "Screen candidates with AI precision",
-    link: "/resume-screening",
+    title: "ATS Checker",
+    description: "One free check per user — fast ATS + recruiter-style review",
+    link: "/ats-checker",
     color: "from-rose-500 to-pink-500",
   },
 ];

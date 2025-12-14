@@ -178,28 +178,69 @@ Be witty but encouraging. Keep taglines under 60 characters. Return ONLY valid J
     const textStr = typeof text === 'string' ? text : '';
     const jsonMatch = textStr?.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        console.warn('Gemini returned invalid JSON for LeetCode Wrapped — falling back');
+      }
     }
   } catch (error) {
     console.error("Gemini error:", error);
   }
+  // Range-based, randomized fallback for variety and personality
+  const total = stats.totalSolved || 0;
+  const hard = stats.hardSolved || 0;
+  const medium = stats.mediumSolved || 0;
+  const streak = stats.streak || 0;
+  const rank = stats.ranking || 0;
+  const accept = stats.acceptanceRate || 0;
 
-  // Fallback
+  const choice = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+
+  const welcome = () => {
+    if (total < 50) return choice([`Getting started with ${total} solves — nice!`, `You solved ${total} problems — the journey begins.`]);
+    if (total < 200) return choice([`${total} solves — steady progress.`, `You've solved ${total} problems — solid grit.`]);
+    return choice([`${total} solves! You're a LeetCode legend.`, `Epic: ${total} problems — mind = blown.`]);
+  };
+
+  const problemsLine = () => {
+    if (medium < 20) return choice([`Mediums: ${medium} — time to up the challenge!`, `Mediums: ${medium} — climbing up.`]);
+    if (medium < 100) return choice([`You crushed ${medium} mediums — real progress.`, `${medium} mediums — consistency wins.`]);
+    return choice([`${medium} mediums — master-level momentum.`, `${medium} mediums — unstoppable.`]);
+  };
+
+  const difficultyLine = () => (hard > 50 ? choice([`${hard} hards? You are a beast!`, `Hard problems galore: ${hard} solved.`]) : choice([`${hard} hards — keep grinding.`, `Hards: ${hard} — patience pays.`]));
+
+  const streakLine = () => (streak > 30 ? choice([`${streak} day streak! Legendary!`, `Streak: ${streak} days — unstoppable!`]) : `${streak} days strong!`);
+
+  const personality = () => choice([`Problem solver at heart.`, `Focused and persistent — great combo.`, `Quick thinker and steady coder.`]);
+
+  const share = () => choice([`Share your Wrapped — flex responsibly.`, `Put that Wrapped on display — earned it!`, `Share your grind — inspiration incoming.`]);
+
+  const funPool = [
+    `You solved ${total} problems this year — that's dedication!`,
+    `${hard} hards show real grit — impressive.`,
+    `${stats.activeDays || 0} active days of focused solving!`,
+    `Acceptance rate: ${accept}% — keep the quality up!`,
+    `Ranking: #${rank || 'N/A'} — standings look 💪`,
+  ];
+
+  const shuffled = funPool.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  // Occasionally include a playful Gemini fallback note
+  const shareNote = Math.random() < 0.25 ? `${share()} (Gemini took a coffee break, so here's a backup wink 😉)` : share();
+
   return {
     creativeTaglines: {
-      welcome: `${stats.totalSolved} problems solved. Impressive!`,
-      problems: `You're crushing it with ${stats.mediumSolved} mediums!`,
-      difficulty: stats.hardSolved > 50 ? `${stats.hardSolved} hards? You're a beast!` : `Keep pushing those hards!`,
-      streak: stats.streak > 30 ? `${stats.streak} day streak! Legendary!` : `${stats.streak} days strong!`,
-      personality: `A true problem solver at heart.`,
-      share: `Show off your LeetCode grind!`,
+      welcome: welcome(),
+      problems: problemsLine(),
+      difficulty: difficultyLine(),
+      streak: streakLine(),
+      personality: personality(),
+      share: shareNote,
     },
-    funFacts: [
-      `You solved ${stats.totalSolved} problems this year!`,
-      `Your ${stats.hardSolved} hard solutions show real skill.`,
-      `${stats.activeDays} active days of grinding!`,
-    ],
-    coderTitle: stats.hardSolved > 100 ? "Hard Problem Destroyer" : stats.totalSolved > 500 ? "Volume King" : "Rising Coder",
+    funFacts: shuffled,
+    coderTitle: hard > 100 ? "Hard Problem Destroyer" : total > 500 ? "Volume King" : "Rising Coder",
   };
 }
 

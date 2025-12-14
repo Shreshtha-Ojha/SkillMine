@@ -56,15 +56,15 @@ export default function ResumeScreeningPage() {
 
 
   useEffect(() => {
-    // Redirect to bulk screening page
-    router.replace("/resume-screening/bulk");
+    // Redirect to ATS Checker page (bulk screening deprecated)
+    router.replace("/ats-checker");
   }, [router]);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-        <p className="text-gray-400 text-sm">Redirecting to AI Resume Screening...</p>
+        <p className="text-gray-400 text-sm">Redirecting to ATS Checker...</p>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import Certification from "@/models/certificationModel";
 import User from "@/models/userModel";
 import { NextResponse, NextRequest } from "next/server";
 import { getDataFromToken } from "@/helpers/getToken";
-import { generateContentWithConfig } from "@/lib/gemini";
+// Gemini-based evaluation removed — MCQ-only flow uses direct scoring
 
 connect();
 
@@ -16,88 +16,7 @@ function generateCertificateId(): string {
   return `${prefix}-${timestamp}-${random}`;
 }
 
-// Evaluate short answers using Gemini
-async function evaluateShortAnswers(
-  questions: any[],
-  userAnswers: string[],
-  roadmapTitle: string
-): Promise<{ scores: any[]; totalScore: number }> {
-  const evaluationPrompt = `You are an exam evaluator for the "${roadmapTitle}" certification test.
-Evaluate each short answer question based on the expected answer and user's response.
-Each question is worth 4 marks.
-
-QUESTIONS AND ANSWERS:
-${questions
-  .map(
-    (q: any, idx: number) => `
-Question ${idx + 1}: ${q.question}
-Expected Answer: ${q.expectedAnswer}
-User's Answer: ${userAnswers[idx] || "(No answer provided)"}
-`
-  )
-  .join("\n")}
-
-RESPOND IN THIS EXACT JSON FORMAT (no markdown, no code blocks, just pure JSON):
-{
-  "evaluations": [
-    {
-      "questionIndex": 0,
-      "marksAwarded": 0,
-      "feedback": "Brief feedback explaining the score"
-    }
-  ]
-}
-
-Scoring Guidelines:
-- 4 marks: Complete and accurate answer
-- 3 marks: Mostly correct with minor issues
-- 2 marks: Partially correct, missing key points
-- 1 mark: Shows some understanding but mostly incorrect
-- 0 marks: Incorrect or no answer
-
-Be fair but strict. Evaluate based on technical accuracy and completeness.`;
-
-  try {
-    const jsonText = await generateContentWithConfig(evaluationPrompt, {
-      temperature: 0.3,
-      maxOutputTokens: 4096,
-    });
-
-    if (!jsonText) {
-      throw new Error("Invalid response from Gemini");
-    }
-
-    const cleanedText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-
-    const parsed = JSON.parse(cleanedText);
-
-    const scores = parsed.evaluations.map((e: any) => ({
-      questionIndex: e.questionIndex,
-      marksAwarded: Math.min(4, Math.max(0, e.marksAwarded)),
-      feedback: e.feedback,
-    }));
-
-    const totalScore = scores.reduce((sum: number, s: any) => sum + s.marksAwarded, 0);
-
-    return { scores, totalScore };
-  } catch (error: any) {
-    console.error("Error evaluating with Gemini:", error);
-    // Fallback: Give partial marks based on answer length
-    const scores = questions.map((q: any, idx: number) => {
-      const answer = userAnswers[idx] || "";
-      let marks = 0;
-      if (answer.length > 100) marks = 2;
-      else if (answer.length > 50) marks = 1;
-      return {
-        questionIndex: idx,
-        marksAwarded: marks,
-        feedback: "Auto-evaluated due to system error",
-      };
-    });
-    const totalScore = scores.reduce((sum: number, s: any) => sum + s.marksAwarded, 0);
-    return { scores, totalScore };
-  }
-}
+// Short-answer evaluation via Gemini removed; MCQ-only tests do not require LLM evaluation.
 
 // POST: Submit test and get results
 export async function POST(request: NextRequest) {
@@ -107,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { testId, roadmapId, mcqAnswers, shortAnswers } = await request.json();
+    const { testId, roadmapId, attemptId, mcqAnswers } = await request.json();
 
     if (!testId || !roadmapId) {
       return NextResponse.json(
@@ -130,19 +49,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for existing submitted attempt
-    const existingAttempt = await TestAttempt.findOne({
-      userId,
-      roadmapId,
-      submittedAt: { $exists: true },
-    });
+    // Fetch the attempt draft
+    if (!attemptId) return NextResponse.json({ error: "attemptId is required" }, { status: 400 });
 
-    if (existingAttempt && !existingAttempt.canRetry) {
-      return NextResponse.json(
-        { error: "You have already submitted this test" },
-        { status: 403 }
-      );
+    const attemptDraft = await TestAttempt.findById(attemptId);
+    if (!attemptDraft) return NextResponse.json({ error: "Attempt not found" }, { status: 404 });
+
+    // Allow admins to act on behalf of users; otherwise ensure owner matches
+    const requestingUser = await User.findById(userId);
+    // check ADMINS env list
+    const adminEmails = (process.env.ADMINS || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+    // try to detect admin from DB user flag or env or token payload
+    let isAdminRequester = requestingUser?.isAdmin === true || adminEmails.includes((requestingUser?.email || "").toLowerCase());
+
+    // also try token payload (in case DB flag isn't set). Use non-verifying decode like middleware
+    try {
+      const token = request.cookies.get("token")?.value;
+      if (token) {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          try {
+            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+            const tokEmail = (payload.email || payload?.user?.email || "").toLowerCase();
+            if (payload.isAdmin === true || adminEmails.includes(tokEmail)) {
+              isAdminRequester = true;
+            }
+            console.log('Submit token payload:', { tokEmail, isAdminFromPayload: payload.isAdmin });
+          } catch (e) {
+            console.log('Failed to parse token payload for submit route');
+          }
+        } else {
+          console.log('Submit token not JWT-like');
+        }
+      }
+    } catch (e) {
+      // ignore token decode errors
     }
+
+    // Owner check: allow if requester is owner OR admin OR ALLOW_SUBMIT_ANYONE env flag is set
+    const allowAnyone = (process.env.ALLOW_SUBMIT_ANYONE || "").toLowerCase() === "true";
+    if (attemptDraft.userId !== userId && !isAdminRequester && !allowAnyone) {
+      console.error('Submit forbidden:', { attemptOwner: attemptDraft.userId, requester: userId, isAdminRequester, adminEmails, allowAnyone });
+      return NextResponse.json({ error: "Attempt belongs to another user. Admin privileges required to submit on behalf." }, { status: 403 });
+    }
+    if (attemptDraft.userId !== userId && allowAnyone) {
+      console.log('ALLOW_SUBMIT_ANYONE active: allowing submission from non-owner', { attemptOwner: attemptDraft.userId, requester: userId });
+    }
+
+    if (attemptDraft.submittedAt) return NextResponse.json({ error: "This attempt has already been submitted" }, { status: 403 });
 
     // Get the test
     const test = await RoadmapTest.findById(testId);
@@ -150,54 +104,67 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Test not found" }, { status: 404 });
     }
 
-    // Calculate MCQ score
+    // Calculate MCQ score using the attempt's mcqSnapshot
+    const snapshot = attemptDraft.mcqSnapshot || [];
+    if (!Array.isArray(snapshot) || snapshot.length === 0) {
+      return NextResponse.json({ error: "No questions snapshot found for this attempt" }, { status: 400 });
+    }
+
+    // Validate mcqAnswers shape: must be array with same length as snapshot
+    if (!Array.isArray(mcqAnswers) || mcqAnswers.length !== snapshot.length) {
+      return NextResponse.json({ error: "mcqAnswers must be an array matching the number of questions" }, { status: 400 });
+    }
+
+    for (let i = 0; i < mcqAnswers.length; i++) {
+      const a = mcqAnswers[i];
+      if (a === null || a === undefined) continue; // unanswered allowed
+      if (!Number.isInteger(a) || a < 0 || a > 3) {
+        return NextResponse.json({ error: `Invalid answer at index ${i}` }, { status: 400 });
+      }
+    }
+
     let mcqScore = 0;
-    const mcqResults = test.mcqQuestions.map((q: any, idx: number) => {
+    const mcqResults = snapshot.map((q: any, idx: number) => {
       const userAnswer = mcqAnswers?.[idx];
       const isCorrect = userAnswer === q.correctAnswer;
-      if (isCorrect) mcqScore += q.marks;
+      if (isCorrect) mcqScore += 1;
       return {
         questionIndex: idx,
         userAnswer,
+        // Do not expose correctAnswer via the saved attempt object below; include in results since submission finished
         correctAnswer: q.correctAnswer,
         isCorrect,
-        marks: isCorrect ? q.marks : 0,
+        marks: isCorrect ? 1 : 0,
       };
     });
 
-    // Evaluate short answers with Gemini
-    const { scores: shortAnswerScores, totalScore: shortAnswerScore } =
-      await evaluateShortAnswers(
-        test.shortAnswerQuestions,
-        shortAnswers || [],
-        test.roadmapTitle
-      );
+    // MCQ-only scoring
+    const totalScore = mcqScore; // out of 60
+    const percentage = Math.round((totalScore / 60) * 100);
+    const passed = percentage >= (test.passingPercentage || 60);
 
-    // Calculate total
-    const totalScore = mcqScore + shortAnswerScore;
-    const percentage = Math.round((totalScore / 100) * 100);
-    const passed = percentage >= 60;
+    // Finalize the attempt draft with results using atomic update to avoid VersionError
+    // Only update if it hasn't been submitted already (avoid overwriting existing submission)
+    const updatedAttempt = await TestAttempt.findOneAndUpdate(
+      { _id: attemptDraft._id, submittedAt: { $exists: false } },
+      {
+        $set: {
+          mcqAnswers: mcqAnswers || [],
+          mcqScore,
+          totalScore,
+          percentage,
+          passed,
+          submittedAt: new Date(),
+        },
+      },
+      { new: true }
+    );
 
-    // If there was an existing attempt that can be retried, delete it
-    if (existingAttempt && existingAttempt.canRetry) {
-      await TestAttempt.findByIdAndDelete(existingAttempt._id);
+    if (!updatedAttempt) {
+      return NextResponse.json({ error: "This attempt has already been submitted" }, { status: 403 });
     }
 
-    // Create attempt record
-    const attempt = await TestAttempt.create({
-      testId,
-      userId,
-      roadmapId,
-      mcqAnswers: mcqAnswers || [],
-      shortAnswers: shortAnswers || [],
-      mcqScore,
-      shortAnswerScore,
-      totalScore,
-      percentage,
-      passed,
-      shortAnswerScores,
-      submittedAt: new Date(),
-    });
+    const attempt = updatedAttempt;
 
     // Issue certificate if passed
     let certification = null;
@@ -216,7 +183,6 @@ export async function POST(request: NextRequest) {
           score: totalScore,
           percentage,
           mcqScore,
-          shortAnswerScore,
           certificateId: generateCertificateId(),
         });
       } else {
@@ -224,18 +190,25 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Sanitize attempt before returning to client: remove mcqSnapshot to avoid leaking correct answers
+    const attemptObj: any = attempt.toObject ? attempt.toObject() : { ...attempt };
+    if (attemptObj.mcqSnapshot) {
+      // replace snapshot with redacted version (no correctAnswer)
+      attemptObj.mcqSnapshot = attemptObj.mcqSnapshot.map((q: any) => ({ question: q.question, options: q.options, marks: q.marks }));
+    }
+
+
+
     return NextResponse.json({
       success: true,
       result: {
         mcqScore,
-        shortAnswerScore,
         totalScore,
         percentage,
         passed,
         mcqResults,
-        shortAnswerScores,
       },
-      attempt,
+      attempt: attemptObj,
       certification,
       message: passed
         ? "Congratulations! You passed the test and earned your certificate!"
@@ -279,8 +252,22 @@ export async function GET(request: NextRequest) {
       roadmapId: attempt.roadmapId,
     });
 
+    // Determine if requester is admin
+    const requestingUser = await User.findById(userId);
+    const adminEmails = process.env.ADMINS ? process.env.ADMINS.split(",").map((e) => e.trim().toLowerCase()) : [];
+    const userEmail = requestingUser?.email?.trim().toLowerCase() || "";
+    const isAdmin = adminEmails.includes(userEmail) || requestingUser?.isAdmin === true;
+
+    const attemptObj: any = attempt.toObject ? attempt.toObject() : { ...attempt };
+    if (!isAdmin) {
+      // Redact correct answers from snapshot to prevent pre/post inspection
+      if (attemptObj.mcqSnapshot) {
+        attemptObj.mcqSnapshot = attemptObj.mcqSnapshot.map((q: any) => ({ question: q.question, options: q.options, marks: q.marks }));
+      }
+    }
+
     return NextResponse.json({
-      attempt,
+      attempt: attemptObj,
       certification,
     });
   } catch (error: any) {

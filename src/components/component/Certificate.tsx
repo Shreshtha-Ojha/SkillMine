@@ -13,7 +13,7 @@ interface CertificateProps {
     score: number;
     percentage: number;
     mcqScore?: number;
-    shortAnswerScore?: number;
+    // shortAnswerScore removed for MCQ-only certifications
     issuedAt: string;
     userName: string;
   };

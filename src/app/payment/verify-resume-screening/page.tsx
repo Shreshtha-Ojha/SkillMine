@@ -54,7 +54,7 @@ function VerifyContent() {
 
           if (response.data.success) {
             setStatus("success");
-            setMessage("Payment successful! You now have access to bulk resume screening.");
+            setMessage("Payment successful! You now have access to the ATS Checker feature.");
           } else {
             setStatus("error");
             setMessage(response.data.error || "Failed to activate premium access.");
@@ -108,11 +108,11 @@ function VerifyContent() {
           </h1>
           <p className="text-gray-400 mb-6">{message}</p>
           <Link
-            href="/resume-screening/bulk"
+            href="/ats-checker"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition"
           >
             <FileText className="w-5 h-5" />
-            Go to Bulk Screening
+            Go to ATS Checker
             <ArrowRight className="w-5 h-5" />
           </Link>
         </>
@@ -128,10 +128,10 @@ function VerifyContent() {
           </h1>
           <p className="text-gray-400 mb-6">{message}</p>
           <Link
-            href="/resume-screening/bulk"
+            href="/ats-checker"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gray-700 text-white font-semibold rounded-xl hover:bg-gray-600 transition"
           >
-            Try Again
+            Try ATS Checker
           </Link>
         </>
       )}

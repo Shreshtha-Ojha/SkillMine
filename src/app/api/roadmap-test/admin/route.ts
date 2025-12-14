@@ -33,28 +33,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find the user's attempt
-    const attempt = await TestAttempt.findOne({
-      userId,
-      roadmapId,
-      submittedAt: { $exists: true },
-    });
+    // Update all submitted attempts for this user & roadmap to allow retry
+    const updateResult = await TestAttempt.updateMany(
+      { userId, roadmapId, submittedAt: { $exists: true } },
+      { $set: { canRetry: true } }
+    );
 
-    if (!attempt) {
+    if (updateResult.matchedCount === 0) {
       return NextResponse.json(
-        { error: "No test attempt found for this user and roadmap" },
+        { error: "No submitted attempts found for this user and roadmap" },
         { status: 404 }
       );
     }
 
-    // Allow retry
-    attempt.canRetry = true;
-    await attempt.save();
+    // Fetch the updated attempts to return to the admin UI
+    const updatedAttempts = await TestAttempt.find({ userId, roadmapId, submittedAt: { $exists: true } }).sort({ submittedAt: -1 }).limit(100);
+
+    console.log(`Allow retry: updated ${updateResult.modifiedCount} attempt(s) for user ${userId} roadmap ${roadmapId}`);
 
     return NextResponse.json({
       success: true,
       message: "User can now retry the test",
-      attempt,
+      updatedCount: updateResult.modifiedCount,
+      attempts: updatedAttempts,
     });
   } catch (error: any) {
     console.error("Error allowing retry:", error);
