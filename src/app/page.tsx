@@ -238,6 +238,7 @@ export default function Home() {
         { name: "Blogs", link: "/blogs" },
         { name: "Roadmaps", link: "/explore" },
         { name: "Interview Experiences", link: "/interview-experiences" },
+        { name: "Skill Tests", link: "/skill-tests" },
       ],
     },
     {

@@ -81,6 +81,24 @@ const navItems = [
     ),
   },
   {
+    label: "Skill Questions",
+    href: "/admin/admin-panel/skill-questions",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Create Skill",
+    href: "/admin/admin-panel/skill-questions/create",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+      </svg>
+    ),
+  },
+  {
     label: "Create Roadmap",
     href: "/admin/admin-panel/roadmap-create",
     icon: (

@@ -61,13 +61,26 @@ export async function GET(request: NextRequest) {
           // Extract user ID and product type from purpose
           const purpose = data.payment_request?.purpose || "";
           const isResumeScreening = purpose.startsWith("RESUME_SCREENING_PREMIUM_") || product === "resume-screening";
-          const purposeUserId = purpose.replace("OA_QUESTIONS_", "").replace("RESUME_SCREENING_PREMIUM_", "");
+          const isSkillTestPremium = purpose.startsWith("SKILL_TEST_PREMIUM_") || product === "skill-test" || product === "skill-test-premium";
+          const purposeUserId = purpose.replace("OA_QUESTIONS_", "").replace("RESUME_SCREENING_PREMIUM_", "").replace("SKILL_TEST_PREMIUM_", "");
 
           // Update user if logged in or use purpose userId
           const targetUserId = user?._id || purposeUserId;
           
           if (targetUserId) {
-            const updateField = isResumeScreening ? "purchases.resumeScreeningPremium" : "purchases.oaQuestions";
+            let updateField = "purchases.oaQuestions";
+            let amountToSet = pricing.oaQuestions;
+            let productName = "oa-questions";
+            if (isResumeScreening) {
+              updateField = "purchases.resumeScreeningPremium";
+              amountToSet = pricing.resumeScreeningPremium;
+              productName = "resume-screening";
+            } else if (isSkillTestPremium) {
+              updateField = "purchases.skillTestPremium";
+              amountToSet = pricing.skillTestPremium ?? pricing.oaQuestions;
+              productName = "skill-test";
+            }
+
             await User.findByIdAndUpdate(targetUserId, {
               $set: {
                 [updateField]: {
@@ -75,19 +88,19 @@ export async function GET(request: NextRequest) {
                   purchasedAt: new Date(),
                   paymentId: paymentId,
                   paymentRequestId: paymentRequestId,
-                  amount: parseFloat(data.payment_request?.amount) || (isResumeScreening ? pricing.resumeScreeningPremium : pricing.oaQuestions),
+                  amount: parseFloat(data.payment_request?.amount) || amountToSet,
                 }
               }
             });
-          }
 
-          return NextResponse.json({
-            success: true,
-            verified: true,
-            message: "Payment verified successfully",
-            paymentId,
-            product: isResumeScreening ? "resume-screening" : "oa-questions",
-          });
+            return NextResponse.json({
+              success: true,
+              verified: true,
+              message: "Payment verified successfully",
+              paymentId,
+              product: productName,
+            });
+          }
         }
       }
 

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     if (!Array.isArray(mcqQuestions)) return NextResponse.json({ error: "mcqQuestions must be an array" }, { status: 400 });
 
     // Basic validation for questions
-    for (const [i, q] of mcqQuestions.entries()) {
+    mcqQuestions.forEach((q: any, i: number) => {
       if (!q.question || !Array.isArray(q.options) || q.options.length !== 4) {
         return NextResponse.json({ error: `Invalid question at index ${i}. Ensure question and 4 options.` }, { status: 400 });
       }
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       }
       // Normalize marks to 1
       q.marks = 1;
-    }
+    });
 
     // Upsert RoadmapTest
     let test = await RoadmapTest.findOne({ roadmapId });

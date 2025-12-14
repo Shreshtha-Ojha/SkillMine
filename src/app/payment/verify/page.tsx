@@ -11,6 +11,7 @@ function VerifyContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("");
+  const [product, setProduct] = useState<string | null>(null);
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -36,7 +37,8 @@ function VerifyContent() {
 
         if (data.success && data.verified) {
           setStatus("success");
-          setMessage(data.message || "Payment successful! All company questions are now unlocked.");
+          setMessage(data.message || "Payment successful!");
+          setProduct(data.product || null);
         } else {
           setStatus("error");
           setMessage(data.message || "Payment verification failed.");
@@ -85,13 +87,23 @@ function VerifyContent() {
             Payment Successful!
           </h1>
           <p className="text-gray-400 mb-6">{message}</p>
-          <Link
-            href="/company-problems"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition"
-          >
-            Access All Companies
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          {product === 'skill-test' ? (
+            <Link
+              href="/skill-tests"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition"
+            >
+              Go to Skill Tests
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          ) : (
+            <Link
+              href="/company-problems"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition"
+            >
+              Access All Companies
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          )}
         </>
       )}
 

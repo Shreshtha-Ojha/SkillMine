@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
         resumeScreeningPremium: 10,
         topInterviews: 10,
         mockInterviews: 10,
+        // do not set skillTestPremium by default; admin must set explicitly
       });
     }
 
@@ -47,6 +48,7 @@ export async function GET(request: NextRequest) {
         resumeScreeningPremium: pricing.resumeScreeningPremium,
         topInterviews: pricing.topInterviews,
         mockInterviews: pricing.mockInterviews || 10,
+        skillTestPremium: pricing.skillTestPremium ?? null,
         updatedAt: pricing.updatedAt,
       },
     });
@@ -71,11 +73,11 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { oaQuestions, resumeScreeningPremium, topInterviews, mockInterviews } = body;
+    const { oaQuestions, resumeScreeningPremium, topInterviews, mockInterviews, skillTestPremium } = body;
 
     // Validate minimum prices (Instamojo requires minimum ₹9)
     const minPrice = 9;
-    if (oaQuestions < minPrice || resumeScreeningPremium < minPrice || topInterviews < minPrice || mockInterviews < minPrice) {
+    if (oaQuestions < minPrice || resumeScreeningPremium < minPrice || topInterviews < minPrice || mockInterviews < minPrice || (skillTestPremium !== undefined && skillTestPremium < minPrice)) {
       return NextResponse.json(
         { error: `Minimum price is ₹${minPrice} (payment gateway requirement)` },
         { status: 400 }
@@ -90,6 +92,7 @@ export async function PUT(request: NextRequest) {
       pricing.resumeScreeningPremium = resumeScreeningPremium;
       pricing.topInterviews = topInterviews;
       pricing.mockInterviews = mockInterviews;
+      if (skillTestPremium !== undefined) pricing.skillTestPremium = skillTestPremium;
       pricing.updatedBy = admin._id.toString();
       await pricing.save();
     } else {
@@ -99,6 +102,7 @@ export async function PUT(request: NextRequest) {
         resumeScreeningPremium,
         topInterviews,
         mockInterviews,
+        skillTestPremium: skillTestPremium === undefined ? undefined : skillTestPremium,
         updatedBy: admin._id.toString(),
       });
     }
@@ -111,6 +115,7 @@ export async function PUT(request: NextRequest) {
         resumeScreeningPremium: pricing.resumeScreeningPremium,
         topInterviews: pricing.topInterviews,
         mockInterviews: pricing.mockInterviews,
+        skillTestPremium: pricing.skillTestPremium ?? null,
         updatedAt: pricing.updatedAt,
       },
     });

@@ -23,6 +23,7 @@ interface Pricing {
   resumeScreeningPremium: number;
   topInterviews: number;
   mockInterviews: number;
+  skillTestPremium?: number | null;
 }
 
 export default function PremiumDeals() {
@@ -30,7 +31,8 @@ export default function PremiumDeals() {
     oaQuestions: 10,
     resumeScreeningPremium: 10,
     topInterviews: 10,
-    mockInterviews: 10
+    mockInterviews: 10,
+    skillTestPremium: null
   });
 
   useEffect(() => {
@@ -70,6 +72,25 @@ export default function PremiumDeals() {
       ],
       popular: true,
       link: "/company-problems"
+    },
+    {
+      id: "skill-tests",
+      title: "Skill Test Premium",
+      subtitle: "Unlimited attempts & premium features",
+      price: pricing.skillTestPremium ?? null,
+      originalPrice: 99,
+      icon: Crown,
+      gradient: "from-indigo-500 via-blue-500 to-teal-400",
+      bgGlow: "bg-indigo-500/20",
+      borderColor: "border-indigo-500/30",
+      features: [
+        "Unlimited attempts for skill tests",
+        "Per-question timers and one-time visit enforcement",
+        "Priority support",
+        "Lifetime access"
+      ],
+      popular: false,
+      link: "/skill-tests"
     },
 
 
@@ -121,7 +142,7 @@ export default function PremiumDeals() {
         </motion.div>
 
         {/* Deals Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
           {deals.map((deal, index) => (
             <motion.div
               key={deal.id}
@@ -162,10 +183,10 @@ export default function PremiumDeals() {
 
                 {/* Pricing */}
                 <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-3xl font-bold text-white">₹{deal.price}</span>
+                  <span className="text-3xl font-bold text-white">{deal.price != null ? `₹${deal.price}` : 'TBD'}</span>
                   <span className="text-gray-500 line-through text-sm">₹{deal.originalPrice}</span>
                   <span className="text-green-400 text-xs font-medium bg-green-500/10 px-2 py-1 rounded-full">
-                    {Math.round((1 - deal.price / deal.originalPrice) * 100)}% OFF
+                    {deal.price != null ? Math.round((1 - deal.price / deal.originalPrice) * 100) + '% OFF' : '—'}
                   </span>
                 </div>
 
@@ -180,13 +201,17 @@ export default function PremiumDeals() {
                 </div>
 
                 {/* CTA Button */}
-                <a
-                  href={deal.link}
-                  className={`w-full py-3 px-4 rounded-xl bg-gradient-to-r ${deal.gradient} text-white font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`}
-                >
-                  Get Started
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
+                {deal.id === 'skill-tests' && deal.price == null ? (
+                  <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-gray-400 font-semibold" disabled>Price not set</button>
+                ) : (
+                  <a
+                    href={deal.link}
+                    className={`w-full py-3 px-4 rounded-xl bg-gradient-to-r ${deal.gradient} text-white font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`}
+                  >
+                    Get Started
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                )}
               </div>
             </motion.div>
           ))}

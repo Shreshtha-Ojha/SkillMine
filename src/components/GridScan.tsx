@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { EffectComposer, RenderPass, EffectPass, BloomEffect, ChromaticAberrationEffect } from 'postprocessing';
 import * as THREE from 'three';
-import * as faceapi from 'face-api.js';
+// Note: `face-api.js` is dynamically imported in browser-only effects to avoid server-side bundling issues
 
 type GridScanProps = {
   enableWebcam?: boolean;
@@ -682,16 +682,20 @@ export const GridScan: React.FC<GridScanProps> = ({
     let canceled = false;
     const load = async () => {
       try {
+        const faceapi = await import('face-api.js');
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
           faceapi.nets.faceLandmark68TinyNet.loadFromUri(modelsPath)
         ]);
+        // store on window for later quick access in detection loop
+        (window as any).__faceapi = faceapi;
         if (!canceled) setModelsReady(true);
-      } catch {
+      } catch (err) {
+        console.error('Failed to load face-api models', err);
         if (!canceled) setModelsReady(false);
       }
     };
-    load();
+    if (typeof window !== 'undefined') load();
     return () => {
       canceled = true;
     };
@@ -716,6 +720,9 @@ export const GridScan: React.FC<GridScanProps> = ({
       } catch {
         return;
       }
+
+      const faceapi = (window as any).__faceapi;
+      if (!faceapi) return; // models not loaded or unsupported environment
 
       const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 });
 

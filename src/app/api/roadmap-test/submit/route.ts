@@ -197,6 +197,15 @@ export async function POST(request: NextRequest) {
       attemptObj.mcqSnapshot = attemptObj.mcqSnapshot.map((q: any) => ({ question: q.question, options: q.options, marks: q.marks }));
     }
 
+    // After a retry submission, ensure retry permission is revoked and admin must re-allow further retries.
+    // This prevents unlimited retries after admin approval — using a retry consumes the allowance.
+    try {
+      await TestAttempt.updateMany({ userId: attempt.userId, roadmapId: attempt.roadmapId }, { $set: { canRetry: false } });
+      console.log(`Revoked canRetry for user ${attempt.userId} roadmap ${attempt.roadmapId} after submission ${attempt._id}`);
+    } catch (err) {
+      console.error('Failed to revoke canRetry after submission:', err);
+    }
+
 
 
     return NextResponse.json({

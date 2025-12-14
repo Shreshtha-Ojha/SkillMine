@@ -82,12 +82,12 @@ export default function RoadmapQuestionsPage() {
       const incoming: MCQ[] = [];
       const invalids: string[] = [];
       let trimmedCount = 0;
-      for (const [i, raw] of parsed.entries()) {
+      parsed.forEach((raw: any, i: number) => {
         const q: any = { ...raw };
         // Basic validation
         if (!q.question || !Array.isArray(q.options)) {
           invalids.push(`index ${i}: missing question/options`);
-          continue;
+          return;
         }
 
         // Normalize options: if more than 4, trim and count; if less than 4, invalid
@@ -97,14 +97,14 @@ export default function RoadmapQuestionsPage() {
         }
         if (q.options.length < 4) {
           invalids.push(`index ${i}: options length ${q.options.length} < 4`);
-          continue;
+          return;
         }
 
         // Normalize correctAnswer
         const ca = Number(q.correctAnswer);
         if (!Number.isInteger(ca) || ca < 0 || ca > 3) {
           invalids.push(`index ${i}: invalid correctAnswer ${q.correctAnswer}`);
-          continue;
+          return;
         }
         q.correctAnswer = ca;
 
@@ -113,7 +113,7 @@ export default function RoadmapQuestionsPage() {
           seen.add(key);
           incoming.push(q as MCQ);
         }
-      }
+      });
 
       if (incoming.length === 0 && invalids.length > 0) {
         return toast.error(`No valid questions found. Errors: ${invalids.slice(0,3).join('; ')}${invalids.length>3?` (+${invalids.length-3} more)`:''}`);

@@ -7,6 +7,7 @@ export interface IPricingSettings {
   resumeScreeningPremium: number;
   topInterviews: number;
   mockInterviews: number;
+  skillTestPremium?: number;
   updatedAt: Date;
   updatedBy?: string;
 }
@@ -41,6 +42,11 @@ const pricingSettingsSchema = new mongoose.Schema<IPricingSettings>(
       type: Number,
       required: true,
       default: 10,
+      min: 9,
+    },
+    skillTestPremium: {
+      type: Number,
+      // optional: admin may set this; do not default to 10
       min: 9,
     },
     updatedBy: {

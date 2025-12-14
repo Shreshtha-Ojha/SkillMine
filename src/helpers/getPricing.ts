@@ -6,6 +6,7 @@ export interface Pricing {
   resumeScreeningPremium: number;
   topInterviews: number;
   mockInterviews: number;
+  skillTestPremium?: number | null;
 }
 
 // Default prices (Instamojo minimum is ₹9)
@@ -31,6 +32,7 @@ export async function getPricing(): Promise<Pricing> {
       resumeScreeningPremium: pricing.resumeScreeningPremium || defaultPricing.resumeScreeningPremium,
       topInterviews: pricing.topInterviews || defaultPricing.topInterviews,
       mockInterviews: pricing.mockInterviews || defaultPricing.mockInterviews,
+      skillTestPremium: pricing.skillTestPremium ?? null,
     };
   } catch (error) {
     console.error("Error fetching pricing:", error);

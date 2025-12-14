@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import { 
   DollarSign, Save, Loader2, AlertCircle, CheckCircle, 
-  FileText, Users, Briefcase, ArrowLeft, RefreshCw 
+  FileText, Users, Briefcase, ArrowLeft, RefreshCw, Crown
 } from "lucide-react";
 import Link from "next/link";
 import useCurrentUser from "@/lib/useCurrentUser";
@@ -16,6 +16,7 @@ interface PricingData {
   resumeScreeningPremium: number;
   topInterviews: number;
   mockInterviews: number;
+  skillTestPremium?: number;
   updatedAt?: string;
 }
 
@@ -29,6 +30,7 @@ export default function PricingManagementPage() {
     resumeScreeningPremium: 10,
     topInterviews: 10,
     mockInterviews: 10,
+    skillTestPremium: 10,
   });
   const [originalPricing, setOriginalPricing] = useState<PricingData | null>(null);
 
@@ -60,7 +62,7 @@ export default function PricingManagementPage() {
 
   const handleSave = async () => {
     // Validate minimum price
-    if (pricing.oaQuestions < 9 || pricing.resumeScreeningPremium < 9 || pricing.topInterviews < 9 || pricing.mockInterviews < 9) {
+    if (pricing.oaQuestions < 9 || pricing.resumeScreeningPremium < 9 || pricing.topInterviews < 9 || pricing.mockInterviews < 9 || (pricing.skillTestPremium || 0) < 9) {
       toast.error("Minimum price is ₹9 (payment gateway requirement)");
       return;
     }
@@ -91,7 +93,8 @@ export default function PricingManagementPage() {
     pricing.oaQuestions !== originalPricing.oaQuestions ||
     pricing.resumeScreeningPremium !== originalPricing.resumeScreeningPremium ||
     pricing.topInterviews !== originalPricing.topInterviews ||
-    pricing.mockInterviews !== originalPricing.mockInterviews
+    pricing.mockInterviews !== originalPricing.mockInterviews ||
+    (pricing.skillTestPremium || 0) !== (originalPricing.skillTestPremium || 0)
   );
 
   if (loading) {
@@ -137,6 +140,13 @@ export default function PricingManagementPage() {
       description: "Access to premium interview preparation",
       icon: Briefcase,
       color: "green",
+    },
+    {
+      key: "skillTestPremium" as const,
+      label: "Skill Test Premium",
+      description: "Unlimited attempts for skill tests and premium features",
+      icon: Crown,
+      color: "yellow",
     },
 
   ];
@@ -252,7 +262,7 @@ export default function PricingManagementPage() {
                   </div>
                 </div>
 
-                {pricing[item.key] < 9 && (
+                {(pricing[item.key] ?? 0) < 9 && (
                   <div className="mt-3 flex items-center gap-2 text-red-400 text-sm">
                     <AlertCircle className="w-4 h-4" />
                     Minimum price is ₹9

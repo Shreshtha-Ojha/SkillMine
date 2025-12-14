@@ -83,6 +83,13 @@ const userSchema = new Schema({
             paymentRequestId: { type: String },
             amount: { type: Number },
         },
+        skillTestPremium: {
+            purchased: { type: Boolean, default: false },
+            purchasedAt: { type: Date },
+            paymentId: { type: String },
+            paymentRequestId: { type: String },
+            amount: { type: Number },
+        },
         mockInterviews: {
             purchased: { type: Boolean, default: false },
             purchasedAt: { type: Date },

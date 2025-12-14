@@ -62,11 +62,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already attempted the test
+    // Check for most recent submitted attempt (if any)
     const existingAttempt = await TestAttempt.findOne({
       userId,
       roadmapId,
       submittedAt: { $exists: true },
-    });
+    }).sort({ submittedAt: -1 });
 
     if (existingAttempt && !existingAttempt.canRetry) {
       return NextResponse.json(
@@ -208,11 +209,12 @@ export async function GET(request: NextRequest) {
     const progressPercent = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
     // Check for existing attempt
+    // Check for most recent submitted attempt (if any)
     const existingAttempt = await TestAttempt.findOne({
       userId,
       roadmapId,
       submittedAt: { $exists: true },
-    });
+    }).sort({ submittedAt: -1 });
 
     // Check if test exists
     const testExists = await RoadmapTest.exists({ roadmapId });

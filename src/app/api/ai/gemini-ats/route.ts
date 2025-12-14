@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { generateContentWithConfig } from '@/lib/gemini';
-import * as JSON5 from 'json5';
+import JSON5 from 'json5';
 
 export async function POST(req: Request) {
   try {

@@ -137,11 +137,13 @@ export default function ProfilePage() {
   const [blogRequest, setBlogRequest] = useState<any>(null);
   const [canCreateBlog, setCanCreateBlog] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'history' | 'certificates' | 'tests' | 'coding'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'history' | 'certificates' | 'tests' | 'skill-tests' | 'coding'>('overview');
   const [certifications, setCertifications] = useState<any[]>([]);
   const [loadingCerts, setLoadingCerts] = useState(true);
   const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
   const [testAttempts, setTestAttempts] = useState<Record<string, any>>({});
+  const [skillHistory, setSkillHistory] = useState<any[]>([]);
+  const [loadingSkillHistory, setLoadingSkillHistory] = useState(false);
   
   // Coding Profiles & Photo Modal States
   const [showPhotoModal, setShowPhotoModal] = useState(false);
@@ -270,6 +272,19 @@ export default function ProfilePage() {
     fetchRoadmapsAndProgress();
     // Also fetch coding profiles on page load
     fetchCodingProfiles();
+
+    // fetch skill test history for the user
+    const fetchSkillHistory = async () => {
+      setLoadingSkillHistory(true);
+      try {
+        const res = await axios.get('/api/skill-test/history');
+        if (res.data?.success) setSkillHistory(res.data.attempts || []);
+      } catch (err) {
+        console.error('Failed fetch skill history', err);
+      }
+      setLoadingSkillHistory(false);
+    };
+    fetchSkillHistory();
   }, [fetchUserDetails, fetchRoadmapsAndProgress]);
 
   // Auto refresh coding profiles when visiting the coding tab
@@ -299,7 +314,7 @@ export default function ProfilePage() {
   // Handle tab query parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['overview', 'progress', 'tests', 'certificates', 'history'].includes(tab)) {
+    if (tab && ['overview', 'progress', 'tests', 'certificates', 'history', 'skill-tests', 'coding'].includes(tab)) {
       setActiveTab(tab as any);
     }
   }, [searchParams]);
@@ -413,11 +428,6 @@ export default function ProfilePage() {
               <span className="hidden sm:inline">Back</span>
             </button>
             
-            <h1 className="text-lg font-semibold text-white flex items-center gap-2">
-              <User className="w-5 h-5 text-blue-400" />
-              <span className="hidden sm:inline">My Profile</span>
-            </h1>
-
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -595,7 +605,8 @@ export default function ProfilePage() {
             { id: 'overview', label: 'Overview', icon: User },
             { id: 'coding', label: 'Coding Profiles', icon: Code2 },
             { id: 'progress', label: 'Progress', icon: BarChart3 },
-            { id: 'tests', label: 'Tests', icon: FileText },
+            { id: 'tests', label: 'Certificate Tests', icon: FileText },
+            { id: 'skill-tests', label: 'Skill Tests', icon: FileText },
             { id: 'certificates', label: 'Certificates', icon: Award },
             { id: 'history', label: 'Interview History', icon: Trophy },
           ].map((tab) => (
@@ -938,8 +949,8 @@ export default function ProfilePage() {
                           />
                         </div>
                         
-                        {/* Test Status Section */}
-                        {item.percent === 100 && (
+                        {/* Test Status Section: show when completed or when test is available/retryable */}
+                        {(item.percent === 100 || testInfo?.canTakeTest || testInfo?.canRetry) && (
                           <div className="mt-3 pt-3 border-t border-white/10">
                             {testInfo?.hasAttempted ? (
                               testInfo?.attempt?.passed ? (
@@ -961,13 +972,15 @@ export default function ProfilePage() {
                                     <AlertCircle className="w-4 h-4" />
                                     Test Failed ({testInfo.attempt.percentage}%)
                                   </span>
-                                  {testInfo?.canRetry && (
+                                  {testInfo?.canRetry ? (
                                     <button
                                       onClick={() => router.push(`/roadmap-test?roadmapId=${roadmap._id}`)}
                                       className="text-xs px-3 py-1 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30"
                                     >
                                       Retry Test
                                     </button>
+                                  ) : (
+                                    <div className="text-xs text-gray-400">Attempted</div>
                                   )}
                                 </div>
                               )
@@ -1293,20 +1306,14 @@ export default function ProfilePage() {
                   <FileText className="w-6 h-6 text-yellow-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Skill Certification Tests</h3>
-                  <p className="text-gray-400 text-sm">
-                    Complete a roadmap 100% to unlock its certification test. Pass with 60% or above to earn your official certificate!
-                  </p>
+                  <h3 className="text-xl font-bold text-white mb-2">Certificate Tests</h3>
+                  <p className="text-gray-400 text-sm">Complete a roadmap 100% to unlock its certification test. Pass with 60% or above to earn your official certificate!</p>
                 </div>
               </div>
             </div>
 
             {/* Available Tests */}
             <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-                <Award className="w-5 h-5 text-yellow-400" />
-                Available Tests
-              </h3>
 
               {loadingRoadmaps ? (
                 <div className="flex items-center justify-center py-12">
@@ -1335,96 +1342,26 @@ export default function ProfilePage() {
                             : 'bg-white/5 border-white/5'
                         }`}
                       >
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                              percent === 100 ? 'bg-yellow-500/20' : 'bg-white/10'
-                            }`}>
-                              {percent === 100 ? (
-                                <Award className="w-6 h-6 text-yellow-400" />
-                              ) : (
-                                <BookOpen className="w-6 h-6 text-gray-400" />
-                              )}
-                            </div>
-                            <div>
-                              <h4 className="font-semibold text-white">{roadmap.title}</h4>
-                              <div className="flex items-center gap-3 mt-1">
-                                <span className={`text-sm ${percent === 100 ? 'text-green-400' : 'text-gray-500'}`}>
-                                  {percent}% completed
-                                </span>
-                                {testInfo?.hasAttempted && (
-                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                    testInfo.attempt?.passed
-                                      ? 'bg-green-500/20 text-green-400'
-                                      : 'bg-red-500/20 text-red-400'
-                                  }`}>
-                                    {testInfo.attempt?.passed ? 'Passed' : 'Failed'}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm text-gray-400">{roadmap.title}</div>
+                            <div className="text-xs text-gray-400">{percent}% complete {testInfo?.canTakeTest && percent < 100 ? (<span className="ml-2 inline-block px-2 py-0.5 text-xs bg-yellow-500/20 text-yellow-400 rounded">Available</span>) : null}</div>
                           </div>
-
-                          <div className="flex items-center gap-3">
-                            {percent < 100 ? (
-                              <div className="flex items-center gap-2">
-                                <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
-                                  <div
-                                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
-                                    style={{ width: `${percent}%` }}
-                                  />
-                                </div>
-                                <button
-                                  onClick={() => router.push(`/explore/roadmap/${roadmap._id}`)}
-                                  className="px-4 py-2 text-sm text-blue-400 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 transition-colors"
-                                >
-                                  Continue
-                                </button>
-                              </div>
-                            ) : testInfo?.hasAttempted && testInfo.attempt?.passed ? (
-                              <button
-                                onClick={() => setActiveTab('certificates')}
-                                className="px-4 py-2 text-sm text-green-400 bg-green-500/10 rounded-lg hover:bg-green-500/20 transition-colors flex items-center gap-2"
-                              >
-                                <CheckCircle className="w-4 h-4" />
-                                View Certificate
-                              </button>
-                            ) : testInfo?.hasAttempted && !testInfo?.canRetry ? (
-                              <span className="px-4 py-2 text-sm text-red-400 bg-red-500/10 rounded-lg flex items-center gap-2">
-                                <AlertCircle className="w-4 h-4" />
-                                Test Failed ({testInfo.attempt?.percentage}%)
-                              </span>
-                            ) : testInfo?.canRetry ? (
-                              <button
-                                onClick={() => router.push(`/roadmap-test?roadmapId=${roadmap._id}`)}
-                                className="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all flex items-center gap-2"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                Retry Test
-                              </button>
-                            ) : !testInfo?.hasFullDetails ? (
-                              <button
-                                onClick={() => {
-                                  setActiveTab('overview');
-                                  setEditMode(true);
-                                }}
-                                className="px-4 py-2 text-sm text-amber-400 bg-amber-500/10 rounded-lg hover:bg-amber-500/20 transition-colors flex items-center gap-2"
-                              >
-                                <AlertCircle className="w-4 h-4" />
-                                Complete Profile First
-                              </button>
+                          <div className="flex gap-2">
+                            {(percent === 100 || testInfo?.canTakeTest) ? (
+                              // Show 'Take Certification' when user is eligible (either 100% complete or explicitly allowed)
+                              !testInfo?.hasAttempted ? (
+                                <button onClick={()=>router.push(`/roadmap/${roadmap._id}/certify`)} className="px-3 py-1 bg-yellow-500 rounded text-black text-sm">Take Certification</button>
+                              ) : (
+                                // If admin allowed retry, show Retry button; otherwise just mark as Attempted
+                                testInfo?.canRetry ? (
+                                  <button onClick={()=>router.push(`/roadmap-test?roadmapId=${roadmap._id}`)} className="px-3 py-1 bg-blue-500 rounded text-white text-sm">Retry Test</button>
+                                ) : (
+                                  <div className="text-xs text-gray-400">Attempted</div>
+                                )
+                              )
                             ) : (
-                              <button
-                                onClick={() => router.push(`/roadmap-test?roadmapId=${roadmap._id}`)}
-                                className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg hover:from-yellow-500 hover:to-orange-500 transition-all flex items-center gap-2"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                </svg>
-                                Start Test
-                              </button>
+                              <button onClick={()=>router.push(`/roadmap/${roadmap._id}`)} className="px-3 py-1 bg-white/5 rounded">Open Roadmap</button>
                             )}
                           </div>
                         </div>
@@ -1450,6 +1387,8 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
+
+
 
             {/* Sample Test Card */}
             <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
@@ -1557,6 +1496,57 @@ export default function ProfilePage() {
                   <p className="text-gray-400 text-sm">One attempt per test (Admin can allow retry)</p>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'skill-tests' && (
+          <div className="space-y-6">
+            {/* Skill Tests Panel */}
+            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Skill Tests</h3>
+                  <p className="text-gray-400 text-sm">Your skill test attempts and quick actions.</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={()=>router.push('/skill-tests')} className="px-4 py-2 bg-emerald-600 rounded text-white">Start New Test</button>
+                  <button onClick={()=>router.push('/skill-test/history')} className="px-4 py-2 bg-white/5 rounded">View All</button>
+                </div>
+              </div>
+
+              {loadingSkillHistory ? (
+                <div className="py-8 flex items-center justify-center text-gray-400">Loading your skill test history...</div>
+              ) : (
+                <div className="space-y-3">
+                  {skillHistory.length === 0 ? (
+                    <div className="text-gray-400 text-sm">No skill tests found. Take a test to see attempts here.</div>
+                  ) : (
+                    skillHistory.slice(0,5).map(h => (
+                      <div key={h._id} className="p-3 bg-[#0b0b10] rounded flex items-center justify-between">
+                        <div>
+                          <div className="font-medium">{h.testName}</div>
+                          <div className="text-xs text-gray-400">{h.mcqSnapshot?.length||0} questions • {new Date(h.startedAt).toLocaleString()}</div>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          {h.submittedAt ? (
+                            <div className={`px-2 py-1 text-xs rounded ${h.passed ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
+                              {h.passed ? 'Passed' : `Failed (${h.percentage || 0}%)`}
+                            </div>
+                          ) : (
+                            <div className="text-xs text-gray-400">In progress</div>
+                          )}
+                          {h.submittedAt ? (
+                            <button onClick={()=>router.push(`/skill-test/result?attemptId=${h._id}`)} className="px-3 py-1 bg-white/5 rounded">View Result</button>
+                          ) : (
+                            <button onClick={()=>router.push(`/skill-test/run?attemptId=${h._id}`)} className="px-3 py-1 bg-white/5 rounded">Resume</button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}

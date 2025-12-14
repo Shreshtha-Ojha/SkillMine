@@ -57,49 +57,90 @@ export async function POST(request: NextRequest) {
 
     // Verify the amount paid is correct using dynamic pricing
     const pricing = await getPricing();
-    const EXPECTED_AMOUNT = pricing.oaQuestions;
     const paidAmount = parseFloat(amount);
-    if (paidAmount < EXPECTED_AMOUNT) {
-      console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
-      return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
-    }
 
-    // Extract user ID from purpose (format: OA_QUESTIONS_{userId})
-    const userId = purpose?.replace("OA_QUESTIONS_", "");
-    
-    if (!userId) {
-      console.error("Invalid purpose format:", purpose);
-      return NextResponse.json({ error: "Invalid purpose" }, { status: 400 });
-    }
+    // Handle different purchase purposes
+    if (purpose?.startsWith("OA_QUESTIONS_")) {
+      const EXPECTED_AMOUNT = pricing.oaQuestions;
+      if (paidAmount < EXPECTED_AMOUNT) {
+        console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
+        return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
+      }
 
-    // Update user's purchase status
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        $set: {
-          "purchases.oaQuestions": {
-            purchased: true,
-            purchasedAt: new Date(),
-            paymentId: payment_id,
-            paymentRequestId: payment_request_id,
-            amount: parseFloat(amount) || pricing.oaQuestions,
+      const userId = purpose.replace("OA_QUESTIONS_", "");
+      if (!userId) {
+        console.error("Invalid purpose format:", purpose);
+        return NextResponse.json({ error: "Invalid purpose" }, { status: 400 });
+      }
+
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: {
+            "purchases.oaQuestions": {
+              purchased: true,
+              purchasedAt: new Date(),
+              paymentId: payment_id,
+              paymentRequestId: payment_request_id,
+              amount: parseFloat(amount) || pricing.oaQuestions,
+            }
           }
-        }
-      },
-      { new: true }
-    );
+        },
+        { new: true }
+      );
 
-    if (!user) {
-      console.error("User not found:", userId);
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      if (!user) {
+        console.error("User not found:", userId);
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+
+      console.log(`Payment successful for user ${userId}, payment_id: ${payment_id}`);
+
+      return NextResponse.json({ success: true, message: "Payment recorded successfully" });
     }
 
-    console.log(`Payment successful for user ${userId}, payment_id: ${payment_id}`);
+    if (purpose?.startsWith("SKILL_TEST_PREMIUM_")) {
+      const EXPECTED_AMOUNT = pricing.skillTestPremium ?? pricing.oaQuestions;
+      if (paidAmount < EXPECTED_AMOUNT) {
+        console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
+        return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
+      }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Payment recorded successfully" 
-    });
+      const userId = purpose.replace("SKILL_TEST_PREMIUM_", "");
+      if (!userId) {
+        console.error("Invalid purpose format:", purpose);
+        return NextResponse.json({ error: "Invalid purpose" }, { status: 400 });
+      }
+
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: {
+            "purchases.skillTestPremium": {
+              purchased: true,
+              purchasedAt: new Date(),
+              paymentId: payment_id,
+              paymentRequestId: payment_request_id,
+              amount: parseFloat(amount) || (pricing.skillTestPremium || pricing.oaQuestions),
+            }
+          }
+        },
+        { new: true }
+      );
+
+      if (!user) {
+        console.error("User not found:", userId);
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+
+      console.log(`Skill test premium payment successful for user ${userId}, payment_id: ${payment_id}`);
+
+      return NextResponse.json({ success: true, message: "Payment recorded successfully" });
+    }
+
+    // Unknown purpose
+    console.error("Unknown payment purpose:", purpose);
+    return NextResponse.json({ error: "Unknown purpose" }, { status: 400 });
 
   } catch (error: any) {
     console.error("Webhook error:", error);
