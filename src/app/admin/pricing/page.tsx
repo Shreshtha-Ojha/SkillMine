@@ -156,7 +156,7 @@ export default function PricingManagementPage() {
       blue: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30" },
       purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30" },
       green: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
-      yellow: { bg: "bg-yellow-500/20", text: "text-yellow-400", border: "border-yellow-500/30" },
+      yellow: { bg: "bg-[#7E102C]/20", text: "text-[#E1D4C1]", border: "border-[#7E102C]/30" },
     };
     return colors[color] || colors.blue;
   };
@@ -176,8 +176,8 @@ export default function PricingManagementPage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-500/20 rounded-lg">
-                <DollarSign className="w-6 h-6 text-yellow-400" />
+              <div className="p-2 bg-[#7E102C]/20 rounded-lg">
+                <DollarSign className="w-6 h-6 text-[#E1D4C1]" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Pricing Management</h1>
@@ -214,10 +214,10 @@ export default function PricingManagementPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Info Banner */}
-        <div className="mb-8 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+        <div className="mb-8 p-4 bg-[#7E102C]/10 border border-[#7E102C]/30 rounded-xl flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-[#E1D4C1] flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-yellow-400 font-medium">Important</p>
+            <p className="text-[#E1D4C1] font-medium">Important</p>
             <p className="text-gray-400 text-sm">
               Minimum price is ₹9 due to payment gateway (Instamojo) requirements. 
               Changes will apply to new purchases immediately.
@@ -282,7 +282,7 @@ export default function PricingManagementPage() {
 
         {/* Unsaved Changes Indicator */}
         {hasChanges && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-6 py-3 rounded-full flex items-center gap-2 shadow-lg">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#7E102C]/20 border border-[#7E102C]/30 text-[#E1D4C1] px-6 py-3 rounded-full flex items-center gap-2 shadow-lg">
             <AlertCircle className="w-4 h-4" />
             You have unsaved changes
           </div>

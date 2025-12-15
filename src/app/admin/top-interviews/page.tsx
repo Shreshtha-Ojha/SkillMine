@@ -348,20 +348,20 @@ export default function ManageTopInterviewsPage() {
 
                       {/* Winners Section (if ended) */}
                       {interview.isEnded && interview.winners && interview.winners.length > 0 && (
-                        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+                        <div className="bg-[#7E102C]/10 border border-[#7E102C]/20 rounded-lg p-4">
                           <h4 className="text-white font-medium mb-4 flex items-center gap-2">
-                            <Award className="w-4 h-4 text-yellow-400" />
+                            <Award className="w-4 h-4 text-[#E1D4C1]" />
                             Winners (Certificates Issued)
                           </h4>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             {interview.winners.map((winner: any, idx: number) => (
                               <div key={idx} className={`p-3 rounded-lg flex items-center gap-3 ${
-                                winner.rank === 1 ? 'bg-yellow-500/20 border border-yellow-500/30' :
+                                winner.rank === 1 ? 'bg-[#7E102C]/20 border border-[#7E102C]/30' :
                                 winner.rank === 2 ? 'bg-gray-400/20 border border-gray-400/30' :
                                 'bg-amber-600/20 border border-amber-600/30'
                               }`}>
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold ${
-                                  winner.rank === 1 ? 'bg-yellow-500/30 text-yellow-400' :
+                                  winner.rank === 1 ? 'bg-[#7E102C]/30 text-[#E1D4C1]' :
                                   winner.rank === 2 ? 'bg-gray-400/30 text-gray-300' :
                                   'bg-amber-600/30 text-amber-500'
                                 }`}>
@@ -428,7 +428,7 @@ export default function ManageTopInterviewsPage() {
                               >
                                 <div className="flex items-center gap-3">
                                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                                    index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
+                                    index === 0 ? 'bg-[#7E102C]/20 text-[#E1D4C1]' :
                                     index === 1 ? 'bg-gray-400/20 text-gray-300' :
                                     index === 2 ? 'bg-amber-600/20 text-amber-500' :
                                     'bg-white/10 text-gray-400'

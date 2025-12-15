@@ -149,7 +149,7 @@ export default function RoadmapQuestionsPage() {
           <button onClick={handleAddRow} className="px-4 py-3 bg-blue-600 text-white rounded-xl">Add Question</button>
           <div className="text-sm text-gray-400 px-3">Total questions: <span className="font-semibold text-white">{questions.length}</span></div>
           {questions.length < 60 && selected && (
-            <div className="text-sm text-yellow-400 px-3">Warning: Less than 60 questions configured. Users cannot take test until 60+ MCQs exist.</div>
+            <div className="text-sm text-[#E1D4C1] px-3">Warning: Less than 60 questions configured. Users cannot take test until 60+ MCQs exist.</div>
           )}
           <label className="inline-flex items-center gap-2 text-sm text-gray-300 px-4">
             <input type="checkbox" checked={appendMode} onChange={(e) => setAppendMode(e.target.checked)} className="accent-blue-500" />
@@ -161,7 +161,7 @@ export default function RoadmapQuestionsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <textarea value={bulkJSON} onChange={(e) => setBulkJSON(e.target.value)} placeholder='Paste JSON array of questions here to bulk import' className="col-span-1 md:col-span-1 p-3 bg-[#0b0b10] border border-white/10 rounded-xl min-h-[160px] text-white" />
           <div className="flex flex-col gap-2">
-            <button onClick={handleImport} className="px-4 py-3 bg-yellow-600 text-white rounded-xl">Import JSON</button>
+            <button onClick={handleImport} className="px-4 py-3 bg-[#7E102C] text-[#E1D4C1] rounded-xl border border-[#0a0a0f]">Import JSON</button>
             <div className="text-sm text-gray-400">Each question: {"{ question: string, options: [4 strings], correctAnswer: 0-3 }"}</div>
           </div>
         </div>

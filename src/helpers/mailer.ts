@@ -40,32 +40,33 @@ const mailOptions = {
     to: email, 
     subject: emailType === "VERIFY" ? "Verify Your Email with PrepSutra" : "Reset Your Password on PrepSutra", // Email subject
     html: `
-        <div style="background-color: #000; color: #fff; padding: 20px; font-family: Arial, sans-serif; background-image: url('https://www.nasa.gov/sites/default/files/thumbnails/image/pia22810-16.jpg'); background-size: cover;">
-            <div style="max-width: 600px; margin: auto; background-color: rgba(0, 0, 0, 0.8); border-radius: 10px; overflow: hidden;">
-                <div style="padding: 20px; text-align: center;">
-                    <h1 style="font-size: 32px; color: #00d8ff; margin-bottom: 10px;">PrepSutra</h1>
-                    <p style="font-size: 18px; color: #fff;">Exploring the universe of knowledge, one step at a time.</p>
+        <div style="background-color: #E1D4C1; color: #222; padding: 20px; font-family: Georgia, 'Times New Roman', serif;">
+            <div style="max-width: 600px; margin: auto; background-color: #F6F0EB; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06);">
+                <div style="padding: 24px; text-align: center; background-color: #7E102C; color: #E1D4C1;">
+                    <h1 style="font-size: 28px; margin: 0;">PrepSutra</h1>
+                    <p style="font-size: 14px; margin: 6px 0 0; opacity: 0.9;">Curated learning for thoughtful engineers.</p>
                 </div>
-                <div style="padding: 20px; text-align: center;">
-                    <h2 style="color: #00ff44; font-size: 24px; margin-bottom: 10px;">
-                        ${emailType === "VERIFY" ? "Verify Your Email!" : "Reset Your Password!"}
+                <div style="padding: 24px; text-align: left; color: #222;">
+                    <h2 style="color: #7E102C; font-size: 20px; margin-bottom: 10px;">
+                        ${emailType === "VERIFY" ? "Verify Your Email" : "Reset Your Password"}
                     </h2>
-                    <p style="font-size: 16px; color: #fff; margin-bottom: 20px;">
-                        We're excited to have you on board! Click the link below to ${emailType === 'VERIFY' ? 'verify your email' : 'reset your password'} 
-                        and start exploring the platform.
+                    <p style="font-size: 15px; color: #333; margin-bottom: 18px; line-height: 1.6;">
+                        We're glad you're here. Click the button below to ${emailType === 'VERIFY' ? 'verify your email' : 'reset your password'} and continue exploring PrepSutra.
                     </p>
-                    <a href="${domain}/auth/${emailType === 'VERIFY' ? 'verifyemail' : 'resetpassword'}?token=${hashedToken}" 
-                       style="display: inline-block; text-decoration: none; color: #fff; background: linear-gradient(to right, #6a11cb, #2575fc); 
-                              padding: 12px 20px; font-size: 16px; border-radius: 5px; font-weight: bold;">
-                        ${emailType === 'VERIFY' ? 'Verify Now' : 'Reset Password'}
-                    </a>
-                    <p style="color: #ccc; font-size: 14px; margin-top: 10px;">
-                        This link is valid for 1 hour. Once verified, you can log in and start exploring.
+                    <div style="text-align: center; margin: 18px 0;">
+                        <a href="${domain}/auth/${emailType === 'VERIFY' ? 'verifyemail' : 'resetpassword'}?token=${hashedToken}"
+                           style="display: inline-block; text-decoration: none; color: #E1D4C1; background: #7E102C; 
+                                  padding: 12px 22px; font-size: 16px; border-radius: 6px; font-weight: bold;">
+                            ${emailType === 'VERIFY' ? 'Verify Now' : 'Reset Password'}
+                        </a>
+                    </div>
+                    <p style="color: #666; font-size: 13px; margin-top: 10px;">
+                        This link is valid for 1 hour. If you didn't request this, you can safely ignore this email.
                     </p>
                 </div>
-                <div style="padding: 20px; text-align: center; background-color: #0b0b3b;">
-                    <p style="color: #aaa; font-size: 14px; margin-bottom: 10px;">Made with 💖 by the PrepSutra Team</p>
-                    <p style="color: #aaa; font-size: 14px;">Explore knowledge, shape the future.</p>
+                <div style="padding: 18px; text-align: center; background-color: #EDE4DF; color: #58423F; font-size: 13px;">
+                    <p style="margin: 0;">Made with care by the PrepSutra Team</p>
+                    <p style="margin: 4px 0 0; color: #777;">Explore knowledge, shape the future.</p>
                 </div>
             </div>
         </div>

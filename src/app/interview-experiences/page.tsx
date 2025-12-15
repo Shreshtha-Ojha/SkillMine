@@ -60,22 +60,22 @@ export default function InterviewExperiencesPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/8 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/8 rounded-full blur-[128px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[rgba(126,16,44,0.06)] rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[rgba(215,169,168,0.03)] rounded-full blur-[128px]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(126,16,44,0.06)] border border-[rgba(126,16,44,0.08)] rounded-full mb-3">
               <Sparkles className="w-4 h-4 text-pink-400" />
-              <span className="text-sm text-blue-300">Community Experiences</span>
+              <span className="text-sm text-[var(--color-accent)]">Community Experiences</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white">Interview Experiences</h1>
             <p className="text-gray-400 mt-2">Community-shared interview stories and tips — approved by admins.</p>
           </div>
           <div>
-            <Link href={canSubmit ? '/interview-experiences/add' : '/auth/login-required'} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
+            <Link href={canSubmit ? '/interview-experiences/add' : '/auth/login-required'} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[#6b0f26] text-[var(--color-foreground)]">
               <span className="text-lg font-bold">+</span>
               Add your interview experience
             </Link>
@@ -113,14 +113,14 @@ export default function InterviewExperiencesPage() {
             {filtered.map((exp, index) => (
               <motion.article key={exp._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }} className="group relative p-6 bg-[#111118] border border-white/5 rounded-2xl hover:border-white/10 transition-all cursor-pointer" onClick={() => router.push(`/interview-experiences/${exp._id}`)}>
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full">Experience</span>
+                  <span className="px-3 py-1 bg-[rgba(126,16,44,0.06)] text-[var(--color-accent)] text-xs font-medium rounded-full">Experience</span>
                   <span className="text-xs text-gray-500 flex items-center gap-1">{exp.company || 'General'}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-pink-300 transition-colors">{exp.title}</h3>
                 <p className="text-gray-400 text-sm mb-4 line-clamp-2">{exp.subtitle || exp.content?.replace(/<[^>]+>/g, '').slice(0, 120) + '...'}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white">{(exp.author || 'U').charAt(0).toUpperCase()}</div>
+                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-foreground)]">{(exp.author || 'U').charAt(0).toUpperCase()}</div>
                     <span className="text-sm text-gray-300">{exp.author || exp.authorId?.username}</span>
                   </div>
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

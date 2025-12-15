@@ -71,7 +71,7 @@ function ResponsiveNavbar({ onNavigate }: { onNavigate: (path: string) => void }
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
-          <div className="relative bg-[#111118] border-b border-white/5 mx-4 mt-2 p-4 rounded-xl flex flex-col gap-1">
+          <div className="relative theme-card theme-card--vintage border-b border-white/5 mx-4 mt-2 p-4 rounded-xl flex flex-col gap-1">
             <button onClick={() => handleLinkClick('/')} className="text-gray-300 hover:text-white text-left text-sm font-medium transition-colors px-3 py-2.5 rounded-lg hover:bg-white/5">Home</button>
             <button onClick={() => handleLinkClick('/explore')} className="text-gray-300 hover:text-white text-left text-sm font-medium transition-colors px-3 py-2.5 rounded-lg hover:bg-white/5">Explore</button>
             <button onClick={() => handleLinkClick('/blogs')} className="text-gray-300 hover:text-white text-left text-sm font-medium transition-colors px-3 py-2.5 rounded-lg hover:bg-white/5">Blogs</button>
@@ -551,7 +551,7 @@ export default function InterviewDashboard() {
           )}
         </div>
         {/* Main Dashboard Card */}
-        <div className="grid md:grid-cols-2 gap-6 md:gap-10 bg-[#111118] border border-white/5 rounded-xl p-5 md:p-8">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-10 theme-card theme-card--vintage border border-white/5 rounded-xl p-5 md:p-8">
           {/* AI Side */}
           <div className="flex flex-col gap-4">
             <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
@@ -802,7 +802,7 @@ export default function InterviewDashboard() {
       {/* Navigation Warning Modal */}
       {showWarningModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#111118] border border-white/10 rounded-xl max-w-md w-full p-6">
+          <div className="theme-card theme-card--vintage border border-white/10 rounded-xl max-w-md w-full p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
                 <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

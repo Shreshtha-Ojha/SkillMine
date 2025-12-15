@@ -12,37 +12,37 @@ export default function StatsSection() {
       icon: Users, 
       value: stats?.activeUsers || "1K+", 
       label: "Active Users",
-      color: "text-blue-400"
+      color: "text-[#E1D4C1]"
     },
     { 
       icon: Mic, 
       value: stats?.totalInterviews || "5K+", 
       label: "Interviews Taken",
-      color: "text-purple-400"
+      color: "text-[#D7A9A8]"
     },
     { 
       icon: FileText, 
       value: stats?.publishedBlogs || "500+", 
       label: "Blogs Published",
-      color: "text-green-400"
+      color: "text-[#7E102C]"
     },
     { 
       icon: Map, 
       value: stats?.availableRoadmaps || "20+", 
       label: "Roadmaps",
-      color: "text-orange-400"
+      color: "text-[#E1D3CC]"
     },
     { 
       icon: Award, 
       value: stats?.certificatesEarned || "2K+", 
       label: "Certificates",
-      color: "text-yellow-400"
+      color: "text-[#D7A9A8]"
     },
     { 
       icon: TrendingUp, 
       value: "95%", 
       label: "Success Rate",
-      color: "text-pink-400"
+      color: "text-[#D7A9A8]"
     },
   ];
 
@@ -53,10 +53,10 @@ export default function StatsSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative p-8 bg-gradient-to-br from-[#111118] to-[#0d0d14] border border-white/5 rounded-3xl overflow-hidden"
+          className="relative p-8 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-3xl overflow-hidden"
         >
           {/* Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-purple-600/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#E1D4C1]/5 pointer-events-none" />
 
           {/* Stats Grid */}
           <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -70,10 +70,10 @@ export default function StatsSection() {
                 className="flex flex-col items-center text-center"
               >
                 <stat.icon className={`w-6 h-6 ${stat.color} mb-3`} />
-                <span className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                <span className="text-2xl sm:text-3xl font-bold text-[#E1D4C1] mb-1">
                   {stat.value}
                 </span>
-                <span className="text-xs text-gray-500">{stat.label}</span>
+                <span className="text-xs text-[#E1D3CC]">{stat.label}</span>
               </motion.div>
             ))}
           </div>

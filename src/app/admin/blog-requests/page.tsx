@@ -118,10 +118,10 @@ export default function BlogRequestsAdmin() {
 
       {/* Stats Card */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-[#111118] border border-yellow-500/30 rounded-xl p-4">
+        <div className="bg-[#111118] border border-[#7E102C]/30 rounded-xl p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 bg-[#7E102C]/20 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-[#E1D4C1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -162,7 +162,7 @@ export default function BlogRequestsAdmin() {
                     <div>
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <span className="text-white font-medium">{userInfo?.username || "Unknown User"}</span>
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#7E102C]/20 text-[#E1D4C1]">
                           Pending
                         </span>
                       </div>

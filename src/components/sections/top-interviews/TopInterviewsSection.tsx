@@ -57,7 +57,7 @@ export default function TopInterviewsSection() {
         {interviews.map((interview: any) => (
           <div
             key={interview._id}
-            className="bg-[#111118] border border-white/5 rounded-xl p-5 flex flex-col hover:border-white/10 transition-all group"
+            className="theme-card theme-card--vintage border border-white/5 rounded-xl p-5 flex flex-col hover:border-white/10 transition-all group"
           >
             <div className="flex-1">
               <h3 className="text-base font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">

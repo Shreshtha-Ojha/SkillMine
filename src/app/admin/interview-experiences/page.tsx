@@ -100,7 +100,7 @@ export default function InterviewExperienceAdmin() {
                   <div>
                     <div className="text-white font-semibold">{p.title}</div>
                           <div className="text-gray-400 text-sm">by {p.author}</div>
-                          <div className="text-xs text-gray-500">Status: <span className={`px-2 py-1 rounded ${p.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' : p.status === 'approved' ? 'bg-green-500/10 text-green-300' : 'bg-red-500/10 text-red-300'}`}>{p.status}</span></div>
+                          <div className="text-xs text-gray-500">Status: <span className={`px-2 py-1 rounded ${p.status === 'pending' ? 'bg-[#7E102C]/20 text-[#E1D4C1]' : p.status === 'approved' ? 'bg-green-500/10 text-green-300' : 'bg-red-500/10 text-red-300'}`}>{p.status}</span></div>
                     <div className="text-xs text-gray-500">{new Date(p.createdAt).toLocaleString()}</div>
                   </div>
                 </div>

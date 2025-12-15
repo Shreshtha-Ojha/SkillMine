@@ -11,7 +11,7 @@ function EditableField({ value, onChange, placeholder, className = "" }: { value
   const [temp, setTemp] = useState(value);
   return editing ? (
     <input
-      className={"bg-gray-900 border border-blue-400 rounded px-2 py-1 text-white text-base md:text-xl w-full max-w-xs md:max-w-2xl " + className}
+      className={"bg-gray-900 border border-[#7E102C] rounded px-2 py-1 text-white text-base md:text-xl w-full max-w-xs md:max-w-2xl " + className}
       value={temp}
       onChange={e => setTemp(e.target.value)}
       onBlur={() => { setEditing(false); onChange(temp); }}
@@ -247,7 +247,7 @@ const RoadmapDetailPage = () => {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-2 border-[#7E102C] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading roadmap...</p>
         </div>
       </div>
@@ -267,7 +267,7 @@ const RoadmapDetailPage = () => {
           <p className="text-gray-500 mb-4">This roadmap doesn't exist or has been removed.</p>
           <button 
             onClick={() => router.push("/explore")}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors"
+            className="px-4 py-2 bg-[#7E102C] text-[#E1D4C1] rounded-lg hover:bg-[#58423F] transition-colors"
           >
             Back to Explore
           </button>
@@ -280,8 +280,8 @@ const RoadmapDetailPage = () => {
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px]" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[128px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7E102C]/10 rounded-full blur-[128px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#7E102C]/8 rounded-full blur-[128px]" />
       </div>
 
       {showConfetti && <ReactConfetti width={typeof window !== 'undefined' ? window.innerWidth : 1920} height={typeof window !== 'undefined' ? window.innerHeight : 1080} recycle={false} numberOfPieces={400} />}
@@ -294,13 +294,13 @@ const RoadmapDetailPage = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="p-8 bg-[#111118] border border-white/10 rounded-2xl max-w-md w-full text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center">
-              <svg className="w-10 h-10 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="w-20 h-20 mx-auto mb-6 bg-[#7E102C]/20 rounded-full flex items-center justify-center">
+              <svg className="w-10 h-10 text-[#E1D4C1]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">🎉 Congratulations!</h2>
-            <p className="text-gray-300 mb-2">You've completed the <span className="text-blue-400 font-semibold">{roadmap?.title}</span> roadmap!</p>
+            <p className="text-gray-300 mb-2">You've completed the <span className="text-[#E1D4C1] font-semibold">{roadmap?.title}</span> roadmap!</p>
             <p className="text-gray-400 text-sm mb-6">
               Now you can attempt a skill test to earn your certificate.
             </p>
@@ -310,7 +310,7 @@ const RoadmapDetailPage = () => {
                   setShowCertModal(false);
                   router.push(`/profile?tab=tests`);
                 }}
-                className="px-6 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-semibold rounded-xl hover:from-yellow-500 hover:to-orange-500 transition-all flex items-center justify-center gap-2"
+                className="px-6 py-3 bg-[#7E102C] text-[#E1D4C1] font-semibold rounded-xl hover:bg-[#58423F] transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -348,7 +348,7 @@ const RoadmapDetailPage = () => {
                 initial={{ width: 0 }}
                 animate={{ width: `${percent}%` }}
                 transition={{ duration: 0.5 }}
-                className="h-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                className="h-full bg-[#E1D4C1]"
               />
             </div>
             <span className="text-sm text-gray-400">{percent}%</span>
@@ -365,10 +365,10 @@ const RoadmapDetailPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-full mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-[#7E102C]/10 rounded-full mb-4"
           >
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-sm text-blue-400">Learning Roadmap</span>
+            <span className="text-sm text-[#E1D4C1]">Learning Roadmap</span>
           </motion.div>
 
           <motion.h1
@@ -426,12 +426,12 @@ const RoadmapDetailPage = () => {
                 <button
                   onClick={() => setOpenPhase(openPhase === idx ? null : idx)}
                   className={`w-full flex items-center justify-between p-5 bg-[#111118] border rounded-xl transition-all ${
-                    openPhase === idx ? "border-blue-500/30 bg-[#111118]" : "border-white/5 hover:border-white/10"
+                    openPhase === idx ? "border-[#7E102C]/30 bg-[#111118]" : "border-white/5 hover:border-white/10"
                   }`}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold ${
-                      openPhase === idx ? "bg-blue-500/20 text-blue-400" : "bg-white/5 text-gray-400"
+                      openPhase === idx ? "bg-[#7E102C]/20 text-[#E1D4C1]" : "bg-white/5 text-gray-400"
                     }`}>
                       {idx + 1}
                     </div>
@@ -473,7 +473,7 @@ const RoadmapDetailPage = () => {
                     {/* Tasks */}
                     {phase.tasks && phase.tasks.length > 0 && (
                       <div className="mb-6">
-                        <h4 className="text-sm font-medium text-blue-400 mb-3 flex items-center gap-2">
+                        <h4 className="text-sm font-medium text-[#E1D4C1] mb-3 flex items-center gap-2">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
@@ -483,14 +483,14 @@ const RoadmapDetailPage = () => {
                           {phase.tasks.map((task: any, tIdx: number) => (
                             <div
                               key={tIdx}
-                              className="flex items-center gap-3 p-3 bg-white/5 border border-white/5 rounded-lg hover:border-blue-500/20 transition-all"
+                              className="flex items-center gap-3 p-3 bg-white/5 border border-white/5 rounded-lg hover:border-[#7E102C]/20 transition-all"
                             >
                               <input
                                 type="checkbox"
                                 checked={progress.completedTasks.includes(task.title)}
                                 onChange={(e) => handleCheck("task", task.title, e.target.checked)}
                                 disabled={progressLoading}
-                                className="w-5 h-5 rounded border-2 border-gray-600 bg-transparent checked:bg-blue-500 checked:border-blue-500 cursor-pointer"
+                                className="w-5 h-5 rounded border-2 border-gray-600 bg-transparent checked:bg-[#7E102C] checked:border-[#7E102C] cursor-pointer"
                               />
                               <span className={`flex-1 text-sm ${
                                 progress.completedTasks.includes(task.title) ? "text-gray-500 line-through" : "text-white"
@@ -504,7 +504,7 @@ const RoadmapDetailPage = () => {
                                   href={task.link}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-500 transition-colors"
+                                  className="px-3 py-1 text-xs bg-[#7E102C] text-[#E1D4C1] rounded-md hover:bg-[#58423F] transition-colors"
                                 >
                                   Open
                                 </a>
@@ -515,7 +515,7 @@ const RoadmapDetailPage = () => {
                                     value={task.link || ""} 
                                     onChange={v => handleEditTask(idx, tIdx, "link", v)} 
                                     placeholder="Link" 
-                                    className="text-blue-400 text-xs"
+                                    className="text-[#E1D4C1] text-xs"
                                   />
                                   <button 
                                     onClick={() => handleDeleteTask(idx, tIdx)} 
@@ -530,7 +530,7 @@ const RoadmapDetailPage = () => {
                           {isAdmin && (
                             <button
                               onClick={() => handleAddTask(idx)}
-                              className="w-full py-2 text-sm text-blue-400 border border-dashed border-blue-500/30 rounded-lg hover:bg-blue-500/5 transition-all"
+                              className="w-full py-2 text-sm text-[#E1D4C1] border border-dashed border-[#7E102C]/30 rounded-lg hover:bg-[#7E102C]/5 transition-all"
                             >
                               + Add Task
                             </button>
@@ -615,7 +615,7 @@ const RoadmapDetailPage = () => {
                           href={phase.folderLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-[#7E102C] text-[#E1D4C1] text-sm font-medium rounded-lg hover:bg-[#58423F] transition-all"
                         >
                           Open Folder
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -644,7 +644,7 @@ const RoadmapDetailPage = () => {
           {isAdmin && (
             <button
               onClick={handleAddPhase}
-              className="w-full py-4 text-blue-400 border border-dashed border-blue-500/30 rounded-xl hover:bg-blue-500/5 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 text-[#E1D4C1] border border-dashed border-[#7E102C]/30 rounded-xl hover:bg-[#7E102C]/5 transition-all flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -662,11 +662,11 @@ const RoadmapDetailPage = () => {
             className="mt-12"
           >
             {/* Test Section */}
-            <div className="mb-8 p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-2xl">
+            <div className="mb-8 p-6 bg-[#7E102C]/10 border border-[#7E102C]/20 rounded-2xl">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-yellow-500/20 rounded-xl">
-                    <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div className="p-3 bg-[#7E102C]/20 rounded-xl">
+                    <svg className="w-6 h-6 text-[#E1D4C1]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
                   </div>
@@ -674,7 +674,7 @@ const RoadmapDetailPage = () => {
                     <h3 className="text-lg font-semibold text-white mb-1">Certification Test</h3>
                     {testEligibility?.hasAttempted && !testEligibility?.canRetry ? (
                       <p className="text-gray-400 text-sm">
-                        You scored <span className="text-yellow-400 font-semibold">{testEligibility.attempt?.percentage}%</span> 
+                        You scored <span className="text-[#E1D4C1] font-semibold">{testEligibility.attempt?.percentage}%</span> 
                         {testEligibility.attempt?.passed ? " - Certificate earned!" : " - Need 60% to pass"}
                       </p>
                     ) : testEligibility?.canRetry ? (
@@ -695,7 +695,7 @@ const RoadmapDetailPage = () => {
                 {testEligibility?.canTakeTest || testEligibility?.canRetry ? (
                   <button
                     onClick={() => router.push(`/roadmap-test?roadmapId=${id}`)}
-                    className="px-6 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-medium rounded-xl hover:from-yellow-500 hover:to-orange-500 transition-all whitespace-nowrap flex items-center gap-2"
+                    className="px-6 py-3 bg-[#7E102C] text-[#E1D4C1] font-medium rounded-xl hover:bg-[#58423F] transition-all whitespace-nowrap flex items-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -722,7 +722,7 @@ const RoadmapDetailPage = () => {
                 ) : !testEligibility?.hasFullDetails ? (
                   <button
                     onClick={() => router.push("/profile")}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-500 hover:to-indigo-500 transition-all whitespace-nowrap flex items-center gap-2"
+                    className="px-6 py-3 bg-[#7E102C] text-[#E1D4C1] font-medium rounded-xl hover:bg-[#58423F] transition-all whitespace-nowrap flex items-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

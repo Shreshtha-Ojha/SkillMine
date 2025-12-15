@@ -38,9 +38,9 @@ export default function VerifyEmailPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
       {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-950/40 via-[#0a0a0f] to-[#0a0a0f]" />
-      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
-      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-indigo-600/8 rounded-full blur-3xl" />
+      <div className="fixed inset-0 bg-[rgba(126,16,44,0.04)]" />
+      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-[rgba(126,16,44,0.06)] rounded-full blur-3xl" />
+      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-[rgba(215,169,168,0.03)] rounded-full blur-3xl" />
 
       {/* Back Button */}
       <button
@@ -58,8 +58,8 @@ export default function VerifyEmailPage() {
         {loading && token ? (
           <>
             {/* Loading State */}
-            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
-              <svg className="w-7 h-7 text-yellow-400 animate-spin" fill="none" viewBox="0 0 24 24">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
+              <svg className="w-7 h-7 text-[var(--color-foreground)] animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
@@ -79,7 +79,7 @@ export default function VerifyEmailPage() {
             <p className="text-sm text-gray-400 mb-6">Your email has been successfully verified. You can now log in.</p>
             <Link
               href="/auth/login"
-              className="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all active:scale-[0.98]"
+              className="block w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg transition-all active:scale-[0.98]"
             >
               Go to Login
             </Link>
@@ -97,7 +97,7 @@ export default function VerifyEmailPage() {
             <div className="space-y-3">
               <Link
                 href="/auth/resendverification"
-                className="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all"
+                className="block w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg transition-all"
               >
                 Resend Verification
               </Link>
@@ -121,7 +121,7 @@ export default function VerifyEmailPage() {
             <p className="text-sm text-gray-400 mb-6">Please use the verification link sent to your email.</p>
             <Link
               href="/auth/resendverification"
-              className="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all"
+              className="block w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg transition-all"
             >
               Resend Verification Email
             </Link>
@@ -129,7 +129,7 @@ export default function VerifyEmailPage() {
         )}
 
         <p className="text-[10px] text-gray-600 mt-5">
-          Need help? <Link href="/contact-support" className="text-blue-400 hover:text-blue-300">Contact support</Link>
+          Need help? <Link href="/contact-support" className="text-[var(--color-accent)] hover:text-[var(--color-muted)]">Contact support</Link>
         </p>
       </div>
     </div>

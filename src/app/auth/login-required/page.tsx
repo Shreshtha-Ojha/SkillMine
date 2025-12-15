@@ -8,9 +8,9 @@ export default function LoginRequiredPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
       {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-950/40 via-[#0a0a0f] to-[#0a0a0f]" />
-      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
-      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-indigo-600/8 rounded-full blur-3xl" />
+      <div className="fixed inset-0 bg-[rgba(126,16,44,0.04)]" />
+      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-[rgba(126,16,44,0.06)] rounded-full blur-3xl" />
+      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-[rgba(215,169,168,0.03)] rounded-full blur-3xl" />
 
       {/* Back Button */}
       <button
@@ -39,14 +39,14 @@ export default function LoginRequiredPage() {
 
         <Link
           href="/auth/login"
-          className="inline-block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all active:scale-[0.98]"
+          className="inline-block w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg transition-all active:scale-[0.98]"
         >
           Sign In
         </Link>
 
         <p className="text-xs text-gray-500 mt-4">
           Don't have an account?{" "}
-          <Link href="/auth/signup" className="text-blue-400 hover:text-blue-300 font-medium">
+          <Link href="/auth/signup" className="text-[var(--color-accent)] hover:text-[var(--color-muted)] font-medium">
             Sign up
           </Link>
         </p>

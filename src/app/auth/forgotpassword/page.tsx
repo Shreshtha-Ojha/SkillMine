@@ -44,9 +44,9 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
       {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-950/40 via-[#0a0a0f] to-[#0a0a0f]" />
-      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
-      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-indigo-600/8 rounded-full blur-3xl" />
+      <div className="fixed inset-0 bg-[rgba(126,16,44,0.04)]" />
+      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-[rgba(126,16,44,0.06)] rounded-full blur-3xl" />
+      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-[rgba(215,169,168,0.03)] rounded-full blur-3xl" />
 
       {/* Back Button */}
       <button
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
             </div>
             <h1 className="text-lg font-semibold text-white mb-2">Check your email</h1>
             <p className="text-xs text-gray-500 mb-4">We sent a password reset link to your email address.</p>
-            <Link href="/auth/login" className="text-xs text-blue-400 hover:text-blue-300">
+            <Link href="/auth/login" className="text-[var(--color-accent)] hover:text-[var(--color-muted)]">
               ← Back to login
             </Link>
           </div>
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
           /* Form State */
           <>
             <div className="text-center mb-5">
-              <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+              <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
@@ -96,14 +96,14 @@ export default function ForgotPassword() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-[rgba(126,16,44,0.25)] transition-all"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-gray-700 disabled:to-gray-700 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all active:scale-[0.98]"
+                className="w-full py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] disabled:bg-[#4e0d20] text-sm font-medium rounded-lg transition-all active:scale-[0.98] hover:bg-[#6b0f26]"
               >
                 {loading ? "Sending..." : "Send Reset Link"}
               </button>
@@ -112,7 +112,7 @@ export default function ForgotPassword() {
             <div className="mt-4 pt-4 border-t border-white/10 text-center">
               <p className="text-xs text-gray-500">
                 Remember your password?{" "}
-                <Link href="/auth/login" className="text-blue-400 hover:text-blue-300 font-medium">Sign in</Link>
+                <Link href="/auth/login" className="text-[var(--color-accent)] hover:text-[var(--color-muted)] font-medium">Sign in</Link>
               </p>
             </div>
           </>

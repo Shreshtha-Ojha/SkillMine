@@ -114,7 +114,7 @@ export default function OAPurchasesPage() {
             Back to Admin Panel
           </Link>
           <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-            <Crown className="w-8 h-8 text-yellow-400" />
+            <Crown className="w-8 h-8 text-[#E1D4C1]" />
             OA Questions Purchases
           </h1>
           <p className="text-gray-400 mt-1">

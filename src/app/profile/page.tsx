@@ -422,7 +422,7 @@ export default function ProfilePage() {
           <div className="flex items-center justify-between">
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="hidden sm:inline">Back</span>
@@ -431,7 +431,7 @@ export default function ProfilePage() {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-400 hover:text-white"
+              className="md:hidden p-2 text-[#E1D4C1] hover:text-[#D7A9A8]"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -440,20 +440,20 @@ export default function ProfilePage() {
             <nav className="hidden md:flex items-center gap-4">
               <button
                 onClick={() => router.push('/explore')}
-                className="text-sm text-gray-400 hover:text-white transition-colors"
+                className="text-sm text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
               >
                 Explore
               </button>
               <button
                 onClick={() => router.push('/interview')}
-                className="text-sm text-gray-400 hover:text-white transition-colors"
+                className="text-sm text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
               >
                 Interview
               </button>
               {userData?.isAdmin && (
                 <button
                   onClick={() => router.push('/admin/admin-panel')}
-                  className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-sm text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors flex items-center gap-1"
                 >
                   <Settings className="w-4 h-4" />
                   Admin
@@ -467,20 +467,20 @@ export default function ProfilePage() {
             <nav className="md:hidden pt-4 pb-2 flex flex-col gap-2 border-t border-white/5 mt-4">
               <button
                 onClick={() => { router.push('/explore'); setMobileMenuOpen(false); }}
-                className="text-left py-2 text-gray-400 hover:text-white transition-colors"
+                className="text-left py-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
               >
                 Explore
               </button>
               <button
                 onClick={() => { router.push('/interview'); setMobileMenuOpen(false); }}
-                className="text-left py-2 text-gray-400 hover:text-white transition-colors"
+                className="text-left py-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
               >
                 Interview
               </button>
               {userData?.isAdmin && (
                 <button
                   onClick={() => { router.push('/admin/admin-panel'); setMobileMenuOpen(false); }}
-                  className="text-left py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-left py-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors flex items-center gap-1"
                 >
                   <Settings className="w-4 h-4" />
                   Admin Panel
@@ -496,13 +496,13 @@ export default function ProfilePage() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#111118] border border-white/5 rounded-2xl p-6 sm:p-8 mb-6"
+          className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6 sm:p-8 mb-6"
         >
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             {/* Avatar with Edit Photo Button */}
             <div className="relative group">
-              {userData?.profilePhoto?.url ? (
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shadow-lg shadow-blue-500/20">
+                {userData?.profilePhoto?.url ? (
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden">
                   <Image
                     src={userData.profilePhoto.url}
                     alt="Profile"
@@ -512,7 +512,7 @@ export default function ProfilePage() {
                   />
                 </div>
               ) : (
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg shadow-blue-500/20">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-[var(--color-primary)] flex items-center justify-center text-4xl font-bold text-[#E1D4C1]">
                   {userData?.username?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
@@ -521,30 +521,30 @@ export default function ProfilePage() {
                 onClick={() => setShowPhotoModal(true)}
                 className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer"
               >
-                <Camera className="w-6 h-6 text-white" />
+                <Camera className="w-6 h-6 text-[#E1D4C1]" />
               </button>
               <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center ${
                 userData?.isVerified ? 'bg-green-500' : 'bg-amber-500'
               }`}>
                 {userData?.isVerified ? (
-                  <CheckCircle className="w-4 h-4 text-white" />
+                  <CheckCircle className="w-4 h-4 text-[#E1D4C1]" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 text-white" />
+                  <AlertCircle className="w-4 h-4 text-[#E1D4C1]" />
                 )}
               </div>
             </div>
 
             {/* User Info */}
             <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#E1D4C1] mb-1">
                 {userData?.fullName || userData?.username || 'Loading...'}
               </h2>
-              <p className="text-gray-400 mb-3">@{userData?.username}</p>
+              <p className="text-[#E1D4C1]/80 mb-3">@{userData?.username}</p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
                   userData?.isVerified 
-                    ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
-                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                    ? 'bg-[#7E102C]/10 text-[#E1D4C1] border border-[#7E102C]/20' 
+                    : 'bg-[#D7A9A8]/10 text-[#E1D4C1] border border-[#D7A9A8]/20'
                 }`}>
                   {userData?.isVerified ? (
                     <><CheckCircle className="w-3 h-3" /> Verified</>
@@ -553,12 +553,12 @@ export default function ProfilePage() {
                   )}
                 </span>
                 {userData?.isAdmin && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#7E102C]/10 text-[#E1D4C1] border border-[#7E102C]/20">
                     <Settings className="w-3 h-3" /> Admin
                   </span>
                 )}
                 {userData?.college && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#7E102C]/10 text-[#E1D4C1] border border-[#7E102C]/20">
                     <GraduationCap className="w-3 h-3" /> {userData.college}
                   </span>
                 )}
@@ -569,21 +569,21 @@ export default function ProfilePage() {
             <div className="flex flex-row sm:flex-col gap-2">
               <button
                 onClick={() => openCodingModal()}
-                className="p-2 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 hover:from-emerald-500/20 hover:to-cyan-500/20 border border-emerald-500/20 rounded-lg text-emerald-400 hover:text-emerald-300 transition-all"
+                className="p-2 bg-[#7E102C]/10 hover:bg-[#7E102C]/20 border border-[#7E102C]/20 rounded-lg text-[#E1D4C1] hover:text-[#D7A9A8] transition-all"
                 title="Coding Profiles"
               >
                 <Code2 className="w-5 h-5" />
               </button>
               <Link
                 href={`/u/${userData?.username}`}
-                className="p-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/20 rounded-lg text-purple-400 hover:text-purple-300 transition-all"
+                className="p-2 bg-[#7E102C]/10 hover:bg-[#7E102C]/20 border border-[#7E102C]/20 rounded-lg text-[#E1D4C1] hover:text-[#D7A9A8] transition-all"
                 title="View Public Profile"
               >
                 <ExternalLink className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setEditMode(true)}
-                className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-400 hover:text-white transition-all"
+                className="p-2 bg-[#7E102C]/10 hover:bg-[#7E102C]/20 border border-[#7E102C]/20 rounded-lg text-[#E1D4C1] hover:text-[#D7A9A8] transition-all"
                 title="Edit Profile"
               >
                 <Edit3 className="w-5 h-5" />
@@ -615,19 +615,19 @@ export default function ProfilePage() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'
-                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
+                  ? 'bg-[#7E102C] text-[#E1D4C1]'
+                  : 'bg-[#E1D3CC]/5 text-[#E1D4C1]/70 hover:bg-[#E1D3CC]/10 hover:text-[#E1D4C1] border border-[#E1D3CC]/5'
               }`}
             >
               <tab.icon className="w-4 h-4" />
               {tab.label}
               {tab.id === 'tests' && Object.values(testAttempts).filter((t: any) => t?.canTakeTest || t?.canRetry).length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">
+                <span className="ml-1 px-1.5 py-0.5 bg-[#7E102C]/20 text-[#E1D4C1] text-xs rounded-full">
                   {Object.values(testAttempts).filter((t: any) => t?.canTakeTest || t?.canRetry).length}
                 </span>
               )}
               {tab.id === 'certificates' && certifications.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">
+                <span className="ml-1 px-1.5 py-0.5 bg-[#7E102C]/20 text-[#E1D4C1] text-xs rounded-full">
                   {certifications.length}
                 </span>
               )}
@@ -667,16 +667,16 @@ export default function ProfilePage() {
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Profile Details */}
-            <div className="lg:col-span-2 bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="lg:col-span-2 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-400" />
+                <h3 className="text-lg font-semibold text-[#E1D4C1] flex items-center gap-2">
+                  <User className="w-5 h-5 text-[#7E102C]" />
                   Profile Information
                 </h3>
                 {!editMode && (
                   <button
                     onClick={() => setEditMode(true)}
-                    className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                    className="text-sm text-[#E1D4C1] hover:text-[#D7A9A8] flex items-center gap-1"
                   >
                     <Edit3 className="w-4 h-4" />
                     Edit
@@ -800,7 +800,7 @@ export default function ProfilePage() {
             <div className="space-y-4">
               {/* Create Blog Card */}
               {canCreateBlog && (
-                <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
+                <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-5">
                   <h4 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
                     <PenSquare className="w-4 h-4 text-green-400" />
                     Content Creator
@@ -817,7 +817,7 @@ export default function ProfilePage() {
               )}
 
               {/* Account Security */}
-              <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
+              <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-5">
                 <h4 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
                   <Key className="w-4 h-4 text-blue-400" />
                   Account Security
@@ -841,7 +841,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Quick Stats */}
-              <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
+              <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-5">
                 <h4 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-purple-400" />
                   Quick Stats
@@ -891,7 +891,7 @@ export default function ProfilePage() {
         {activeTab === 'progress' && (
           <div className="space-y-6">
             {/* Roadmap Progress */}
-            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-blue-400" />
                 Roadmap Progress
@@ -1067,7 +1067,7 @@ export default function ProfilePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-gradient-to-br from-[#111118] to-[#0a0a0f] border border-white/5 rounded-2xl p-6 mb-6 overflow-hidden relative"
+                className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6 mb-6 overflow-hidden relative"
               >
                 {/* Background decoration */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5 rounded-full blur-3xl" />
@@ -1300,7 +1300,7 @@ export default function ProfilePage() {
         {activeTab === 'tests' && (
           <div className="space-y-6">
             {/* Tests Header */}
-            <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-yellow-500/20 rounded-xl">
                   <FileText className="w-6 h-6 text-yellow-400" />
@@ -1313,7 +1313,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Available Tests */}
-            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
 
               {loadingRoadmaps ? (
                 <div className="flex items-center justify-center py-12">
@@ -1391,7 +1391,7 @@ export default function ProfilePage() {
 
 
             {/* Sample Test Card */}
-            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
                 <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -1445,7 +1445,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Test Info Card */}
-            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-blue-400" />
                 Test Information
@@ -1503,30 +1503,30 @@ export default function ProfilePage() {
         {activeTab === 'skill-tests' && (
           <div className="space-y-6">
             {/* Skill Tests Panel */}
-            <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Skill Tests</h3>
-                  <p className="text-gray-400 text-sm">Your skill test attempts and quick actions.</p>
+                  <p className="text-[#E1D4C1]/80 text-sm">Your skill test attempts and quick actions.</p>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={()=>router.push('/skill-tests')} className="px-4 py-2 bg-emerald-600 rounded text-white">Start New Test</button>
-                  <button onClick={()=>router.push('/skill-test/history')} className="px-4 py-2 bg-white/5 rounded">View All</button>
+                  <button onClick={()=>router.push('/skill-tests')} className="px-4 py-2 bg-[#7E102C] rounded text-[#E1D4C1]">Start New Test</button>
+                  <button onClick={()=>router.push('/skill-test/history')} className="px-4 py-2 bg-[#E1D3CC]/5 rounded text-[#E1D4C1]">View All</button>
                 </div>
               </div>
 
               {loadingSkillHistory ? (
-                <div className="py-8 flex items-center justify-center text-gray-400">Loading your skill test history...</div>
+                <div className="py-8 flex items-center justify-center text-[#E1D4C1]/80">Loading your skill test history...</div>
               ) : (
                 <div className="space-y-3">
                   {skillHistory.length === 0 ? (
-                    <div className="text-gray-400 text-sm">No skill tests found. Take a test to see attempts here.</div>
+                    <div className="text-[#E1D4C1]/80 text-sm">No skill tests found. Take a test to see attempts here.</div>
                   ) : (
                     skillHistory.slice(0,5).map(h => (
-                      <div key={h._id} className="p-3 bg-[#0b0b10] rounded flex items-center justify-between">
+                      <div key={h._id} className="p-3 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 flex items-center justify-between">
                         <div>
-                          <div className="font-medium">{h.testName}</div>
-                          <div className="text-xs text-gray-400">{h.mcqSnapshot?.length||0} questions • {new Date(h.startedAt).toLocaleString()}</div>
+                          <div className="font-medium text-[#E1D4C1]">{h.testName}</div>
+                          <div className="text-xs text-[#E1D4C1]/70">{h.mcqSnapshot?.length||0} questions • {new Date(h.startedAt).toLocaleString()}</div>
                         </div>
                         <div className="flex gap-2 items-center">
                           {h.submittedAt ? (
@@ -1556,7 +1556,7 @@ export default function ProfilePage() {
         )}
 
         {activeTab === 'certificates' && (
-          <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
+          <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
             <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
               <Award className="w-5 h-5 text-yellow-400" />
               My Certificates

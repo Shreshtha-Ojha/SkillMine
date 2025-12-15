@@ -35,9 +35,9 @@ export default function AboutPage() {
   const platformFeatures = [
     {
       category: "Learning & Growth",
-      color: "from-blue-500 to-cyan-500",
-      borderColor: "border-blue-500/30",
-      bgColor: "bg-blue-500/10",
+      color: "from-[#7E102C] to-[#D7A9A8]",
+      borderColor: "border-[#7E102C]/30",
+      bgColor: "bg-[#7E102C]/10",
       items: [
         {
           icon: Map,
@@ -61,9 +61,9 @@ export default function AboutPage() {
     },
     {
       category: "Interview Prep",
-      color: "from-purple-500 to-pink-500",
-      borderColor: "border-purple-500/30",
-      bgColor: "bg-purple-500/10",
+      color: "from-[#7E102C] to-[#D7A9A8]",
+      borderColor: "border-[#7E102C]/30",
+      bgColor: "bg-[#7E102C]/10",
       items: [
         {
           icon: Mic,
@@ -87,9 +87,9 @@ export default function AboutPage() {
     },
     {
       category: "Career Tools",
-      color: "from-green-500 to-emerald-500",
-      borderColor: "border-green-500/30",
-      bgColor: "bg-green-500/10",
+      color: "from-[#7E102C] to-[#D7A9A8]",
+      borderColor: "border-[#7E102C]/30",
+      bgColor: "bg-[#7E102C]/10",
       items: [
         {
           icon: FileText,
@@ -113,9 +113,9 @@ export default function AboutPage() {
     },
     {
       category: "Developer Stats",
-      color: "from-orange-500 to-yellow-500",
-      borderColor: "border-orange-500/30",
-      bgColor: "bg-orange-500/10",
+      color: "from-[#7E102C] to-[#D7A9A8]",
+      borderColor: "border-[#7E102C]/30",
+      bgColor: "bg-[#7E102C]/10",
       items: [
         {
           icon: GitBranch,
@@ -146,7 +146,7 @@ export default function AboutPage() {
       icon: Map,
       title: "Follow Roadmaps",
       description: "Start with curated learning paths to acquire skills.",
-      color: "from-blue-500 to-cyan-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/explore",
     },
     {
@@ -154,7 +154,7 @@ export default function AboutPage() {
       icon: CheckCircle,
       title: "Skill Tests",
       description: "Assess your skills with real-world coding tests.",
-      color: "from-teal-500 to-green-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/skill-tests",
     },
     {
@@ -162,7 +162,7 @@ export default function AboutPage() {
       icon: Award,
       title: "Earn Certificates",
       description: "Complete roadmaps and score 60% or more to get certified.",
-      color: "from-yellow-500 to-orange-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/explore",
     },
     {
@@ -170,7 +170,7 @@ export default function AboutPage() {
       icon: Users,
       title: "Interview Experiences",
       description: "Read and share real interview stories to prepare better.",
-      color: "from-pink-500 to-purple-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/interview-experiences",
     },
     {
@@ -178,7 +178,7 @@ export default function AboutPage() {
       icon: FileText,
       title: "Resume Builder",
       description: "Create ATS-friendly resumes and improve your chances.",
-      color: "from-indigo-500 to-violet-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/resume-builder",
     },
     {
@@ -186,7 +186,7 @@ export default function AboutPage() {
       icon: FileSearch,
       title: "ATS Checker",
       description: "Get AI feedback on your resume to make it better.",
-      color: "from-green-500 to-emerald-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/ats-checker",
     },
     {
@@ -194,7 +194,7 @@ export default function AboutPage() {
       icon: Mic,
       title: "Mock Interviews",
       description: "Practice with AI-powered mock interviews to gain confidence.",
-      color: "from-purple-500 to-pink-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/interview",
     },
     {
@@ -202,7 +202,7 @@ export default function AboutPage() {
       icon: Briefcase,
       title: "Company Problems",
       description: "Solve premium problems to prepare for top companies.",
-      color: "from-orange-500 to-red-500",
+      color: "from-[#7E102C] to-[#D7A9A8]",
       link: "/company-problems",
     },
   ];
@@ -232,9 +232,9 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[128px]" />
-        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-green-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7E102C]/10 rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7E102C]/10 rounded-full blur-[128px]" />
+        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-[#7E102C]/10 rounded-full blur-[100px]" />
       </div>
 
       {/* Header */}
@@ -242,12 +242,11 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => router.push("/")}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="hidden sm:inline">Home</span>
           </button>
-          <h1 className="text-white font-semibold">About Platform</h1>
           <div className="w-16" />
         </div>
       </header>
@@ -259,17 +258,17 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-yellow-400" />
-            <span className="text-sm text-gray-300">All Features</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7E102C]/10 to-[#D7A9A8]/10 border border-white/10 rounded-full mb-6">
+            <Sparkles className="w-4 h-4 text-[#7E102C]" />
+            <span className="text-sm text-[#E1D4C1]/90">All Features</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#E1D4C1] mb-6">
             Everything You Need to
-            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-[#7E102C] via-[#D7A9A8] to-[#E1D4C1] bg-clip-text text-transparent">
               Ace Your Tech Career
             </span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-[#E1D4C1]/80 text-lg max-w-2xl mx-auto">
             A complete platform for learning, practicing, and showcasing your
             skills — mostly free, with premium add-ons.
           </p>
@@ -283,10 +282,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-3xl font-bold text-[#E1D4C1] mb-4">
               Your Learning Journey
             </h2>
-            <p className="text-gray-400">
+            <p className="text-[#E1D4C1]/80">
               From signup to certification in 5 simple steps
             </p>
           </motion.div>
@@ -308,24 +307,24 @@ export default function AboutPage() {
                   <div
                     className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-lg`}
                   >
-                    <step.icon className="w-8 h-8 text-white" />
+                    <step.icon className="w-8 h-8 text-[#E1D4C1]" />
                   </div>
 
                   {/* Connector Arrow */}
                   {index < journeySteps.length - 1 && (
                     <div className="absolute top-8 left-[60%] w-[80%] flex items-center">
                       <div className="flex-1 h-0.5 bg-gradient-to-r from-white/30 to-white/10" />
-                      <ArrowRight className="w-5 h-5 text-white/30" />
+                      <ArrowRight className="w-5 h-5 text-[#E1D4C1]/30" />
                     </div>
                   )}
 
-                  <div className="text-xs text-gray-500 mb-1">
+                  <div className="text-xs text-[#E1D3CC] mb-1">
                     Step {step.step}
                   </div>
-                  <h4 className="text-white font-semibold mb-1">
+                  <h4 className="text-[#E1D4C1] font-semibold mb-1">
                     {step.title}
                   </h4>
-                  <p className="text-gray-500 text-sm">{step.description}</p>
+                  <p className="text-[#E1D3CC] text-sm">{step.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -346,18 +345,18 @@ export default function AboutPage() {
                   <div
                     className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center`}
                   >
-                    <step.icon className="w-6 h-6 text-white" />
+                    <step.icon className="w-6 h-6 text-[#E1D4C1]" />
                   </div>
                   {index < journeySteps.length - 1 && (
                     <div className="w-0.5 flex-1 bg-gradient-to-b from-white/30 to-transparent mt-2" />
                   )}
                 </div>
                 <div className="flex-1 pb-6">
-                  <div className="text-xs text-gray-500 mb-1">
+                  <div className="text-xs text-[#E1D3CC] mb-1">
                     Step {step.step}
                   </div>
-                  <h4 className="text-white font-semibold">{step.title}</h4>
-                  <p className="text-gray-500 text-sm">{step.description}</p>
+                  <h4 className="text-[#E1D4C1] font-semibold">{step.title}</h4>
+                  <p className="text-[#E1D3CC] text-sm">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -373,10 +372,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-3xl font-bold text-[#E1D4C1] mb-4">
               Platform Features
             </h2>
-            <p className="text-gray-400">
+            <p className="text-[#E1D4C1]/80">
               Explore all the tools available to accelerate your growth
             </p>
           </motion.div>
@@ -395,9 +394,9 @@ export default function AboutPage() {
                   <div
                     className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}
                   >
-                    <Zap className="w-5 h-5 text-white" />
+                    <Zap className="w-5 h-5 text-[#E1D4C1]" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-[#E1D4C1]">
                     {category.category}
                   </h3>
                 </div>
@@ -417,18 +416,18 @@ export default function AboutPage() {
                         className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} p-0.5 flex-shrink-0`}
                       >
                         <div className="w-full h-full bg-[#0a0a0f] rounded-[6px] flex items-center justify-center">
-                          <item.icon className="w-5 h-5 text-white" />
+                          <item.icon className="w-5 h-5 text-[#E1D4C1]" />
                         </div>
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-white font-semibold mb-1 group-hover:text-blue-400 transition-colors">
+                        <h4 className="text-[#E1D4C1] font-semibold mb-1 group-hover:text-[#D7A9A8] transition-colors">
                           {item.title}
                         </h4>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-[#E1D3CC] text-sm">
                           {item.description}
                         </p>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-5 h-5 text-[#E1D3CC] group-hover:text-[#E1D4C1] group-hover:translate-x-1 transition-all" />
                     </motion.div>
                   ))}
                 </div>
@@ -444,22 +443,22 @@ export default function AboutPage() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-[#E1D4C1] mb-4">
             Ready to Start?
           </h2>
-          <p className="text-gray-400 mb-8">
+          <p className="text-[#E1D4C1]/80 mb-8">
             Begin your learning journey today — it&apos;s mostly free!
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => router.push("/explore")}
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-indigo-500 transition-all"
+              className="px-8 py-4 bg-[#7E102C] text-[#E1D4C1] font-semibold rounded-xl hover:bg-[#6a0f27] transition-all"
             >
               Explore Roadmaps
             </button>
             <button
               onClick={() => router.push("/interview")}
-              className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+              className="px-8 py-4 bg-[#E1D4C1]/6 text-[#E1D4C1] font-medium rounded-xl border border-[#E1D4C1]/10 hover:bg-[#E1D4C1]/8 transition-all"
             >
               Practice Interview
             </button>

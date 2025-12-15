@@ -68,8 +68,8 @@ export default function EditBlogPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 py-12 px-4">
-      <div className="w-full max-w-3xl bg-zinc-900 rounded-3xl shadow-2xl p-10 border-2 border-blue-900">
-        <h1 className="text-3xl font-bold text-blue-400 mb-8 text-center">Edit Blog</h1>
+      <div className="w-full max-w-3xl bg-zinc-900 rounded-3xl shadow-2xl p-10 border-2 border-[rgba(126,16,44,0.12)]">
+        <h1 className="text-3xl font-bold text-[var(--color-accent)] mb-8 text-center">Edit Blog</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <input
             type="text"
@@ -88,7 +88,7 @@ export default function EditBlogPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-blue-700 text-white rounded-xl text-lg hover:bg-blue-800 disabled:opacity-60"
+            className="px-6 py-3 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded-xl text-lg hover:bg-[#6b0f26] disabled:opacity-60"
           >
             {loading ? "Updating..." : "Update Blog"}
           </button>

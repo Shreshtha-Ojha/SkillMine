@@ -279,7 +279,7 @@ export default function TestManagementPage() {
                             <button
                               onClick={() => handleAllowRetry(attempt.userId, attempt.roadmapId)}
                               disabled={allowingRetry === `${attempt.userId}-${attempt.roadmapId}`}
-                              className="px-3 py-2 bg-yellow-600 text-white text-sm font-medium rounded-lg hover:bg-yellow-500 transition-colors disabled:opacity-50 flex items-center gap-2"
+                              className="px-3 py-2 bg-[#7E102C] text-[#E1D4C1] text-sm font-medium rounded-lg hover:bg-[#58423F] transition-colors disabled:opacity-50 flex items-center gap-2"
                             >
                               {allowingRetry === `${attempt.userId}-${attempt.roadmapId}` ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />

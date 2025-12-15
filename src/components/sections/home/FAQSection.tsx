@@ -30,15 +30,15 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full py-24 px-4 bg-[#08080c]">
+    <section className="w-full py-24 px-4 bg-[#0a0a0f]">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-full mb-4">
-            <HelpCircle className="w-4 h-4 text-blue-400" />
-            <span className="text-xs font-medium text-blue-400">FAQ</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#E1D4C1]/10 rounded-full mb-4">
+            <HelpCircle className="w-4 h-4 text-[#E1D4C1]" />
+            <span className="text-xs font-medium text-[#E1D4C1]">FAQ</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#E1D4C1] mb-4">
             Questions? We've Got Answers
           </h2>
         </div>
@@ -56,11 +56,11 @@ export default function FAQSection() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-5 bg-[#111118] border border-white/5 rounded-xl text-left hover:border-white/10 transition-all"
+                className="w-full flex items-center justify-between p-5 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-xl text-left hover:border-[#D7A9A8]/30 transition-all"
               >
-                <span className="text-white font-medium pr-4">{faq.question}</span>
+                <span className="text-[#E1D4C1] font-medium pr-4">{faq.question}</span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${
+                  className={`w-5 h-5 text-[#E1D3CC] shrink-0 transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`} 
                 />
@@ -74,7 +74,7 @@ export default function FAQSection() {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="p-5 pt-3 text-gray-400 text-sm leading-relaxed">
+                    <div className="p-5 pt-3 text-[#E1D3CC] text-sm leading-relaxed">
                       {faq.answer}
                     </div>
                   </motion.div>

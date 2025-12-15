@@ -35,10 +35,10 @@ export default function HowItWorks() {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#E1D4C1] mb-4">
             How It Works
           </h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[#E1D3CC] text-lg">
             Four simple steps to accelerate your career
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function HowItWorks() {
         {/* Steps */}
         <div className="relative">
           {/* Connector Line - Desktop */}
-          <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
+          <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px bg-[#E1D4C1]/30" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
             {steps.map((step, index) => (
@@ -60,17 +60,17 @@ export default function HowItWorks() {
               >
                 {/* Step Number */}
                 <div className="relative mb-4">
-                  <div className="w-20 h-20 bg-[#111118] border border-white/5 rounded-2xl flex items-center justify-center">
-                    <step.icon className="w-8 h-8 text-blue-400" />
+                  <div className="w-20 h-20 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl flex items-center justify-center">
+                    <step.icon className="w-8 h-8 text-[#E1D4C1]" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-[#7E102C] text-[#E1D4C1] text-xs font-bold rounded-full flex items-center justify-center">
                     {index + 1}
                   </span>
                 </div>
 
                 {/* Content */}
-                <h3 className="text-white font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-500 text-sm">{step.description}</p>
+                <h3 className="text-[#E1D4C1] font-semibold mb-2">{step.title}</h3>
+                <p className="text-[#E1D3CC] text-sm">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -85,7 +85,7 @@ export default function HowItWorks() {
         >
           <button
             onClick={() => router.push("/explore")}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg shadow-blue-500/25"
+            className="px-8 py-4 bg-[#7E102C] text-[#E1D4C1] font-medium rounded-xl hover:bg-[#6a0f27] transition-all shadow-lg shadow-black/25"
           >
             Start Your Journey
           </button>

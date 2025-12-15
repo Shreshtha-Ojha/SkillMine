@@ -97,7 +97,7 @@ export default function SkillTestHistory() {
                       }
                     } catch (e:any) { alert(e?.message||'Failed to reattempt'); }
                   }}
-                  className="px-4 py-2 bg-blue-600/20 border border-blue-500/40 text-blue-400 rounded-lg hover:bg-blue-600/30 transition"
+                  className="px-4 py-2 bg-[var(--color-primary)]/10 border border-[rgba(126,16,44,0.08)] text-[var(--color-accent)] rounded-lg hover:bg-[var(--color-primary)]/20 transition"
                 >
                   Re-attempt
                 </button>

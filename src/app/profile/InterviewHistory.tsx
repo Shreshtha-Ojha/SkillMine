@@ -63,26 +63,26 @@ const InterviewHistory: React.FC<{ userId?: string }> = ({ userId }) => {
 
   return (
     <div className="w-full">
-      <div className="bg-[#111118] border border-white/5 rounded-2xl p-6">
-        <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-yellow-400" />
+      <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
+        <h3 className="text-lg font-semibold text-[#E1D4C1] mb-6 flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-[#7E102C]" />
           Interview History
         </h3>
 
         {/* Stats Row */}
         {history.length > 0 && (
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="bg-white/5 rounded-xl p-4 border border-white/5 text-center">
-              <div className="text-2xl font-bold text-blue-400">{history.length}</div>
-              <div className="text-xs text-gray-500">Total</div>
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-4 text-center">
+              <div className="text-2xl font-bold text-[#E1D4C1]">{history.length}</div>
+              <div className="text-xs text-[#E1D4C1]/70">Total</div>
             </div>
-            <div className="bg-white/5 rounded-xl p-4 border border-white/5 text-center">
-              <div className="text-2xl font-bold text-green-400">{avgScore}</div>
-              <div className="text-xs text-gray-500">Avg Score</div>
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-4 text-center">
+              <div className="text-2xl font-bold text-[#E1D4C1]">{avgScore}</div>
+              <div className="text-xs text-[#E1D4C1]/70">Avg Score</div>
             </div>
-            <div className="bg-white/5 rounded-xl p-4 border border-white/5 text-center">
-              <div className="text-2xl font-bold text-purple-400">{highScores}</div>
-              <div className="text-xs text-gray-500">High (8+)</div>
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-4 text-center">
+              <div className="text-2xl font-bold text-[#E1D4C1]">{highScores}</div>
+              <div className="text-xs text-[#E1D4C1]/70">High (8+)</div>
             </div>
           </div>
         )}
@@ -91,20 +91,20 @@ const InterviewHistory: React.FC<{ userId?: string }> = ({ userId }) => {
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="flex flex-col items-center gap-3">
-              <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <span className="text-gray-400 text-sm">Loading history...</span>
+              <div className="w-10 h-10 border-3 border-[#7E102C] border-t-transparent rounded-full animate-spin" />
+              <span className="text-[#E1D4C1]/80 text-sm">Loading history...</span>
             </div>
           </div>
         ) : history.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
-              <MessageSquare className="w-8 h-8 text-blue-400" />
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#7E102C]/10 flex items-center justify-center">
+              <MessageSquare className="w-8 h-8 text-[#E1D4C1]" />
             </div>
-            <h4 className="text-lg font-medium text-white mb-2">No interviews yet</h4>
-            <p className="text-gray-500 text-sm mb-4">Start practicing to build your history!</p>
+            <h4 className="text-lg font-medium text-[#E1D4C1] mb-2">No interviews yet</h4>
+            <p className="text-[#E1D4C1]/70 text-sm mb-4">Start practicing to build your history!</p>
             <button
               onClick={() => window.location.href = '/interview'}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium"
+              className="px-4 py-2 bg-[#7E102C] text-[#E1D4C1] rounded-lg font-medium"
             >
               Start Interview
             </button>
@@ -115,28 +115,24 @@ const InterviewHistory: React.FC<{ userId?: string }> = ({ userId }) => {
               <div
                 key={item._id}
                 onClick={() => setModalItem(item)}
-                className="p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 hover:border-white/10 transition-all cursor-pointer group"
+                className="p-4 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-white truncate max-w-[200px] group-hover:text-blue-400 transition-colors">
+                  <h4 className="font-medium text-[#E1D4C1] truncate max-w-[200px] group-hover:text-[#D7A9A8] transition-colors">
                     {item.topic}
                   </h4>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    item.score >= 8 ? 'bg-green-500/20 text-green-400' :
-                    item.score >= 6 ? 'bg-yellow-500/20 text-yellow-400' :
-                    'bg-red-500/20 text-red-400'
-                  }`}>
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold bg-[#7E102C]/20 text-[#E1D4C1]`}>
                     {item.score}/10
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center justify-between text-xs text-[#E1D4C1]/70">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {new Date(item.createdAt).toLocaleDateString('en-US', { 
                       month: 'short', day: 'numeric', year: 'numeric' 
                     })}
                   </span>
-                  <span className="flex items-center gap-1 text-blue-400 group-hover:text-blue-300">
+                  <span className="flex items-center gap-1 text-[#E1D4C1] group-hover:text-[#D7A9A8]">
                     View <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>

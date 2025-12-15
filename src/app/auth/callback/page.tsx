@@ -45,7 +45,7 @@ export default function AuthCallback() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
       <div className="text-center">
-        <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <div className="w-10 h-10 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
         <p className="text-white text-lg font-medium mb-2">Completing sign in...</p>
         <p className="text-gray-500 text-sm">Please wait while we set up your session</p>
       </div>

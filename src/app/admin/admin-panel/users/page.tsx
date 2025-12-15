@@ -162,7 +162,7 @@ const UserManagement = () => {
                   <div className="flex items-center gap-2">
                     <span className="text-white font-medium">{user.username}</span>
                     {user.isAdmin && (
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-yellow-500/20 text-yellow-400">
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#7E102C]/20 text-[#E1D4C1]">
                         ADMIN
                       </span>
                     )}
@@ -176,8 +176,8 @@ const UserManagement = () => {
                   Verified
                 </span>
               ) : (
-                <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+                <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-[#7E102C]/20 text-[#E1D4C1]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E1D4C1]"></span>
                   Pending
                 </span>
               )}
@@ -242,7 +242,7 @@ const UserManagement = () => {
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl font-bold text-white">{selectedUser.username}</h2>
                     {selectedUser.isAdmin && (
-                      <span className="px-2 py-0.5 rounded text-xs font-bold bg-yellow-500/20 text-yellow-400">ADMIN</span>
+                      <span className="px-2 py-0.5 rounded text-xs font-bold bg-[#7E102C]/20 text-[#E1D4C1]">ADMIN</span>
                     )}
                   </div>
                   <p className="text-sm text-gray-400">{selectedUser.fullName || "Name not provided"}</p>
@@ -300,7 +300,7 @@ const UserManagement = () => {
                   )}
                   <div className="bg-white/5 rounded-lg p-3">
                     <div className="text-xs text-gray-500 mb-1">Account Status</div>
-                    <div className={`text-sm font-medium ${selectedUser.isVerified ? "text-green-400" : "text-yellow-400"}`}>
+                    <div className={`text-sm font-medium ${selectedUser.isVerified ? "text-green-400" : "text-[#E1D4C1]"}`>}
                       {selectedUser.isVerified ? "Verified" : "Pending Verification"}
                     </div>
                   </div>

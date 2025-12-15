@@ -65,7 +65,7 @@ export function Context() {
         href="https://ayush-delta.vercel.app"
         target="_blank"
         rel="noopener noreferrer"
-        className="py-2 px-6 mt-4 bg-gray-700 hover:bg-blue-600 text-white font-semibold rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+        className="py-2 px-6 mt-4 bg-[#7E102C] hover:bg-[#6b0f26] text-[#E1D4C1] font-semibold rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
       >
         View My Portfolio
       </a>

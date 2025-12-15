@@ -220,12 +220,12 @@ export default function ATSCheckerClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white p-6">
+    <div className="min-h-screen bg-[#0a0a0f] text-[#E1D4C1] p-6">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <button onClick={()=>history.back()} className="p-2 bg-white/5 rounded-md hover:bg-white/10 transition">
-              <ArrowLeft className="w-4 h-4 text-white" />
+              <ArrowLeft className="w-4 h-4 text-[#E1D4C1]" />
             </button>
             <h1 className="text-2xl font-extrabold">ATS Checker</h1>
           </div>
@@ -233,32 +233,32 @@ export default function ATSCheckerClient() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-[#0b0b11] p-4 rounded-xl border border-white/5">
-            <div className="text-sm text-gray-400 mb-2">Resume (upload .pdf or .txt)</div>
+            <div className="text-sm text-[#E1D3CC] mb-2">Resume (upload .pdf or .txt)</div>
             <div className="w-full bg-[#07070a] p-3 rounded-md text-sm min-h-[12rem] flex items-center justify-center">
-              <div className="text-center text-gray-400">Upload your resume file — we will extract and use the text for analysis.</div>
+              <div className="text-center text-[#E1D3CC]">Upload your resume file — we will extract and use the text for analysis.</div>
             </div>
             <div className="mt-2 flex items-center gap-2">
               <label className="inline-flex items-center gap-2 px-3 py-2 bg-white/5 rounded cursor-pointer text-sm">
-                <Upload className="w-4 h-4 text-white/80" />
-                <span className="text-sm text-gray-300">Upload Resume</span>
+                <Upload className="w-4 h-4 text-[#E1D4C1]/80" />
+                <span className="text-sm text-[#E1D3CC]">Upload Resume</span>
                 <input className="hidden" type="file" accept=".txt,.pdf" onChange={handleFile} />
               </label>
               <button onClick={() => { setResumeText(''); setResumeFile(null); setResult(null); setLastLLMResponseRaw(null); setUsageLimitReached(null); }} className="px-3 py-1 bg-white/5 rounded">Clear</button>
             </div>
-            {resumeFile && <div className="mt-2 text-xs text-gray-400">Selected file: {resumeFile.name}</div>}
-            {resumeText && <div className="mt-2 text-xs text-gray-400">Extracted text available ({Math.min(200, resumeText.length)} chars preview)</div>}
+            {resumeFile && <div className="mt-2 text-xs text-[#E1D3CC]">Selected file: {resumeFile.name}</div>}
+            {resumeText && <div className="mt-2 text-xs text-[#E1D3CC]">Extracted text available ({Math.min(200, resumeText.length)} chars preview)</div>}
           </div>
 
           <div className="bg-[#0b0b11] p-4 rounded-xl border border-white/5">
-            <div className="text-sm text-gray-400 mb-2">Job Description (optional)</div>
+            <div className="text-sm text-[#E1D3CC] mb-2">Job Description (optional)</div>
             <textarea value={jdText} onChange={(e)=>setJdText(e.target.value)} rows={12} className="w-full bg-[#07070a] p-3 rounded-md text-sm" />
-            <div className="mt-3 text-xs text-gray-400">Providing the JD improves keyword-matching and ATS suggestions.</div>
+            <div className="mt-3 text-xs text-[#E1D3CC]">Providing the JD improves keyword-matching and ATS suggestions.</div>
           </div>
         </div>
 
         <div className="mt-4 flex items-center gap-3">
-          <div className="text-sm text-yellow-300 mr-4">Testing mode — logged-in users only. Each user gets one free ATS check.</div>
-          <button onClick={analyze} disabled={loading || user === undefined || user === null || (user && user.atsChecker && !user.atsChecker.allowedByAdmin && (user.atsChecker.used || 0) >= 1)} className="px-4 py-2 bg-emerald-600 rounded-md">{loading ? 'Analyzing...' : 'Analyze'} </button>
+          <div className="text-sm text-[var(--color-accent)] mr-4">Testing mode — logged-in users only. Each user gets one free ATS check.</div>
+          <button onClick={analyze} disabled={loading || user === undefined || user === null || (user && user.atsChecker && !user.atsChecker.allowedByAdmin && (user.atsChecker.used || 0) >= 1)} className="px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded-md hover:bg-[#6b0f26]">{loading ? 'Analyzing...' : 'Analyze'} </button>
 
           <button onClick={() => { setResumeText(''); setJdText(''); setResult(null); setLastLLMResponseRaw(null); setUsageLimitReached(null); }} className="px-3 py-2 bg-white/5 rounded">Reset</button>
         </div>
@@ -268,8 +268,8 @@ export default function ATSCheckerClient() {
         {error && <div className="mt-4 text-red-400">{error}</div>}
 
         {usageLimitReached && (
-          <div className="mt-4 bg-yellow-900/20 p-3 rounded border border-yellow-500/10">
-            <div className="text-sm text-yellow-300 mb-2">{usageLimitReached}</div>
+          <div className="mt-4 bg-[rgba(126,16,44,0.06)] p-3 rounded border border-[rgba(126,16,44,0.08)]">
+            <div className="text-sm text-[var(--color-accent)] mb-2">{usageLimitReached}</div>
             <div className="flex gap-2">
               <button disabled={retryRequested} onClick={async ()=>{
                 try {
@@ -279,7 +279,7 @@ export default function ATSCheckerClient() {
                   if (!r.ok) { setError(j?.error || 'Request failed'); setRetryRequested(false); return; }
                   setRetryRequested(true);
                 } catch (e:any) { setError(e?.message || 'Request failed'); setRetryRequested(false); }
-              }} className="px-3 py-2 bg-emerald-600 rounded text-sm">Request admin retry</button>
+              }} className="px-3 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded text-sm">Request admin retry</button>
               <button onClick={()=>setUsageLimitReached(null)} className="px-3 py-2 bg-white/5 rounded text-sm">Dismiss</button>
             </div>
           </div>
@@ -288,22 +288,22 @@ export default function ATSCheckerClient() {
         {result && (
           <div id="ats-results" className="mt-6 space-y-4">
             {result.parseMethod && (
-              <div className="text-sm text-yellow-300">LLM parse method: <strong className="text-white">{result.parseMethod}</strong>{result.parseError ? <span className="text-red-400"> — Parse error: {result.parseError}</span> : null}</div>
+              <div className="text-sm text-[#D7A9A8]">LLM parse method: <strong className="text-[#E1D4C1]">{result.parseMethod}</strong>{result.parseError ? <span className="text-red-400"> — Parse error: {result.parseError}</span> : null}</div>
             )}
             {result.parsedSnippet && (
-              <details className="mt-2 text-xs text-gray-300 bg-[#07070a] p-2 rounded"><summary className="cursor-pointer">Show extracted JSON snippet</summary><pre className="mt-2 text-xs text-gray-200 max-h-60 overflow-auto">{result.parsedSnippet}</pre></details>
+              <details className="mt-2 text-xs text-[#E1D3CC] bg-[#07070a] p-2 rounded"><summary className="cursor-pointer">Show extracted JSON snippet</summary><pre className="mt-2 text-xs text-[#E1D3CC] max-h-60 overflow-auto">{result.parsedSnippet}</pre></details>
             )}
             <div className="flex gap-6">
               <div className="w-72 hidden md:block">
                 <div className="bg-[#06060a] p-3 rounded-lg border border-white/5 sticky top-24">
-                  <div className="text-xs text-gray-400 mb-2">Report</div>
-                  <button onClick={() => { document.getElementById('summary')?.scrollIntoView({behavior:'smooth'}); setActiveSection('summary'); }} className="block text-left text-sm text-gray-300 hover:text-white py-1">Summary</button>
-                  <div className="text-xs text-gray-500 mt-2">Guidelines</div>
+                  <div className="text-xs text-[#E1D3CC] mb-2">Report</div>
+                  <button onClick={() => { document.getElementById('summary')?.scrollIntoView({behavior:'smooth'}); setActiveSection('summary'); }} className="block text-left text-sm text-[#E1D3CC] hover:text-[#E1D4C1] py-1">Summary</button>
+                  <div className="text-xs text-[#E1D3CC] mt-2">Guidelines</div>
                   {result.detailedGuidelines?.map((g:any,i:number)=>(
-                    <button key={i} onClick={() => { document.getElementById(`guideline-${i}`)?.scrollIntoView({behavior:'smooth'}); setActiveSection(`guideline-${i}`); }} className="block text-left text-sm text-gray-300 hover:text-white py-1">{g.heading}</button>
+                    <button key={i} onClick={() => { document.getElementById(`guideline-${i}`)?.scrollIntoView({behavior:'smooth'}); setActiveSection(`guideline-${i}`); }} className="block text-left text-sm text-[#E1D3CC] hover:text-[#E1D4C1] py-1">{g.heading}</button>
                   ))}
-                  <button onClick={() => { document.getElementById('missing-keywords')?.scrollIntoView({behavior:'smooth'}); setActiveSection('missing-keywords'); }} className="block text-left text-sm text-gray-300 hover:text-white py-1">Missing Keywords</button>
-                  <button onClick={() => { document.getElementById('top-actions')?.scrollIntoView({behavior:'smooth'}); setActiveSection('top-actions'); }} className="block text-left text-sm text-gray-300 hover:text-white py-1">Top Actions</button>
+                  <button onClick={() => { document.getElementById('missing-keywords')?.scrollIntoView({behavior:'smooth'}); setActiveSection('missing-keywords'); }} className="block text-left text-sm text-[#E1D3CC] hover:text-[#E1D4C1] py-1">Missing Keywords</button>
+                  <button onClick={() => { document.getElementById('top-actions')?.scrollIntoView({behavior:'smooth'}); setActiveSection('top-actions'); }} className="block text-left text-sm text-[#E1D3CC] hover:text-[#E1D4C1] py-1">Top Actions</button>
                 </div>
               </div>
 
@@ -311,25 +311,25 @@ export default function ATSCheckerClient() {
                 <div id="summary" className="bg-[#0b0b11] p-4 rounded-xl border border-white/5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-gray-400">ATS Compatibility</div>
+                      <div className="text-xs text-[#E1D3CC]">ATS Compatibility</div>
                       <div className="text-2xl font-bold">{result.scores?.atsCompatibility ?? result.scores?.ats ?? 'N/A'}</div>
                     </div>
                     <div>
-                      <div className="text-xs text-gray-400">Grammar</div>
+                      <div className="text-xs text-[#E1D3CC]">Grammar</div>
                       <div className="text-2xl font-bold">{result.scores?.grammarQuality ?? result.scores?.grammar ?? 'N/A'}</div>
                     </div>
                     <div>
-                      <div className="text-xs text-gray-400">Keywords</div>
+                      <div className="text-xs text-[#E1D3CC]">Keywords</div>
                       <div className="text-2xl font-bold">{result.scores?.keywordMatch ?? 'N/A'}</div>
                     </div>
                   </div>
                   {result.suggestions && result.suggestions.length > 0 && (
-                    <div className="mt-3 text-sm text-gray-300">
+                    <div className="mt-3 text-sm text-[#E1D3CC]">
                       <div className="font-semibold">Quick suggestions:</div>
                       <ul className="list-disc ml-5 mt-1">{result.suggestions.map((s:string,i:number)=>(<li key={i}>{s}</li>))}</ul>
                     </div>
                   )}
-                  {result.summary && <div className="mt-3 text-sm text-gray-300">{result.summary}</div>}
+                  {result.summary && <div className="mt-3 text-sm text-[#E1D3CC]">{result.summary}</div>}
                 </div>
 
 
@@ -337,29 +337,29 @@ export default function ATSCheckerClient() {
                 {Array.isArray(result.detailedGuidelines) && result.detailedGuidelines.map((g:any,i:number)=> (
                   <div id={`guideline-${i}`} key={i} className={`bg-[#0b0b11] p-4 rounded-xl border border-white/5 transition ${activeSection===`guideline-${i}`? 'ring-2 ring-emerald-600':''}`}>
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400 font-semibold">{g.heading}</div>
+                      <div className="text-sm text-[#E1D3CC] font-semibold">{g.heading}</div>
 
                     </div>
-                    <div className="mt-2 text-sm text-gray-200">{g.whatATSLooksFor}</div>
+                    <div className="mt-2 text-sm text-[#E1D4C1]">{g.whatATSLooksFor}</div>
                     <div className="mt-3 grid md:grid-cols-3 gap-3 text-sm">
                       <div>
-                        <div className="text-xs text-gray-400">Add</div>
-                        <ul className="list-disc ml-5 mt-1">{(g.whatToAdd||[]).map((a:string,ai:number)=>(<li key={ai}>{a}</li>))}</ul>
+                        <div className="text-xs text-[#E1D3CC]">Add</div>
+                        <ul className="list-disc ml-5 mt-1 text-[#E1D4C1]">{(g.whatToAdd||[]).map((a:string,ai:number)=>(<li key={ai}>{a}</li>))}</ul>
                       </div>
                       <div>
-                        <div className="text-xs text-gray-400">Avoid</div>
-                        <ul className="list-disc ml-5 mt-1">{(g.whatToAvoid||[]).map((a:string,ai:number)=>(<li key={ai}>{a}</li>))}</ul>
+                        <div className="text-xs text-[#E1D3CC]">Avoid</div>
+                        <ul className="list-disc ml-5 mt-1 text-[#E1D4C1]">{(g.whatToAvoid||[]).map((a:string,ai:number)=>(<li key={ai}>{a}</li>))}</ul>
                       </div>
                       <div>
-                        <div className="text-xs text-gray-400">Vocabulary</div>
-                        <div className="mt-1 text-sm text-gray-200">{(g.recommendedVocabulary||[]).slice(0,8).join(', ')}</div>
+                        <div className="text-xs text-[#E1D3CC]">Vocabulary</div>
+                        <div className="mt-1 text-sm text-[#E1D4C1]">{(g.recommendedVocabulary||[]).slice(0,8).join(', ')}</div>
                       </div>
                     </div>
                     {g.exampleImprovement && (
                       <div className="mt-3 text-sm bg-[#07070a] p-3 rounded">
-                        <div className="text-xs text-gray-400">Example</div>
-                        <div className="mt-1 text-sm text-gray-200"><strong>Before:</strong> {g.exampleImprovement.before}</div>
-                        <div className="mt-1 text-sm text-gray-200"><strong>After:</strong> {g.exampleImprovement.after}</div>
+                        <div className="text-xs text-[#E1D3CC]">Example</div>
+                        <div className="mt-1 text-sm text-[#E1D4C1]"><strong>Before:</strong> {g.exampleImprovement.before}</div>
+                        <div className="mt-1 text-sm text-[#E1D4C1]"><strong>After:</strong> {g.exampleImprovement.after}</div>
                       </div>
                     )}
                   </div>
@@ -367,22 +367,22 @@ export default function ATSCheckerClient() {
 
                 {result.missingCriticalKeywords && result.missingCriticalKeywords.length > 0 && (
                   <div id="missing-keywords" className="bg-[#0b0b11] p-4 rounded-xl border border-white/5">
-                    <div className="text-sm text-gray-400 mb-2">Missing Critical Keywords</div>
-                    <div className="flex flex-wrap gap-2">{result.missingCriticalKeywords.map((k:string,i:number)=>(<span key={i} className="bg-white/5 px-2 py-1 rounded text-sm text-gray-200">{k}</span>))}</div>
+                    <div className="text-sm text-[#E1D3CC] mb-2">Missing Critical Keywords</div>
+                    <div className="flex flex-wrap gap-2">{result.missingCriticalKeywords.map((k:string,i:number)=>(<span key={i} className="bg-white/5 px-2 py-1 rounded text-sm text-[#E1D4C1]">{k}</span>))}</div>
                   </div>
                 )}
 
                 {result.topActionItems && result.topActionItems.length > 0 && (
                   <div id="top-actions" className="bg-[#0b0b11] p-4 rounded-xl border border-white/5">
-                    <div className="text-sm text-gray-400 mb-2">Top Action Items</div>
-                    <ol className="list-decimal ml-5 text-sm text-gray-200">{result.topActionItems.map((t:string,i:number)=>(<li key={i}>{t}</li>))}</ol>
+                    <div className="text-sm text-[#E1D3CC] mb-2">Top Action Items</div>
+                    <ol className="list-decimal ml-5 text-sm text-[#E1D4C1]">{result.topActionItems.map((t:string,i:number)=>(<li key={i}>{t}</li>))}</ol>
                   </div>
                 )}
 
                 {result.finalATSReadySummary && (
-                  <div className="bg-gradient-to-r from-emerald-600/10 to-blue-500/5 p-4 rounded-xl border border-white/5">
-                    <div className="text-sm text-gray-400">Final ATS-ready Summary</div>
-                    <div className="mt-2 text-sm text-white">{result.finalATSReadySummary}</div>
+                  <div className="bg-[rgba(126,16,44,0.03)] p-4 rounded-xl border border-white/5">
+                    <div className="text-sm text-[#E1D3CC]">Final ATS-ready Summary</div>
+                    <div className="mt-2 text-sm text-[#E1D4C1]">{result.finalATSReadySummary}</div>
                   </div>
                 )}
               </div>

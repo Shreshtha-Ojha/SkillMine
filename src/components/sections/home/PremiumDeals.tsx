@@ -60,9 +60,6 @@ export default function PremiumDeals() {
       price: pricing.oaQuestions,
       originalPrice: 99,
       icon: Code,
-      gradient: "from-yellow-500 via-orange-500 to-red-500",
-      bgGlow: "bg-yellow-500/20",
-      borderColor: "border-yellow-500/30",
       features: [
         "450+ curated company questions",
         "Google, Amazon, Meta, Apple & more",
@@ -80,9 +77,6 @@ export default function PremiumDeals() {
       price: pricing.skillTestPremium ?? null,
       originalPrice: 99,
       icon: Crown,
-      gradient: "from-indigo-500 via-blue-500 to-teal-400",
-      bgGlow: "bg-indigo-500/20",
-      borderColor: "border-indigo-500/30",
       features: [
         "Unlimited attempts for skill tests",
         "Per-question timers and one-time visit enforcement",
@@ -99,9 +93,7 @@ export default function PremiumDeals() {
       price: 0,
       originalPrice: 49,
       icon: Users,
-      gradient: "from-pink-500 via-purple-500 to-indigo-500",
-      bgGlow: "bg-pink-500/20",
-      borderColor: "border-pink-500/30",
+
       features: [
         "Read and share real interview stories",
         "Insights from Google, Amazon, Meta, and more",
@@ -116,9 +108,9 @@ export default function PremiumDeals() {
   return (
     <section className="relative py-20 md:py-32 overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[#0a0a0f]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(139,92,246,0.08),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(59,130,246,0.08),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[color:var(--color-bg-dark)]/100" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(225,212,193,0.06),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(215,169,168,0.06),transparent_50%)]" />
       
       {/* Animated Grid */}
       <div className="absolute inset-0 opacity-20">
@@ -139,20 +131,20 @@ export default function PremiumDeals() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 mb-6"
-          >
-            <Flame className="w-4 h-4 text-yellow-400" />
-            <span className="text-yellow-400 text-sm font-medium">Limited Time Offers</span>
+className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10 border border-[#E1D4C1]/20 mb-6"
+            >
+            <Flame className="w-4 h-4 text-[#E1D4C1]" />
+            <span className="text-[#E1D4C1] text-sm font-medium">Limited Time Offers</span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            <span className="text-white">Premium </span>
-            <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+            <span className="text-[#E1D4C1]">Premium </span>
+            <span className="text-[#D7A9A8]">
               Deals
             </span>
           </h2>
           
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-[#E1D4C1]/80 text-lg md:text-xl max-w-2xl mx-auto">
             Unlock your full potential with our premium features at unbeatable prices
           </p>
         </motion.div>
@@ -167,10 +159,10 @@ export default function PremiumDeals() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className={`relative group rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl border ${deal.borderColor} p-6 lg:p-8 overflow-hidden`}
+              className={`relative group rounded-3xl theme-card theme-card--vintage border border-[#7E102C]/14 p-6 lg:p-8 overflow-hidden`}   
             >
               {/* Glow Effect */}
-              <div className={`absolute inset-0 ${deal.bgGlow} opacity-0 group-hover:opacity-100 blur-3xl transition-opacity duration-500`} />
+              <div className={`absolute inset-0 bg-[#E1D4C1]/6 opacity-0 group-hover:opacity-100 blur-3xl transition-opacity duration-500`} />
               
               {/* Popular Badge */}
               {deal.popular && (
@@ -179,29 +171,29 @@ export default function PremiumDeals() {
                   animate={{ scale: 1 }}
                   className="absolute -top-1 -right-1 z-20"
                 >
-                  <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-orange-500/30">
+                  <div className="bg-[#E1D4C1] text-[#7E102C] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-black/20">
                     <Star className="w-3 h-3 fill-current" />
                     POPULAR
-                  </div>
+                  </div> 
                 </motion.div>
               )}
 
               {/* Content */}
               <div className="relative z-10">
                 {/* Icon */}
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${deal.gradient} p-3 mb-6 shadow-lg`}>
-                  <deal.icon className="w-full h-full text-white" />
-                </div>
+                <div className="w-14 h-14 rounded-2xl bg-[#E1D4C1] p-3 mb-6 shadow-lg">
+                  <deal.icon className="w-full h-full text-[#7E102C]" />
+                </div> 
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-white mb-1">{deal.title}</h3>
-                <p className="text-gray-400 text-sm mb-6">{deal.subtitle}</p>
+                <h3 className="text-xl font-bold text-[#E1D4C1] mb-1">{deal.title}</h3>
+                <p className="text-[#E1D3CC] text-sm mb-6">{deal.subtitle}</p>
 
                 {/* Pricing */}
                 <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-3xl font-bold text-white">{deal.price != null ? `₹${deal.price}` : 'TBD'}</span>
-                  <span className="text-gray-500 line-through text-sm">₹{deal.originalPrice}</span>
-                  <span className="text-green-400 text-xs font-medium bg-green-500/10 px-2 py-1 rounded-full">
+                  <span className="text-3xl font-bold text-[#E1D4C1]">{deal.price != null ? `₹${deal.price}` : 'TBD'}</span>
+                  <span className="text-[#E1D3CC] line-through text-sm">₹{deal.originalPrice}</span>
+                  <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">
                     {deal.price != null ? Math.round((1 - deal.price / deal.originalPrice) * 100) + '% OFF' : '—'}
                   </span>
                 </div>
@@ -210,19 +202,19 @@ export default function PremiumDeals() {
                 <div className="space-y-3 mb-8">
                   {deal.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
+                      <CheckCircle className="w-4 h-4 text-[#7E102C] mt-0.5 flex-shrink-0" />
+                      <span className="text-[#E1D4C1] text-sm">{feature}</span>
                     </div>
                   ))}
-                </div>
+                </div> 
 
                 {/* CTA Button */}
                 {deal.id === 'skill-tests' && deal.price == null ? (
-                  <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-gray-400 font-semibold" disabled>Price not set</button>
+                  <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-[#E1D3CC] font-semibold" disabled>Price not set</button>
                 ) : (
                   <a
                     href={deal.link}
-                    className={`w-full py-3 px-4 rounded-xl bg-gradient-to-r ${deal.gradient} text-white font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`}
+                    className={`w-full py-3 px-4 rounded-xl bg-[#7E102C] text-[#E1D4C1] font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`} 
                   >
                     Get Started
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -253,12 +245,12 @@ export default function PremiumDeals() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 + index * 0.1 }}
-              className="text-center p-4 md:p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
+              className="text-center p-4 md:p-6 rounded-2xl theme-card theme-card--vintage border border-[#7E102C]/14"
             >
-              <stat.icon className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-              <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
-              <div className="text-gray-400 text-sm">{stat.label}</div>
-            </motion.div>
+              <stat.icon className="w-6 h-6 text-[#E1D4C1] mx-auto mb-2" />
+              <div className="text-2xl md:text-3xl font-bold text-[#E1D4C1] mb-1">{stat.value}</div>
+              <div className="text-[#E1D3CC] text-sm">{stat.label}</div>
+            </motion.div> 
           ))}
         </motion.div>
 
@@ -270,20 +262,20 @@ export default function PremiumDeals() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-12 flex flex-wrap items-center justify-center gap-6 md:gap-8"
         >
-          <div className="flex items-center gap-2 text-gray-400">
-            <Zap className="w-5 h-5 text-yellow-400" />
+          <div className="flex items-center gap-2 text-[#E1D3CC]">
+            <Zap className="w-5 h-5 text-[#D7A9A8]" />
             <span className="text-sm">Instant Access</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-400">
-            <Crown className="w-5 h-5 text-purple-400" />
+          <div className="flex items-center gap-2 text-[#E1D3CC]">
+            <Crown className="w-5 h-5 text-[#E1D4C1]" />
             <span className="text-sm">Lifetime Updates</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-400">
-            <Sparkles className="w-5 h-5 text-blue-400" />
+          <div className="flex items-center gap-2 text-[#E1D3CC]">
+            <Sparkles className="w-5 h-5 text-[#E1D4C1]" />
             <span className="text-sm">Premium Support</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-400">
-            <BadgeCheck className="w-5 h-5 text-green-400" />
+          <div className="flex items-center gap-2 text-[#E1D3CC]">
+            <BadgeCheck className="w-5 h-5 text-[#7E102C]" />
             <span className="text-sm">Secure Payment</span>
           </div>
         </motion.div>

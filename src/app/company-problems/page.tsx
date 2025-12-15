@@ -255,7 +255,7 @@ export default function CompanyProblemsPage() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toUpperCase()) {
       case "EASY": return "text-green-400 bg-green-500/10 border-green-500/20";
-      case "MEDIUM": return "text-yellow-400 bg-yellow-500/10 border-yellow-500/20";
+      case "MEDIUM": return "text-[#E1D4C1] bg-[#7E102C]/10 border-[#7E102C]/20";
       case "HARD": return "text-red-400 bg-red-500/10 border-red-500/20";
       default: return "text-gray-400 bg-gray-500/10 border-gray-500/20";
     }
@@ -289,37 +289,37 @@ export default function CompanyProblemsPage() {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] border border-white/10 rounded-2xl p-8 max-w-lg w-full"
+        className="bg-[#0a0a0f] border border-white/10 rounded-2xl p-8 max-w-lg w-full"
       >
         <div className="text-center">
-          <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center">
-            <Crown className="w-10 h-10 text-yellow-400" />
+          <div className="w-20 h-20 mx-auto mb-6 bg-[#7E102C]/20 rounded-full flex items-center justify-center">
+            <Crown className="w-10 h-10 text-[#E1D4C1]" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-[#E1D4C1] mb-3">
             Unlock 450+ Company Questions
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-[#E1D3CC] mb-6">
             Get access to curated LeetCode problems from 450+ top companies including Meta, Apple, Netflix, Adobe, and many more!
           </p>
 
           <div className="bg-white/5 rounded-xl p-4 mb-6">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-gray-400">One-time Payment</span>
+              <span className="text-[#E1D3CC]">One-time Payment</span>
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 line-through text-sm">₹99</span>
-                <span className="text-2xl font-bold text-white">₹{oaPrice}</span>
+                <span className="text-[#E1D3CC] line-through text-sm">₹99</span>
+                <span className="text-2xl font-bold text-[#E1D4C1]">₹{oaPrice}</span>
               </div>
             </div>
             <div className="space-y-2 text-left">
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span>Lifetime access to all company questions</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span>Regular updates with new problems</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span>Frequency & acceptance data</span>
               </div>
@@ -328,10 +328,10 @@ export default function CompanyProblemsPage() {
 
           {user === null ? (
             <div className="space-y-3">
-              <p className="text-gray-400">You need to login to purchase premium access.</p>
+              <p className="text-[#E1D3CC]">You need to login to purchase premium access.</p>
               <div className="flex gap-2">
-                <a href="/auth/login" className="w-full inline-flex items-center justify-center py-3 bg-white/5 border border-white/10 rounded-lg text-white font-semibold">Log in</a>
-                <button onClick={handlePurchase} disabled={processingPayment} className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-400 hover:to-orange-400 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <a href="/auth/login" className="w-full inline-flex items-center justify-center py-3 bg-white/5 border border-white/10 rounded-lg text-[#E1D4C1] font-semibold">Log in</a>
+                <button onClick={handlePurchase} disabled={processingPayment} className="w-full py-3 bg-[#7E102C] text-[#E1D4C1] font-bold rounded-xl hover:bg-[#58423F] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                   {processingPayment ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -350,7 +350,7 @@ export default function CompanyProblemsPage() {
             <button
               onClick={handlePurchase}
               disabled={processingPayment}
-            className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-400 hover:to-orange-400 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-[#7E102C] text-[#E1D4C1] font-bold rounded-xl hover:bg-[#58423F] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {processingPayment ? (
                 <>
@@ -368,7 +368,7 @@ export default function CompanyProblemsPage() {
           
           <button
             onClick={() => setShowPurchaseModal(false)}
-            className="mt-4 text-gray-500 hover:text-gray-400 text-sm transition"
+            className="mt-4 text-[#E1D3CC] hover:text-[#E1D4C1] text-sm transition"
           >
             Maybe later
           </button>
@@ -394,7 +394,7 @@ export default function CompanyProblemsPage() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           >
             <div className="text-center">
-              <Loader2 className="w-12 h-12 text-yellow-400 animate-spin mx-auto mb-4" />
+              <Loader2 className="w-12 h-12 text-[#E1D4C1] animate-spin mx-auto mb-4" />
               <p className="text-white font-medium">Redirecting to payment...</p>
             </div>
           </motion.div>
@@ -403,7 +403,7 @@ export default function CompanyProblemsPage() {
       
       {/* Background effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7E102C]/8 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/5 rounded-full blur-3xl" />
       </div>
 
@@ -412,7 +412,7 @@ export default function CompanyProblemsPage() {
         <div className="mb-8">
           <button
             onClick={() => selectedCompany ? setSelectedCompany(null) : router.back()}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition mb-6"
+            className="flex items-center gap-2 text-[#E1D3CC] hover:text-[#E1D4C1] transition mb-6"
           >
             <ArrowLeft className="w-5 h-5" />
             {selectedCompany ? "Back to Companies" : "Back"}
@@ -420,13 +420,13 @@ export default function CompanyProblemsPage() {
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
-                  <Code2 className="w-8 h-8 text-white" />
+              <h1 className="text-3xl md:text-4xl font-bold text-[#E1D4C1] flex items-center gap-3">
+                <div className="p-2 bg-[#7E102C]/20 rounded-xl">
+                  <Code2 className="w-8 h-8 text-[#E1D4C1]" />
                 </div>
                 {selectedCompany ? selectedCompany.displayName : "Company-Wise Problems"}
               </h1>
-              <p className="text-gray-400 mt-2">
+              <p className="text-[#E1D3CC] mt-2">
                 {selectedCompany 
                   ? `LeetCode problems frequently asked at ${selectedCompany.displayName}`
                   : "Practice company-specific LeetCode problems for your dream job"
@@ -438,7 +438,7 @@ export default function CompanyProblemsPage() {
               {!hasPurchased && !checkingPurchase && (
                 <button
                   onClick={() => setShowPurchaseModal(true)}
-                  className="px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-xl text-yellow-400 font-medium flex items-center gap-2 hover:from-yellow-500/30 hover:to-orange-500/30 transition"
+                  className="px-4 py-2 bg-[#7E102C]/10 border border-[#7E102C]/30 rounded-xl text-[#E1D4C1] font-medium flex items-center gap-2 hover:bg-[#7E102C]/20 transition"
                 >
                   <Crown className="w-4 h-4" />
                   Unlock All 450+ Companies
@@ -451,7 +451,7 @@ export default function CompanyProblemsPage() {
                 </span>
               )}
               {selectedCompany && (
-                <span className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 font-medium">
+                <span className="px-4 py-2 bg-[#7E102C]/10 border border-[#7E102C]/20 rounded-xl text-[#E1D4C1] font-medium">
                   {filteredProblems.length} Problems
                 </span>
               )}
@@ -471,28 +471,28 @@ export default function CompanyProblemsPage() {
               {/* Search Companies */}
               <div className="mb-8">
                 <div className="relative max-w-md">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#E1D3CC]" />
                   <input
                     type="text"
                     placeholder="Search companies..."
                     value={companySearch}
                     onChange={(e) => setCompanySearch(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition"
+                    className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-[#E1D4C1] placeholder:text-[#E1D3CC] focus:outline-none focus:ring-2 focus:ring-[#7E102C]/50 transition"
                   />
                 </div>
               </div>
 
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-                  <p className="text-gray-400">Loading companies...</p>
+                  <Loader2 className="w-10 h-10 text-[#E1D4C1] animate-spin mb-4" />
+                  <p className="text-[#E1D3CC]">Loading companies...</p>
                 </div>
               ) : error ? (
                 <div className="text-center py-20">
                   <p className="text-red-400">{error}</p>
                   <button
                     onClick={fetchCompanies}
-                    className="mt-4 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition"
+                    className="mt-4 px-4 py-2 bg-[#7E102C]/10 text-[#E1D4C1] rounded-lg hover:bg-[#7E102C]/20 transition"
                   >
                     Retry
                   </button>
@@ -501,11 +501,11 @@ export default function CompanyProblemsPage() {
                 <>
                   {/* Featured Companies */}
                   <div className="mb-8">
-                    <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Star className="w-5 h-5 text-yellow-400" />
+                    <h2 className="text-lg font-semibold text-[#E1D4C1] mb-4 flex items-center gap-2">
+                      <Star className="w-5 h-5 text-[#E1D4C1]" />
                       Featured Companies
                       {!hasPurchased && (
-                        <span className="text-xs text-gray-500 font-normal ml-2">
+                        <span className="text-xs text-[#E1D3CC] font-normal ml-2">
                           ({FREE_COMPANIES.length} free, rest require purchase)
                         </span>
                       )}
@@ -527,15 +527,15 @@ export default function CompanyProblemsPage() {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: idx * 0.05 }}
                               onClick={() => handleCompanySelect(company)}
-                              className={`group relative p-4 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border rounded-xl cursor-pointer transition-all ${
+                              className={`group relative p-4 bg-white/5 border rounded-xl cursor-pointer transition-all ${
                                 isLocked 
-                                  ? "border-white/5 hover:border-yellow-500/30" 
-                                  : "border-white/10 hover:border-blue-500/30 hover:bg-white/5"
+                                  ? "border-white/5 hover:border-[#7E102C]/30" 
+                                  : "border-white/10 hover:border-[#7E102C]/30 hover:bg-white/5"
                               }`}
                             >
                               {isLocked && (
                                 <div className="absolute top-2 right-2">
-                                  <Lock className="w-4 h-4 text-yellow-500/70" />
+                                  <Lock className="w-4 h-4 text-[#7E102C]/70" />
                                 </div>
                               )}
                               {isFree && !hasPurchased && (
@@ -548,13 +548,13 @@ export default function CompanyProblemsPage() {
                               <div className="flex flex-col items-center text-center">
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${
                                   isLocked 
-                                    ? "bg-gradient-to-br from-gray-500/20 to-gray-600/20" 
-                                    : "bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+                                    ? "bg-[#7E102C]/20" 
+                                    : "bg-[#111118]/50" 
                                 }`}>
-                                  <Building2 className={`w-6 h-6 ${isLocked ? "text-gray-500" : "text-blue-400"}`} />
+                                  <Building2 className={`w-6 h-6 ${isLocked ? "text-[#E1D3CC]" : "text-[#E1D4C1]"}`} />
                                 </div>
                                 <h3 className={`text-sm font-medium truncate w-full ${
-                                  isLocked ? "text-gray-500" : "text-white"
+                                  isLocked ? "text-[#E1D3CC]" : "text-[#E1D4C1]"
                                 }`}>
                                   {company.displayName}
                                 </h3>
@@ -567,13 +567,13 @@ export default function CompanyProblemsPage() {
 
                   {/* All Companies */}
                   <div>
-                    <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-blue-400" />
+                    <h2 className="text-lg font-semibold text-[#E1D4C1] mb-4 flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 text-[#E1D4C1]" />
                       All Companies ({filteredCompanies.length})
                       {!hasPurchased && (
                         <button
                           onClick={() => setShowPurchaseModal(true)}
-                          className="text-xs text-yellow-400 font-normal ml-auto flex items-center gap-1 hover:text-yellow-300 transition"
+                          className="text-xs text-[#E1D4C1] font-normal ml-auto flex items-center gap-1 hover:text-[#D7A9A8] transition"
                         >
                           <Lock className="w-3 h-3" />
                           Unlock all for ₹{oaPrice}
@@ -594,13 +594,13 @@ export default function CompanyProblemsPage() {
                             onClick={() => handleCompanySelect(company)}
                             className={`group relative p-3 bg-[#111118] border rounded-xl cursor-pointer transition-all ${
                               isLocked 
-                                ? "border-white/5 hover:border-yellow-500/20" 
-                                : "border-white/5 hover:border-blue-500/30 hover:bg-white/5"
+                                ? "border-white/5 hover:border-[#7E102C]/20" 
+                                : "border-white/5 hover:border-[#7E102C]/30 hover:bg-white/5"
                             }`}
                           >
                             {isLocked && (
                               <div className="absolute top-2 right-2">
-                                <Lock className="w-3 h-3 text-yellow-500/50" />
+                                <Lock className="w-3 h-3 text-[#7E102C]/50" />
                               </div>
                             )}
                             {isFree && !hasPurchased && (
@@ -613,19 +613,19 @@ export default function CompanyProblemsPage() {
                             <div className="flex items-center gap-3">
                               <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition ${
                                 isLocked 
-                                  ? "bg-white/5 group-hover:bg-yellow-500/10" 
-                                  : "bg-white/5 group-hover:bg-blue-500/20"
+                                  ? "bg-white/5 group-hover:bg-[#7E102C]/10" 
+                                  : "bg-white/5 group-hover:bg-[#7E102C]/10"
                               }`}>
                                 <Building2 className={`w-4 h-4 transition ${
                                   isLocked 
-                                    ? "text-gray-500 group-hover:text-yellow-500" 
-                                    : "text-gray-400 group-hover:text-blue-400"
+                                    ? "text-[#E1D3CC] group-hover:text-[#E1D4C1]" 
+                                    : "text-[#E1D3CC] group-hover:text-[#E1D4C1]"
                                 }`} />
                               </div>
                               <span className={`text-sm truncate transition ${
                                 isLocked 
-                                  ? "text-gray-500 group-hover:text-gray-400" 
-                                  : "text-gray-300 group-hover:text-white"
+                                  ? "text-[#E1D3CC] group-hover:text-[#E1D4C1]" 
+                                  : "text-[#E1D4C1] group-hover:text-[#E1D4C1]"
                               }`}>
                                 {company.displayName}
                               </span>
@@ -649,13 +649,13 @@ export default function CompanyProblemsPage() {
               {/* Filters */}
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#E1D3CC]" />
                   <input
                     type="text"
                     placeholder="Search problems..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition"
+                    className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-[#E1D4C1] placeholder:text-[#E1D3CC] focus:outline-none focus:ring-2 focus:ring-[#7E102C]/50 transition"
                   />
                 </div>
 
@@ -669,11 +669,11 @@ export default function CompanyProblemsPage() {
                           ? diff === "easy"
                             ? "bg-green-500/20 text-green-400 border border-green-500/30"
                             : diff === "medium"
-                            ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                            ? "bg-[#7E102C]/20 text-[#E1D4C1] border border-[#7E102C]/30"
                             : diff === "hard"
                             ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                            : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                          : "bg-white/5 text-gray-400 border border-white/5 hover:bg-white/10"
+                            : "bg-[#7E102C]/20 text-[#E1D4C1] border border-[#7E102C]/30"
+                          : "bg-white/5 text-[#E1D3CC] border border-white/5 hover:bg-white/10"
                       }`}
                     >
                       {diff.charAt(0).toUpperCase() + diff.slice(1)}
@@ -688,25 +688,25 @@ export default function CompanyProblemsPage() {
                   <div className="text-2xl font-bold text-green-400">
                     {problems.filter(p => p.difficulty === "EASY").length}
                   </div>
-                  <div className="text-sm text-gray-400">Easy</div>
+                  <div className="text-sm text-[#E1D3CC]">Easy</div>
                 </div>
-                <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-center">
-                  <div className="text-2xl font-bold text-yellow-400">
+                <div className="p-4 bg-[#7E102C]/10 border border-[#7E102C]/20 rounded-xl text-center">
+                  <div className="text-2xl font-bold text-[#E1D4C1]">
                     {problems.filter(p => p.difficulty === "MEDIUM").length}
                   </div>
-                  <div className="text-sm text-gray-400">Medium</div>
+                  <div className="text-sm text-[#E1D3CC]">Medium</div>
                 </div>
                 <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
                   <div className="text-2xl font-bold text-red-400">
                     {problems.filter(p => p.difficulty === "HARD").length}
                   </div>
-                  <div className="text-sm text-gray-400">Hard</div>
+                  <div className="text-sm text-[#E1D3CC]">Hard</div>
                 </div>
               </div>
 
               {loadingProblems ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
+                  <Loader2 className="w-10 h-10 text-[#E1D4C1] animate-spin mb-4" />
                   <p className="text-gray-400">Loading problems...</p>
                 </div>
               ) : error ? (
@@ -714,21 +714,21 @@ export default function CompanyProblemsPage() {
                   <p className="text-red-400 mb-4">{error}</p>
                   <button
                     onClick={() => fetchProblems(selectedCompany.name)}
-                    className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition"
+                    className="px-4 py-2 bg-[#7E102C]/10 text-[#E1D4C1] rounded-lg hover:bg-[#7E102C]/20 transition"
                   >
                     Retry
                   </button>
                 </div>
               ) : filteredProblems.length === 0 ? (
                 <div className="text-center py-20 bg-[#111118] border border-white/5 rounded-2xl">
-                  <Code2 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No problems found</p>
+                  <Code2 className="w-12 h-12 text-[#E1D3CC] mx-auto mb-4" />
+                  <p className="text-[#E1D3CC]">No problems found</p>
                 </div>
               ) : (
                 /* Problems Table */
                 <div className="bg-[#111118] border border-white/5 rounded-2xl overflow-hidden">
                   {/* Table Header */}
-                  <div className="grid grid-cols-12 gap-4 p-4 bg-white/5 border-b border-white/5 text-sm font-medium text-gray-400">
+                  <div className="grid grid-cols-12 gap-4 p-4 bg-white/5 border-b border-white/5 text-sm font-medium text-[#E1D3CC]">
                     <div className="col-span-1">#</div>
                     <div className="col-span-5">Problem</div>
                     <div className="col-span-2">Difficulty</div>
@@ -746,7 +746,7 @@ export default function CompanyProblemsPage() {
                         transition={{ delay: Math.min(idx * 0.02, 0.3) }}
                         className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group"
                       >
-                        <div className="col-span-1 text-gray-500 text-sm">
+                        <div className="col-span-1 text-[#E1D3CC] text-sm">
                           {idx + 1}
                         </div>
                         <div className="col-span-5">
@@ -754,7 +754,7 @@ export default function CompanyProblemsPage() {
                             href={problem.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white hover:text-blue-400 transition font-medium flex items-center gap-2"
+                            className="text-[#E1D4C1] hover:text-[#E1D4C1] transition font-medium flex items-center gap-2"
                           >
                             {problem.title}
                             <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
@@ -767,8 +767,8 @@ export default function CompanyProblemsPage() {
                         </div>
                         <div className="col-span-2">
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-blue-400" />
-                            <span className="text-gray-300 text-sm">{problem.frequency}</span>
+                            <TrendingUp className="w-4 h-4 text-[#E1D4C1]" />
+                            <span className="text-[#E1D4C1] text-sm">{problem.frequency}</span>
                           </div>
                         </div>
                         <div className="col-span-2 text-right">
@@ -776,7 +776,7 @@ export default function CompanyProblemsPage() {
                             href={problem.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 transition text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#7E102C]/10 text-[#E1D4C1] rounded-lg hover:bg-[#7E102C]/20 transition text-sm font-medium"
                           >
                             Solve
                             <ExternalLink className="w-4 h-4" />

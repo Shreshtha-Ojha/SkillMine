@@ -150,14 +150,14 @@ export default function SkillTestsPage() {
             {/* Back */}
             <button
               onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-gray-400 hover:text-white mb-2"
+              className="flex items-center gap-2 text-[#E1D3CC] hover:text-[#E1D4C1] mb-2"
             >
               <ChevronLeft size={18} /> Back
             </button>
 
             {/* Header */}
-            <h1 className="text-3xl font-extrabold">Create Skill Test</h1>
-            <p className="text-gray-400 mt-1">Build a focused skill assessment. Pass ≥60% to qualify.</p>
+            <h1 className="text-3xl font-extrabold text-[#E1D4C1]">Create Skill Test</h1>
+            <p className="text-[#E1D3CC] mt-1">Build a focused skill assessment. Pass ≥60% to qualify.</p>
           </div>
 
           {/* Buy Premium Button on top-right */}
@@ -198,7 +198,7 @@ export default function SkillTestsPage() {
               <div className="absolute inset-0 bg-black/60" onClick={() => setShowPremiumModal(false)} />
               <div className="relative bg-[#0b0b10] border border-white/10 rounded-2xl p-6 max-w-xl w-full z-10">
                 <h3 className="text-xl font-semibold mb-2">Skill Test Premium</h3>
-                <p className="text-sm text-gray-300 mb-4">Unlock unlimited attempts and premium test features (per-question timers, one-time visit enforcement, priority support).</p>
+                <p className="text-sm text-[#E1D4C1] mb-4">Unlock unlimited attempts and premium test features (per-question timers, one-time visit enforcement, priority support).</p>
                 <div className="flex gap-3">
                   <button className="px-4 py-2 bg-yellow-500 rounded font-medium" onClick={async ()=>{
                     if (user === undefined) return;
@@ -216,7 +216,7 @@ export default function SkillTestsPage() {
               </div>
             </div>
           )}
-            <label className="text-sm text-gray-300 mb-1 block">Test Name</label>
+            <label className="text-sm text-[#E1D4C1] mb-1 block">Test Name</label>
             <input
               value={testName}
               onChange={e => setTestName(e.target.value)}
@@ -226,7 +226,7 @@ export default function SkillTestsPage() {
 
           {/* Skills */}
           <div ref={dropdownRef} className="relative">
-            <label className="text-sm text-gray-300 mb-2 block">Skills</label>
+            <label className="text-sm text-[#E1D4C1] mb-2 block">Skills</label>
 
             <div
               onClick={() => setOpenDropdown(true)}
@@ -241,13 +241,13 @@ export default function SkillTestsPage() {
                 placeholder="Search skills"
                 className="bg-transparent outline-none flex-1 text-sm"
               />
-              <ChevronDown size={16} className="text-gray-500" />
+              <ChevronDown size={16} className="text-[#E1D3CC]" />
             </div>
 
             {openDropdown && (
               <div className="absolute z-20 mt-2 w-full bg-[#0b0b10] border border-white/10 rounded-xl max-h-60 overflow-auto">
                 {filteredSkills.length === 0 && (
-                  <div className="px-4 py-3 text-sm text-gray-400">No skills found</div>
+                  <div className="px-4 py-3 text-sm text-[#E1D3CC]">No skills found</div>
                 )}
                 {filteredSkills.map(s => (
                   <div
@@ -256,7 +256,7 @@ export default function SkillTestsPage() {
                     className="px-4 py-3 cursor-pointer hover:bg-[#3E80F6]/10 flex justify-between"
                   >
                     <span>{s.title}</span>
-                    <span className="text-xs text-gray-500">{s.questionCount} Qs</span>
+                    <span className="text-xs text-[#E1D3CC]">{s.questionCount} Qs</span>
                   </div>
                 ))}
               </div>
@@ -286,7 +286,7 @@ export default function SkillTestsPage() {
 
           {/* Questions */}
           <div>
-            <label className="text-sm text-gray-300 mb-1 block">Questions</label>
+            <label className="text-sm text-[#E1D4C1] mb-1 block">Questions</label>
             <select
               value={totalQuestions}
               onChange={e => setTotalQuestions(Number(e.target.value))}
@@ -300,7 +300,7 @@ export default function SkillTestsPage() {
 
           {/* Time */}
           <div>
-            <label className="text-sm text-gray-300 mb-1 block">Total Time (minutes)</label>
+            <label className="text-sm text-[#E1D4C1] mb-1 block">Total Time (minutes)</label>
             <input
               type="number"
               value={timeLimitMinutes}
@@ -369,7 +369,7 @@ export default function SkillTestsPage() {
           <div className="flex gap-4 pt-4">
             <button
               onClick={handleCreate}
-              className="px-6 py-3 rounded-xl font-semibold bg-[#3E80F6] hover:opacity-90"
+              className="px-6 py-3 bg-[#7E102C] hover:bg-[#6a0f27] text-[#E1D4C1] font-semibold rounded-xl transition-all duration-300"
             >
               Start Test
             </button>

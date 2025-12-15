@@ -105,9 +105,9 @@ const BlogSection = () => {
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[128px]" />
+        <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[rgba(126,16,44,0.06)] rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[rgba(215,169,168,0.04)] rounded-full blur-[128px]" />
       </div>
 
       {/* Header */}
@@ -122,7 +122,7 @@ const BlogSection = () => {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-400" />
+                <BookOpen className="w-5 h-5 text-[var(--color-accent)]" />
                 <h1 className="text-lg font-bold text-white">Tech Blogs</h1>
               </div>
             </div>
@@ -141,7 +141,7 @@ const BlogSection = () => {
               {canCreateBlog && (
                 <Link
                   href="/blogs/create"
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg hover:bg-[#6b0f26] transition-all"
                 >
                   <Plus className="w-4 h-4" />
                   Write Blog
@@ -170,9 +170,9 @@ const BlogSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-blue-400" />
-            <span className="text-sm text-blue-300">Community Blog Hub</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(126,16,44,0.06)] border border-[rgba(126,16,44,0.08)] rounded-full mb-6">
+            <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
+            <span className="text-sm text-[var(--color-accent)]">Community Blog Hub</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Explore Tech
@@ -191,13 +191,13 @@ const BlogSection = () => {
           className="max-w-xl mx-auto mb-10"
         >
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-muted)]" />
             <input
               type="text"
               placeholder="Search blogs by title or author..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder-[color:var(--color-muted)] focus:outline-none focus:ring-[rgba(126,16,44,0.25)] transition-colors"
             />
           </div>
         </motion.div>
@@ -210,7 +210,7 @@ const BlogSection = () => {
           className="flex items-center justify-center gap-6 mb-10 text-sm"
         >
           <div className="flex items-center gap-2 text-gray-400">
-            <BookOpen className="w-4 h-4 text-blue-400" />
+            <BookOpen className="w-4 h-4 text-[var(--color-accent)]" />
             <span>{blogs.length} Blogs</span>
           </div>
           <div className="flex items-center gap-2 text-gray-400">
@@ -237,8 +237,8 @@ const BlogSection = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-16"
           >
-            <div className="w-20 h-20 mx-auto mb-6 bg-blue-500/10 rounded-full flex items-center justify-center">
-              <BookOpen className="w-10 h-10 text-blue-400" />
+            <div className="w-20 h-20 mx-auto mb-6 bg-[rgba(126,16,44,0.06)] rounded-full flex items-center justify-center">
+              <BookOpen className="w-10 h-10 text-[var(--color-accent)]" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               {searchQuery ? "No blogs found" : "No blogs yet"}
@@ -246,10 +246,10 @@ const BlogSection = () => {
             <p className="text-gray-400 mb-6">
               {searchQuery ? "Try a different search term" : "Be the first to share your knowledge!"}
             </p>
-            {canCreateBlog && (
+              {canCreateBlog && (
               <Link
                 href="/blogs/create"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-500 hover:to-indigo-500 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] text-[var(--color-foreground)] font-medium rounded-xl hover:bg-[#6b0f26] transition-all"
               >
                 <PenLine className="w-5 h-5" />
                 Write First Blog
@@ -269,7 +269,7 @@ const BlogSection = () => {
               >
                 {/* Category Badge */}
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full">
+                  <span className="px-3 py-1 bg-[rgba(126,16,44,0.06)] text-[var(--color-accent)] text-xs font-medium rounded-full">
                     Tech
                   </span>
                   <span className="text-xs text-gray-500 flex items-center gap-2">
@@ -282,7 +282,7 @@ const BlogSection = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
+                <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-[var(--color-accent)] transition-colors">
                   {blog.title}
                 </h3>
 
@@ -294,8 +294,8 @@ const BlogSection = () => {
                 {/* Author */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-[var(--color-foreground)]" />
                     </div>
                     <span className="text-sm text-gray-300">{blog.author}</span>
                   </div>

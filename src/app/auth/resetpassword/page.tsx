@@ -58,7 +58,7 @@ function ResetPasswordForm() {
     );
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-zinc-900/80 via-blue-900/60 to-purple-900/70 px-6 relative overflow-hidden">
+        <div className="flex items-center justify-center min-h-screen bg-[#0a0a0f] px-6 relative overflow-hidden">
             {/* Back Button */}
             <button
                 onClick={() => router.back()}
@@ -68,45 +68,45 @@ function ResetPasswordForm() {
                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 <span className="hidden sm:inline">Back</span>
             </button>
-            {/* Optimized Subtle Pattern Background */}
-            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
+            {/* Subtle maroon pattern */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[rgba(126,16,44,0.06)] via-transparent to-transparent pointer-events-none" />
             {/* Glassmorphism Effect Reset Password Card */}
-            <div className="max-w-md w-full p-12 bg-gradient-to-br from-zinc-900/80 via-blue-900/60 to-purple-900/70 backdrop-blur-2xl border border-blue-400/30 rounded-3xl shadow-2xl z-10 relative flex flex-col items-center animate-fade-in">
+            <div className="max-w-md w-full p-12 bg-[#111118] border border-white/10 rounded-3xl shadow-2xl z-10 relative flex flex-col items-center animate-fade-in">
                 {/* Logo/Icon */}
                 <div className="mb-6 flex items-center justify-center">
-                    <svg className="w-14 h-14 text-blue-300 animate-spin-slow" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-20"/><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" className="opacity-60"/></svg>
+                    <svg className="w-14 h-14 text-[var(--color-primary)] animate-spin-slow" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-20"/><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" className="opacity-60"/></svg>
                 </div>
                 <h1 className="text-4xl font-extrabold text-center text-white mb-8 drop-shadow-lg tracking-tight font-sans">Reset Your Password</h1>
                 <hr className="w-1/2 mx-auto mb-8 border-blue-400 opacity-20" />
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-8 w-full" autoComplete="off">
                     <div>
-                        <label htmlFor="newPassword" className="block text-base font-semibold text-blue-100 mb-3 tracking-wide">New Password</label>
+                        <label htmlFor="newPassword" className="block text-base font-semibold text-gray-300 mb-3 tracking-wide">New Password</label>
                         <input
                             id="newPassword"
                             type="password"
                             placeholder="Enter new password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full p-4 border border-blue-400/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 text-blue-900 bg-white/90 placeholder:text-blue-400/60 shadow-md font-medium"
+                            className="w-full p-4 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgba(126,16,44,0.25)] text-white bg-white/5 placeholder:text-gray-400 shadow-md font-medium"
                             required
                         />
                     </div>
                     <div>
-                        <label htmlFor="confirmPassword" className="block text-base font-semibold text-blue-100 mb-3 tracking-wide">Confirm New Password</label>
+                        <label htmlFor="confirmPassword" className="block text-base font-semibold text-gray-300 mb-3 tracking-wide">Confirm New Password</label>
                         <input
                             id="confirmPassword"
                             type="password"
                             placeholder="Confirm new password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full p-4 border border-blue-400/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 text-blue-900 bg-white/90 placeholder:text-blue-400/60 shadow-md font-medium"
+                            className="w-full p-4 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgba(126,16,44,0.25)] text-white bg-white/5 placeholder:text-gray-400 shadow-md font-medium"
                             required
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full p-4 text-white rounded-xl font-bold text-lg transition-all duration-300 ease-in-out mt-2 mb-2 shadow-lg bg-gradient-to-r from-blue-700/90 to-purple-800/90 hover:from-blue-800 hover:to-purple-900 active:scale-95 focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+                        className="w-full p-4 text-[var(--color-foreground)] rounded-xl font-bold text-lg transition-all duration-300 ease-in-out mt-2 mb-2 shadow-lg bg-[var(--color-primary)] hover:bg-[#6b0f26] active:scale-95 focus:ring-2 focus:ring-[rgba(126,16,44,0.25)] focus:ring-offset-2"
                     >
                         Reset Password
                     </button>
@@ -118,7 +118,7 @@ function ResetPasswordForm() {
                     </p>
                 )}
                 <footer className="mt-10 text-xs text-blue-200/80 text-center w-full">
-                    Need help? <a href="/contact-support" className="text-blue-400 font-medium hover:underline">Contact support</a>.
+                    Need help? <a href="/contact-support" className="text-[var(--color-accent)] font-medium hover:underline">Contact support</a>.
                 </footer>
             </div>
         </div>

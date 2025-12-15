@@ -43,9 +43,9 @@ export default function ResendVerification() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
       {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-950/40 via-[#0a0a0f] to-[#0a0a0f]" />
-      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
-      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-indigo-600/8 rounded-full blur-3xl" />
+      <div className="fixed inset-0 bg-[rgba(126,16,44,0.04)]" />
+      <div className="fixed top-1/4 left-1/4 w-72 h-72 bg-[rgba(126,16,44,0.06)] rounded-full blur-3xl" />
+      <div className="fixed bottom-1/4 right-1/4 w-56 h-56 bg-[rgba(215,169,168,0.03)] rounded-full blur-3xl" />
 
       {/* Back Button */}
       <button
@@ -71,7 +71,7 @@ export default function ResendVerification() {
             <p className="text-xs text-gray-400 mb-5">Check your inbox for the verification link.</p>
             <Link
               href="/auth/login"
-              className="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all"
+              className="block w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm font-medium rounded-lg transition-all"
             >
               Go to Login
             </Link>
@@ -79,7 +79,7 @@ export default function ResendVerification() {
         ) : (
           <>
             {/* Icon */}
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[var(--color-primary)/20] flex items-center justify-center">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
@@ -98,7 +98,7 @@ export default function ResendVerification() {
                 <input
                   id="email"
                   type="email"
-                  className="w-full px-3 py-2 bg-[#1a1a24] border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                  className="w-full px-3 py-2 bg-[#1a1a24] border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[rgba(126,16,44,0.25)] focus:ring-1 focus:ring-[rgba(126,16,44,0.25)] transition-all"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -109,7 +109,7 @@ export default function ResendVerification() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-[var(--color-primary)] text-[var(--color-foreground)] disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium rounded-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -126,7 +126,7 @@ export default function ResendVerification() {
             </form>
 
             <p className="text-[10px] text-gray-600 text-center mt-5">
-              Need help? <Link href="/contact-support" className="text-blue-400 hover:text-blue-300">Contact support</Link>
+              Need help? <Link href="/contact-support" className="text-[var(--color-accent)] hover:text-[var(--color-muted)]">Contact support</Link>
             </p>
           </>
         )}

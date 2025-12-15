@@ -283,7 +283,7 @@ export default function SkillTestRunner() {
     } catch (e:any) { toast.error(e?.message||'Submit failed'); } setSubmitting(false);
   };
 
-  if (loading) return <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-gray-400"><Loader2 className="w-8 h-8 animate-spin text-blue-500"/></div>;
+  if (loading) return <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-gray-400"><Loader2 className="w-8 h-8 animate-spin text-[var(--color-primary)]"/></div>;
   if (!attempt) return <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-gray-400">Attempt not found</div>;
 
   const q = attempt.mcqSnapshot[currentQuestion];
@@ -293,7 +293,7 @@ export default function SkillTestRunner() {
     return (
       <div className="min-h-screen bg-[#0a0a0f]">
         <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px]" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[rgba(126,16,44,0.06)] rounded-full blur-[128px]" />
         </div>
         <header className="sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -314,7 +314,7 @@ export default function SkillTestRunner() {
                     if (!res.ok) throw new Error(j.error || 'Payment initiation failed');
                     if (j.paymentUrl) window.location.href = j.paymentUrl;
                   } catch (e:any) { alert(e?.message || 'Failed to initiate purchase'); }
-                }} className="px-3 py-1 rounded bg-yellow-500 text-black text-sm">Buy Premium</button>
+                }} className="px-3 py-1 rounded bg-[var(--color-primary)] text-[var(--color-foreground)] text-sm">Buy Premium</button>
                 </div>
               )}
             </div>
@@ -322,9 +322,9 @@ export default function SkillTestRunner() {
         </header>
 
         <main className="max-w-3xl mx-auto px-4 py-8">
-          <div className="p-8 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 rounded-2xl text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-10 h-10 text-blue-400" />
+          <div className="p-8 bg-[rgba(126,16,44,0.04)] border border-[rgba(126,16,44,0.06)] rounded-2xl text-center">
+            <div className="w-20 h-20 mx-auto mb-6 bg-[rgba(126,16,44,0.06)] rounded-full flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-[var(--color-accent)]" />
             </div>
             <h2 className="text-3xl font-bold text-white mb-2">{attempt.testName || 'Skill Test'}</h2>
             <p className="text-gray-400 max-w-lg mx-auto">This test contains {attempt.mcqSnapshot.length} questions. You will have {attempt.timeLimitMinutes || 60} minutes to complete the test. Tab-switching is monitored.</p>
@@ -342,22 +342,22 @@ export default function SkillTestRunner() {
                 <div className="text-xs text-gray-500">Total Marks</div>
               </div>
               <div className="p-4 bg-white/5 rounded-xl text-center">
-                <div className="text-2xl font-bold text-blue-400">60%</div>
+                <div className="text-2xl font-bold text-[var(--color-accent)]">60%</div>
                 <div className="text-xs text-gray-500">To Pass</div>
               </div>
             </div>
             <div className="mt-6 flex items-center justify-center gap-3">
-              <button onClick={async ()=>{ await enterFullscreen(); }} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl">Start Test</button>
+              <button onClick={async ()=>{ await enterFullscreen(); }} className="px-6 py-3 bg-[var(--color-primary)] text-[var(--color-foreground)] font-semibold rounded-xl hover:bg-[#6b0f26]">Start Test</button>
             </div>
           </div>
           
           <div className="mt-6 p-6 bg-[#111118] border border-white/5 rounded-2xl">
             <h3 className="text-lg font-semibold text-white mb-4">Question Breakdown</h3>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+              <div className="p-4 bg-[rgba(126,16,44,0.04)] border border-[rgba(126,16,44,0.06)] rounded-xl">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-white font-medium">Multiple Choice (MCQ)</span>
-                  <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-lg">Section 1</span>
+                  <span className="px-2 py-1 bg-[rgba(126,16,44,0.06)] text-[var(--color-accent)] text-xs rounded-lg">Section 1</span>
                 </div>
                 <div className="space-y-2 text-sm text-gray-400">
                   <div className="flex justify-between"><span>Number of Questions</span><span className="text-white font-medium">{attempt.mcqSnapshot.length}</span></div>
@@ -365,13 +365,13 @@ export default function SkillTestRunner() {
                   <div className="flex justify-between"><span>Total Marks</span><span className="text-blue-400 font-medium">{attempt.mcqSnapshot.reduce((s:any,q:any)=>s + (q.marks||1),0)}</span></div>
                 </div>
               </div>
-              <div className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl">
+              <div className="p-4 bg-[rgba(215,169,168,0.02)] border border-[rgba(215,169,168,0.04)] rounded-xl">
                 <div className="flex items-center justify-between mb-3"><span className="text-white font-medium">Important Rules</span></div>
                 <div className="space-y-2 text-sm text-gray-400">
-                  <div className="flex items-start gap-3"><div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">1</div><div><div className="text-white font-medium">Time Limit</div><div className="text-gray-400 text-sm">You have {attempt.timeLimitMinutes || 60} minutes. Timer starts when you click "Start Test" and the test will auto-submit when time expires.</div></div></div>
+                  <div className="flex items-start gap-3"><div className="w-6 h-6 bg-[rgba(126,16,44,0.06)] rounded-full flex items-center justify-center">1</div><div><div className="text-white font-medium">Time Limit</div><div className="text-gray-400 text-sm">You have {attempt.timeLimitMinutes || 60} minutes. Timer starts when you click "Start Test" and the test will auto-submit when time expires.</div></div></div>
 
                   {attempt.perQuestionTimerEnabled && (
-                    <div className="flex items-start gap-3"><div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center">2</div><div><div className="text-white font-medium">Per-question timer</div><div className="text-gray-400 text-sm">Each question has its own timer of {attempt.perQuestionTimeMinutes || 1} minute{(attempt.perQuestionTimeMinutes || 1) > 1 ? 's' : ''}. When it expires the question locks and the test advances to the next question (or auto-submits if it was the last).</div></div></div>
+                    <div className="flex items-start gap-3"><div className="w-6 h-6 bg-[rgba(126,16,44,0.06)] rounded-full flex items-center justify-center">2</div><div><div className="text-white font-medium">Per-question timer</div><div className="text-gray-400 text-sm">Each question has its own timer of {attempt.perQuestionTimeMinutes || 1} minute{(attempt.perQuestionTimeMinutes || 1) > 1 ? 's' : ''}. When it expires the question locks and the test advances to the next question (or auto-submits if it was the last).</div></div></div>
                   )}
 
                   {attempt.oneTimeVisit && (
@@ -380,7 +380,7 @@ export default function SkillTestRunner() {
 
                   <div className="flex items-start gap-3"><div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center">4</div><div><div className="text-white font-medium">Navigation & Tab Switching</div><div className="text-gray-400 text-sm">Use the question navigator to move between questions. Tab-switching is monitored and may auto-submit the test after repeated switches.</div></div></div>
 
-                  <div className="mt-2 text-sm text-yellow-200 bg-yellow-900/10 p-2 rounded">Note: Skill tests do not provide official certificates or external verification.</div>
+                  <div className="mt-2 text-sm text-[var(--color-muted)] bg-[rgba(215,169,168,0.02)] p-2 rounded">Note: Skill tests do not provide official certificates or external verification.</div>
                 </div>
               </div>
             </div>
@@ -429,7 +429,7 @@ export default function SkillTestRunner() {
                 if (!res.ok) throw new Error(j.error || 'Payment initiation failed');
                 if (j.paymentUrl) window.location.href = j.paymentUrl;
               } catch (e:any) { alert(e?.message || 'Failed to initiate purchase'); }
-            }} className="px-4 py-2 bg-yellow-500 rounded">Buy Premium — ₹{skillPrice}</button>
+            }} className="px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded hover:bg-[#6b0f26]">Buy Premium — ₹{skillPrice}</button>
           </div>
         </div>
       </div>
@@ -450,14 +450,14 @@ export default function SkillTestRunner() {
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-white font-semibold">Questions</h3>
               <div className="flex items-center gap-2 text-sm text-gray-300">
-                <Clock className="w-4 h-4 text-yellow-400" />
+                <Clock className="w-4 h-4 text-[var(--color-accent)]" />
                 <span className="font-medium">{attempt.timeLimitMinutes || 60} mins</span>
               </div>
             </div>
             {/* Legend */}
             <div className="flex flex-col gap-2 mb-3 text-sm text-gray-300">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-4 h-4 rounded bg-blue-600 border border-blue-600" />
+                <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded bg-[var(--color-primary)] border border-[var(--color-primary)]" />
                 <span>Current</span>
               </div>
               <div className="flex items-center gap-2">
@@ -465,7 +465,7 @@ export default function SkillTestRunner() {
                 <span>Answered</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="inline-block w-4 h-4 rounded bg-yellow-500/20 border border-yellow-500/30" />
+                <span className="inline-block w-4 h-4 rounded bg-[var(--color-primary)]/20 border border-[rgba(126,16,44,0.08)]" />
                 <span>Locked</span>
               </div>
               <div className="flex items-center gap-2">
@@ -473,9 +473,9 @@ export default function SkillTestRunner() {
                 <span>Unanswered</span>
               </div>
             </div>
-            <div className="grid grid-cols-6 gap-1">
+              <div className="grid grid-cols-6 gap-1">
                 {attempt.mcqSnapshot.map((_:any, idx:number)=>(
-                <button key={idx} onClick={()=>{ goToQuestion(idx); }} disabled={locked[idx] && idx !== currentQuestion} className={`w-8 h-8 text-xs rounded flex items-center justify-center transition-colors ${currentQuestion===idx ? 'bg-blue-600 text-white' : locked[idx] ? 'bg-yellow-500/20 text-yellow-400 opacity-90 cursor-not-allowed' : mcqAnswers[idx] != null ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
+                <button key={idx} onClick={()=>{ goToQuestion(idx); }} disabled={locked[idx] && idx !== currentQuestion} className={`w-8 h-8 text-xs rounded flex items-center justify-center transition-colors ${currentQuestion===idx ? 'bg-[var(--color-primary)] text-white' : locked[idx] ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] opacity-90 cursor-not-allowed' : mcqAnswers[idx] != null ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
                   {idx+1}
                 </button>
               ))}
@@ -492,7 +492,7 @@ export default function SkillTestRunner() {
                   <div className="text-xs text-gray-400">Total</div>
                   <div className="text-sm font-medium">{Math.floor(timeLeft/60).toString().padStart(2,'0')}:{(timeLeft%60).toString().padStart(2,'0')}</div>
                 </div>
-                <button onClick={()=>handleSubmit(false)} disabled={submitting} className="px-4 py-2 bg-emerald-600 rounded">{submitting ? 'Submitting...' : 'Submit Test'}</button>
+                <button onClick={()=>handleSubmit(false)} disabled={submitting} className="px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded hover:bg-[#6b0f26]">{submitting ? 'Submitting...' : 'Submit Test'}</button>
               </div>
             </div>
 
@@ -500,12 +500,12 @@ export default function SkillTestRunner() {
             <div className="mb-4 flex items-start justify-between">
               <div className="text-white mr-4">{q?.question}</div>
               {attempt.perQuestionTimerEnabled && (
-                <div className="text-sm text-yellow-300 ml-4">Per-Q: {Math.floor(perQTimeLeft/60).toString().padStart(2,'0')}:{(perQTimeLeft%60).toString().padStart(2,'0')}</div>
+                <div className="text-sm text-[var(--color-accent)] ml-4">Per-Q: {Math.floor(perQTimeLeft/60).toString().padStart(2,'0')}:{(perQTimeLeft%60).toString().padStart(2,'0')}</div>
               )}
             </div>
             <div className="space-y-2">
               {q?.options?.map((opt:any, i:number)=>(
-                <label key={i} className={`block p-3 rounded border ${mcqAnswers[currentQuestion]===i? 'border-blue-500 bg-blue-500/10':'border-white/10'} cursor-pointer flex items-center justify-between`}>
+                <label key={i} className={`block p-3 rounded border ${mcqAnswers[currentQuestion]===i? 'border-[var(--color-primary)] bg-[var(--color-primary)]/10':'border-white/10'} cursor-pointer flex items-center justify-between`}>
                   <div className="flex items-center gap-3">
                     <input type="radio" checked={mcqAnswers[currentQuestion]===i} onChange={()=>selectAnswer(currentQuestion, i)} className="mr-2" />
                     <span>{opt}</span>
@@ -538,11 +538,11 @@ export default function SkillTestRunner() {
           {/* Mobile Question Navigator */}
           <div className="lg:hidden mt-6 p-4 bg-[#111118] border border-white/5 rounded-xl">
             <div className="flex gap-4 mb-4">
-              <button className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors bg-blue-600 text-white`}>Questions</button>
+              <button className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors bg-[var(--color-primary)] text-[var(--color-foreground)]`}>Questions</button>
             </div>
             <div className="flex flex-wrap gap-1">
               {attempt.mcqSnapshot.map((_:any, idx:number)=>(
-                <button key={idx} onClick={()=>{ goToQuestion(idx); }} disabled={locked[idx] && idx !== currentQuestion} className={`w-8 h-8 text-xs rounded flex items-center justify-center ${currentQuestion===idx ? 'bg-blue-600 text-white' : locked[idx] ? 'bg-yellow-500/20 text-yellow-400 opacity-90 cursor-not-allowed' : mcqAnswers[idx] != null ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-gray-400'}`}>
+                <button key={idx} onClick={()=>{ goToQuestion(idx); }} disabled={locked[idx] && idx !== currentQuestion} className={`w-8 h-8 text-xs rounded flex items-center justify-center ${currentQuestion===idx ? 'bg-[var(--color-primary)] text-white' : locked[idx] ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] opacity-90 cursor-not-allowed' : mcqAnswers[idx] != null ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-gray-400'}`}>
                   {idx+1}
                 </button>
               ))}

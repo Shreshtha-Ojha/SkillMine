@@ -170,7 +170,7 @@ export default function BlogDetailPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-3 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
           <span className="text-gray-400">Loading article...</span>
         </div>
       </div>
@@ -221,8 +221,8 @@ export default function BlogDetailPage() {
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(139,92,246,0.06),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[rgba(126,16,44,0.04)]" />
+        <div className="absolute inset-0 bg-[rgba(215,169,168,0.02)]" />
       </div>
 
       {/* Header */}
@@ -275,7 +275,7 @@ export default function BlogDetailPage() {
                 alt={blog.title}
                 className="w-full h-64 sm:h-80 md:h-96 object-contain object-center bg-black"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
             </div>
           )}
 
@@ -288,7 +288,7 @@ export default function BlogDetailPage() {
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-8 pb-8 border-b border-white/10">
             {/* Author */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold">
+              <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-foreground)] font-semibold">
                 {blog.author?.[0]?.toUpperCase() || 'A'}
               </div>
               <div>
@@ -320,7 +320,7 @@ export default function BlogDetailPage() {
 
           {/* Description */}
           {blog.description && (
-            <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-blue-500/10 to-indigo-500/10">
+            <div className="mb-8 p-6 rounded-xl bg-[rgba(126,16,44,0.04)] border border-[rgba(126,16,44,0.06)]">
               <p className="text-lg text-gray-300 leading-relaxed italic">
                 {blog.description}
               </p>
@@ -334,9 +334,9 @@ export default function BlogDetailPage() {
             prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
             prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
             prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
-            prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+            prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline
             prose-strong:text-white prose-strong:font-semibold
-            prose-code:text-blue-300 prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+            prose-code:text-[var(--color-accent)] prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
             prose-pre:bg-[#111118] prose-pre:rounded-xl prose-pre:p-4
             prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-white/5 prose-blockquote:rounded-r-lg prose-blockquote:pl-6 prose-blockquote:py-4 prose-blockquote:italic prose-blockquote:text-gray-300
             prose-ul:text-gray-300 prose-ol:text-gray-300
@@ -349,16 +349,16 @@ export default function BlogDetailPage() {
 
           {/* Like and Comment Actions */}
           <div className="mt-10 pt-8 border-t border-white/10">
-            <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6">
               <button
                 onClick={handleLike}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all ${
                   liked
-                    ? "bg-pink-500/20 text-pink-400 border border-pink-500/30"
-                    : "bg-white/5 text-gray-400 hover:text-pink-400 hover:bg-pink-500/10 border border-white/10"
+                    ? "bg-[var(--color-accent)]/20 text-[var(--color-accent)] border border-[rgba(215,169,168,0.18)]"
+                    : "bg-white/5 text-gray-400 hover:text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10 border border-white/10"
                 }`}
               >
-                <Heart className={`w-5 h-5 ${liked ? "fill-pink-400" : ""}`} />
+                <Heart className={`w-5 h-5 ${liked ? "fill-[var(--color-accent)]" : ""}`} />
                 <span>{likesCount}</span>
                 <span className="hidden sm:inline">{likesCount === 1 ? "Like" : "Likes"}</span>
               </button>
@@ -367,8 +367,8 @@ export default function BlogDetailPage() {
                 onClick={() => setShowComments(!showComments)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all ${
                   showComments
-                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                    : "bg-white/5 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 border border-white/10"
+                    ? "bg-[var(--color-primary)]/20 text-[var(--color-primary)] border border-[rgba(126,16,44,0.22)]"
+                    : "bg-white/5 text-gray-400 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 border border-white/10"
                 }`}
               >
                 <MessageCircle className="w-5 h-5" />
@@ -388,7 +388,7 @@ export default function BlogDetailPage() {
                 {/* Add Comment */}
                 <div className="mb-6">
                   <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-foreground)] font-semibold flex-shrink-0">
                       {user ? (user.username?.[0] || user.email[0]).toUpperCase() : <User className="w-5 h-5" />}
                     </div>
                     <div className="flex-1">
@@ -398,7 +398,7 @@ export default function BlogDetailPage() {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder={user ? "Write a comment..." : "Login to comment"}
-                        className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
+                        className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-[color:var(--color-muted)] focus:outline-none focus:ring-[rgba(126,16,44,0.25)] resize-none"
                         rows={3}
                         disabled={!user}
                       />
@@ -406,7 +406,7 @@ export default function BlogDetailPage() {
                         <button
                           onClick={handleAddComment}
                           disabled={!user || submittingComment || !newComment.trim()}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-500 hover:to-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded-lg font-medium hover:bg-[#6b0f26] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {submittingComment ? (
                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

@@ -103,7 +103,7 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
             <span className="hidden sm:inline text-sm font-medium">Back</span>
           </button>
           <div className="flex-1" />
-          <button onClick={() => router.push('/interview-experiences/add')} className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">Add your experience</button>
+          <button onClick={() => router.push('/interview-experiences/add')} className="px-4 py-2 text-sm font-medium text-[var(--color-foreground)] bg-[var(--color-primary)] hover:bg-[#6b0f26] rounded-lg">Add your experience</button>
         </div>
       </header>
 
@@ -114,7 +114,7 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
               <div className="text-gray-400">by {exp.authorId?.username || exp.author} • {new Date(exp.createdAt).toLocaleDateString()}</div>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={handleLike} aria-label={liked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${liked ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}>
+              <button onClick={handleLike} aria-label={liked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${liked ? 'bg-[var(--color-primary)] text-[var(--color-foreground)]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}>
                 <Heart className="w-4 h-4" />
                 <span className="text-sm">{likesCount}</span>
               </button>
@@ -145,7 +145,7 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
           <div className="prose prose-invert max-w-none text-gray-200 mb-6" dangerouslySetInnerHTML={{ __html: exp.content }} />
 
           <div className="flex items-center gap-3 mt-3 mb-6">
-            {exp.company && <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm">{exp.company}</span>}
+            {exp.company && <span className="px-3 py-1 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded-full text-sm">{exp.company}</span>}
             {(exp.tags || []).slice(0,5).map((t:string) => (
               <span key={t} className="px-2 py-1 bg-white/5 rounded text-gray-300 text-sm">{t}</span>
             ))}
@@ -182,7 +182,7 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
 
               <div className="mt-4 flex gap-2">
                 <input ref={commentInputRef} id="comment-input" value={newComment} onChange={(e)=>setNewComment(e.target.value)} placeholder="Add a public comment" className="flex-1 p-3 rounded-lg bg-[#0e0e12] border border-white/10 text-white" />
-                <button onClick={handleAddComment} className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">Comment</button>
+                <button onClick={handleAddComment} className="px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[#6b0f26] text-[var(--color-foreground)]">Comment</button>
               </div>
             </div>
           )}

@@ -36,7 +36,7 @@ const ExplorePage = () => {
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7E102C]/10 rounded-full blur-[128px]" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[128px]" />
       </div>
 
@@ -59,7 +59,7 @@ const ExplorePage = () => {
               placeholder="Search roadmaps..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#7E102C]/50 transition-all"
             />
           </div>
 
@@ -74,10 +74,10 @@ const ExplorePage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-full mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-[#7E102C]/10 rounded-full mb-4"
           >
-            <Map className="w-4 h-4 text-blue-400" />
-            <span className="text-sm text-blue-400">Learning Paths</span>
+            <Map className="w-4 h-4 text-[#E1D4C1]" />
+            <span className="text-sm text-[#E1D4C1]">Learning Paths</span>
           </motion.div>
           
           <motion.h1
@@ -136,15 +136,15 @@ const ExplorePage = () => {
               >
                 <button
                   onClick={() => router.push(`/explore/roadmap/${roadmap._id}`)}
-                  className="w-full text-left p-6 bg-[#111118] border border-white/5 rounded-2xl hover:border-blue-500/30 hover:bg-[#111118]/80 transition-all duration-300 group"
+                  className="w-full text-left p-6 bg-[#111118] border border-white/5 rounded-2xl hover:border-[#7E102C]/30 hover:bg-[#111118]/80 transition-all duration-300 group"
                 >
                   {/* Icon */}
-                  <div className="w-12 h-12 mb-4 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
-                    <Map className="w-6 h-6 text-blue-400" />
+                  <div className="w-12 h-12 mb-4 bg-[#7E102C]/20 rounded-xl flex items-center justify-center">
+                    <Map className="w-6 h-6 text-[#E1D4C1]" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#E1D4C1] transition-colors line-clamp-1">
                     {roadmap.title}
                   </h3>
 
@@ -161,7 +161,7 @@ const ExplorePage = () => {
                       <User className="w-4 h-4" />
                       <span>{roadmap.createdBy}</span>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-blue-400 transition-colors" />
+                    <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-[#E1D4C1] transition-colors" />
                   </div>
                 </button>
               </motion.div>

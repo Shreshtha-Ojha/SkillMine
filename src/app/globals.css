@@ -309,6 +309,13 @@ body {
 
 @layer base {
   :root {
+    /* Project palette variables */
+    --color-primary: #7E102C; /* deep maroon */
+    --color-foreground: #E1D4C1; /* light cream */
+    --color-accent: #D7A9A8; /* muted pink */
+    --color-muted: #E1D3CC; /* soft neutral */
+    --color-bg-dark: #58423F; /* warm dark */
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -336,6 +343,12 @@ body {
     --radius: 0.5rem;
   }
   .dark {
+    --color-primary: #7E102C;
+    --color-foreground: #E1D4C1;
+    --color-accent: #D7A9A8;
+    --color-muted: #E1D3CC;
+    --color-bg-dark: #58423F;
+
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -360,7 +373,52 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Ensure vintage cards are warm and not brown/black */
+    --card-bg: rgba(225,212,193,0.03);
+    --card-bg-dark: rgba(215,169,168,0.02);
+    --card-border: rgba(126,16,44,0.14);
   }
+
+  /* Theme utility classes */
+  .theme-section { background-color: var(--background); }
+  /* Card base colors use project palette for warmer vintage feel */
+  :root {
+    --card-bg: rgba(225,212,193,0.03); /* subtle warm cream tint */
+    --card-bg-dark: rgba(215,169,168,0.02); /* subtle darker tint for depth */
+    --card-border: rgba(126,16,44,0.14);
+  }
+
+  .theme-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--color-foreground);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  .theme-card--vintage {
+    background-image: linear-gradient(180deg, rgba(225,212,193,0.04), rgba(215,169,168,0.02)), repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 10px);
+    background-blend-mode: overlay, overlay;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+    color: var(--color-foreground);
+    overflow: hidden;
+  }
+
+  /* Convenience alias for components */
+  .card-vintage {
+    background-image: linear-gradient(180deg, rgba(225,212,193,0.02), rgba(215,169,168,0.01)), repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 10px);
+    background-blend-mode: overlay, overlay;
+    background-color: #111118;
+    border: 1px solid rgba(126,16,44,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.02);
+    color: var(--color-foreground);
+    overflow: hidden;
+  }
+  .theme-cta { background-color: var(--color-primary); color: var(--color-foreground); }
+  .theme-muted { color: var(--color-muted); }
+  .theme-accent { color: var(--color-accent); }
 }
 
 
