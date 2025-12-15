@@ -300,7 +300,7 @@ const UserManagement = () => {
                   )}
                   <div className="bg-white/5 rounded-lg p-3">
                     <div className="text-xs text-gray-500 mb-1">Account Status</div>
-                    <div className={`text-sm font-medium ${selectedUser.isVerified ? "text-green-400" : "text-[#E1D4C1]"}`>}
+                    <div className={`text-sm font-medium ${selectedUser.isVerified ? "text-green-400" : "text-[#E1D4C1]"}`}>
                       {selectedUser.isVerified ? "Verified" : "Pending Verification"}
                     </div>
                   </div>
