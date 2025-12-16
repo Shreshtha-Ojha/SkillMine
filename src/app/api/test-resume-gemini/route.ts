@@ -51,7 +51,7 @@ Return ONLY a valid JSON object in this format:
     console.log("[TestResume] Calling Gemini with prompt length:", prompt.length);
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-preview-09-2025",
       contents: prompt,
     });
 
@@ -113,7 +113,7 @@ Return JSON with name, email, phone, and a score from 0-100.`;
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash", 
+      model: "gemini-2.5-flash-preview-09-2025", 
       contents: prompt,
     });
 

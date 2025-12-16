@@ -138,12 +138,21 @@ export default function CompanyProblemsPage() {
       const response = await fetch("/api/payment/create-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Failed to create payment request. Please try again.");
+        if (response.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+        console.warn('Payment create-request failed', response.status, data);
+        const errMsg = typeof data?.error === 'object' ? (data?.error?.message || JSON.stringify(data?.error)) : data?.error;
+        if (data?.code === 'ALREADY_PURCHASED') {
+          alert(errMsg || 'You already own this product.');
+          window.location.href = '/company-problems';
+          return;
+        }
+        alert(errMsg || "Failed to create payment request. Please try again.");
         setProcessingPayment(false);
         return;
       }
@@ -306,7 +315,7 @@ export default function CompanyProblemsPage() {
             <div className="flex items-center justify-between mb-3">
               <span className="text-[#E1D3CC]">One-time Payment</span>
               <div className="flex items-center gap-2">
-                <span className="text-[#E1D3CC] line-through text-sm">₹99</span>
+                <span className="text-[#E1D3CC] line-through text-sm">{`₹${oaPrice > 0 ? oaPrice + 100 : 99}`}</span>
                 <span className="text-2xl font-bold text-[#E1D4C1]">₹{oaPrice}</span>
               </div>
             </div>
@@ -340,7 +349,8 @@ export default function CompanyProblemsPage() {
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5" />
-                      Pay ₹{oaPrice} & Unlock
+                      <span className="mr-2">Pay ₹{oaPrice} & Unlock</span>
+                      <span className="text-xs text-gray-300 line-through">₹{oaPrice > 0 ? oaPrice + 100 : ''}</span>
                     </>
                   )}
                 </button>
@@ -360,7 +370,8 @@ export default function CompanyProblemsPage() {
               ) : (
                 <>
                   <Sparkles className="w-5 h-5" />
-                  Pay ₹{oaPrice} & Unlock
+                  <span className="mr-2">Pay ₹{oaPrice} & Unlock</span>
+                  <span className="text-xs text-gray-300 line-through">₹{oaPrice > 0 ? oaPrice + 100 : ''}</span>
                 </>
               )}
             </button>
@@ -576,7 +587,7 @@ export default function CompanyProblemsPage() {
                           className="text-xs text-[#E1D4C1] font-normal ml-auto flex items-center gap-1 hover:text-[#D7A9A8] transition"
                         >
                           <Lock className="w-3 h-3" />
-                          Unlock all for ₹{oaPrice}
+                          Unlock all for ₹{oaPrice} <span className="text-xs ml-2 line-through">₹{oaPrice > 0 ? oaPrice + 100 : ''}</span>
                         </button>
                       )}
                     </h2>

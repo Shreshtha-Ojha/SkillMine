@@ -201,12 +201,9 @@ export default function PremiumDeals() {
 
                 {/* Pricing */}
                 <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-3xl font-bold text-white">
-                    ₹{deal.price.toLocaleString("en-IN")}
-                  </span>
-                  <span className="text-gray-400 text-xs">
-                    starting price
-                  </span>
+                  <span className="text-3xl font-bold text-white">₹{deal.price.toLocaleString("en-IN")}</span>
+                  <span className="text-gray-400 text-sm line-through">₹{(deal.price + 100).toLocaleString("en-IN")}</span>
+                  <span className="text-gray-400 text-xs">starting price</span>
                 </div>
 
                 {/* Features */}

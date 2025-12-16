@@ -9,12 +9,16 @@ export default function DropdownPortal({
   children,
   offset = 8,
   zIndex = 100000,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   rect: DOMRect | null;
   open: boolean;
   children: React.ReactNode;
   offset?: number;
   zIndex?: number;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -34,7 +38,7 @@ export default function DropdownPortal({
   };
 
   return createPortal(
-    <div style={style} className="pointer-events-auto">
+    <div style={style} className="pointer-events-auto" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {children}
     </div>,
     document.body

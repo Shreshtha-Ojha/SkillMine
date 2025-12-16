@@ -3,6 +3,7 @@ import { generateContentWithConfig } from '@/lib/gemini';
 import JSON5 from 'json5';
 
 export async function POST(req: Request) {
+  const BETA_NOTICE = 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.';
   try {
     const body = await req.json().catch(() => ({}));
     const resume: string = String(body.resume || '');
@@ -21,15 +22,8 @@ Your task is to deeply analyze:
 
 Your response MUST be:
 - ATS-friendly
-- Recruiter-oriented
 - Brutally honest
-- Extremely actionable
-- Written as if advising a real hiring manager and candidate
-
-================================
 OUTPUT FORMAT (JSON ONLY)
-================================
-
 {
   "scores": {
     "atsCompatibility": number (0–100),
@@ -42,31 +36,9 @@ OUTPUT FORMAT (JSON ONLY)
 
   "overallVerdict": "1–2 line recruiter-style summary of how this resume would perform in ATS + human screening",
 
-  "jobDescriptionReview": {
-    "jdClarityScore": number (0–100),
-    "jdATSQuality": number (0–100),
-    "jdRealism": "Is this JD realistic or inflated? (honest opinion)",
-    "jdRedFlags": [
-      "Any vague requirements",
-      "Unclear tech stack",
-      "Unrealistic expectations"
-    ],
-    "jdMissingDetails": [
-      "Missing responsibilities",
-      "Missing tools/tech",
-      "Missing seniority clarity"
-    ],
-    "jdImprovementSuggestions": [
-      "How the JD could be written better for candidates",
-      "How it could attract stronger resumes"
-    ]
-  },
-
-  "detailedGuidelines": [ /* 1..10 structured sections as in template */ ],
+  "detailedGuidelines": [ /* 3..7 structured sections as in template */ ],
 
   "missingCriticalKeywords": [ /* list */ ],
-
-  "topActionItems": [ /* list */ ],
 
   "finalATSReadySummary": "Concise, ATS-optimized resume summary tailored to this JD"
 }
@@ -93,6 +65,8 @@ IMPORTANT RULES:
 - Output VALID JSON ONLY
 - No markdown, no explanations outside JSON
 `;
+
+ 
 
     // Enforce login and per-user usage limit: 1 free check unless admin allows
     const getUserFromRequest = (await import('@/lib/getUserFromRequest')).default;
@@ -170,12 +144,28 @@ IMPORTANT RULES:
         return out;
       })(parsed);
 
-      return NextResponse.json({ success: true, raw: text, parsed: normalized, promptUsed: prompt, parseMethod, parsedSnippet });
+      return NextResponse.json({ success: true, raw: text, parsed: normalized, promptUsed: prompt, parseMethod, parsedSnippet, betaNotice: 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.' });
     }
 
     // Fallback: return raw text and parsing metadata so client can display it
-    return NextResponse.json({ success: true, raw: text, parsed: null, promptUsed: prompt, parseMethod: parseMethod || null, parsedSnippet, parseError });
+    return NextResponse.json({ success: true, raw: text, parsed: null, promptUsed: prompt, parseMethod: parseMethod || null, parsedSnippet, parseError, betaNotice: 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.' });
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || 'gemini failed' }, { status: 500 });
+    // Try to surface a sensible short message while inspecting nested provider error fields
+    const msg = e?.message || (e?.error && e.error.message) || 'gemini failed';
+    const full = (String(msg) + ' ' + (JSON.stringify(e) || '')).toLowerCase();
+
+    // Timeout => 504
+    if (full.includes('timed out')) {
+      return NextResponse.json({ error: 'LLM request timed out', betaNotice: 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.' }, { status: 504 });
+    }
+
+    // Detect overloaded / rate-limited model responses (message text, nested error fields, or status/code)
+    const isOverloaded = full.includes('overload') || full.includes('model is overloaded') || full.includes('model overloaded') || full.includes('unavailable') || e?.status === 429 || e?.status === 503 || (e?.error && (e.error.code === 503 || String(e.error.status).toUpperCase() === 'UNAVAILABLE'));
+    if (isOverloaded) {
+      return NextResponse.json({ error: 'Model overloaded — try again', keywords: ['model', 'overloaded', 'retry'], betaNotice: 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.' }, { status: 503 });
+    }
+
+    // Fallback: return original error message
+    return NextResponse.json({ error: msg, betaNotice: 'Beta: using free Gemini (free tier) — service may be intermittent; please try again later.' }, { status: 500 });
   }
 }

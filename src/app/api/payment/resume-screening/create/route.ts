@@ -6,24 +6,22 @@ import { getPricing } from "@/helpers/getPricing";
 
 connect();
 
-// Helper to get user from request
-async function getUserFromRequest(request: NextRequest) {
-  try {
-    const cookieToken = request.cookies.get("token")?.value;
-    if (!cookieToken) return null;
+import getUserFromRequest from '@/lib/getUserFromRequest';
 
-    const decoded = jwt.verify(cookieToken, process.env.TOKEN_SECRET!) as { id: string };
-    const user = await User.findById(decoded.id);
-    return user;
-  } catch (error) {
-    return null;
+async function debugGetUser(request: NextRequest) {
+  const user = await getUserFromRequest(request as unknown as Request);
+  if (!user) {
+    const cookiePresent = !!request.cookies.get('token');
+    const authHeader = request.headers.get('authorization');
+    console.warn(`Resume-screening create: unauthenticated request. cookiePresent=${cookiePresent}, hasAuthHeader=${!!authHeader}`);
   }
+  return user;
 }
 
 // POST - Create a payment request for Resume Screening Premium
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUserFromRequest(request);
+    const user = await debugGetUser(request);
 
     if (!user) {
       return NextResponse.json(
@@ -34,8 +32,9 @@ export async function POST(request: NextRequest) {
 
     // Check if already purchased
     if (user.purchases?.resumeScreeningPremium?.purchased) {
+      console.warn(`User ${user._id} attempted to create resume-screening payment but already purchased`);
       return NextResponse.json(
-        { error: "You have already purchased Resume Screening Premium" },
+        { error: "You have already purchased Resume Screening Premium", code: "ALREADY_PURCHASED" },
         { status: 400 }
       );
     }
@@ -57,44 +56,80 @@ export async function POST(request: NextRequest) {
       purpose: `RESUME_SCREENING_${user._id}`,
       buyer_name: user.fullName || user.username || "Customer",
       email: user.email,
-      phone: user.contactNumber || "9999999999",
       redirect_url: redirectUrl,
       send_email: "false",
       send_sms: "false",
       allow_repeated_payments: "false",
     };
 
+    // Sanitize phone number; include only if valid
+    try {
+      const { sanitizeIndianPhone } = await import('@/lib/phoneUtils');
+      const phone = sanitizeIndianPhone(user.contactNumber || null);
+      if (phone) {
+        bodyParams.phone = phone;
+      } else {
+        console.warn(`Resume-screening create: omitting invalid phone for user ${user._id}`);
+      }
+    } catch (e) {
+      console.warn('Resume-screening create: phone sanitizer failed', String(e?.message || e));
+    }
+
     // Only add webhook if not localhost
     if (webhookUrl) {
       bodyParams.webhook = webhookUrl;
     }
 
-    // Create payment request using Instamojo API
-    const response = await fetch("https://www.instamojo.com/api/1.1/payment-requests/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-Api-Key": process.env.INSTAMOJO_API_KEY!,
-        "X-Auth-Token": process.env.INSTAMOJO_AUTH_TOKEN!,
-      },
-      body: new URLSearchParams(bodyParams),
-    });
+    // Use the shared pattern: fetch with timeout + retries and robust error handling
+    async function fetchWithTimeoutAndRetry(url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) {
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const res = await fetch(url, { ...opts, signal: controller.signal });
+          clearTimeout(timer);
+          return res;
+        } catch (err: any) {
+          clearTimeout(timer);
+          const isLast = attempt === retries;
+          console.warn(`Instamojo request attempt ${attempt + 1} failed`, err?.message || err);
+          if (isLast) throw err;
+          await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+        }
+      }
+      throw new Error('Failed to reach Instamojo');
+    }
 
-    const data = await response.json();
+    let response;
+    try {
+      response = await fetchWithTimeoutAndRetry("https://www.instamojo.com/api/1.1/payment-requests/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Api-Key": process.env.INSTAMOJO_API_KEY!,
+          "X-Auth-Token": process.env.INSTAMOJO_AUTH_TOKEN!,
+        },
+        body: new URLSearchParams(bodyParams),
+      });
+    } catch (err: any) {
+      console.error("Instamojo create request failed:", err?.message || err);
+      const isAbort = String(err?.name || '').toLowerCase().includes('abort') || String(err?.message || '').toLowerCase().includes('timed out');
+      return NextResponse.json({ error: isAbort ? 'Payment provider timed out. Please try again.' : 'Failed to contact payment provider. Please try again.' }, { status: isAbort ? 504 : 502 });
+    }
+
+    let data: any;
+    try {
+      data = await response.json();
+    } catch (err) {
+      const text = await response.text().catch(() => '');
+      data = { message: text || 'Invalid response from payment provider' };
+    }
 
     if (!response.ok || !data.success) {
-      console.error("Instamojo API error:", data);
-      // Handle error message which can be string or object
-      let errorMsg = "Failed to create payment request. Please try again.";
-      if (typeof data.message === "string") {
-        errorMsg = data.message;
-      } else if (data.message && typeof data.message === "object") {
-        errorMsg = Object.values(data.message).flat().join(", ");
-      }
-      return NextResponse.json(
-        { error: errorMsg },
-        { status: 500 }
-      );
+      console.error("Instamojo API error:", response.status, data);
+      let errorMsg = data?.message || data?.error || (typeof data === 'string' ? data : JSON.stringify(data).slice(0, 500));
+      if (typeof errorMsg === 'object') errorMsg = JSON.stringify(errorMsg);
+      return NextResponse.json({ error: String(errorMsg) }, { status: response.status || 500 });
     }
 
     // Return the payment URL

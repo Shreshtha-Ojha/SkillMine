@@ -117,12 +117,22 @@ export default function Home() {
       const response = await fetch("/api/payment/create-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Failed to create payment request. Please try again.");
+        if (response.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+        console.warn('Payment create-request failed', response.status, data);
+        const errMsg = typeof data?.error === 'object' ? (data?.error?.message || JSON.stringify(data.error)) : data?.error;
+        if (data?.code === 'ALREADY_PURCHASED') {
+          alert(errMsg || 'You already own this product.');
+          // optional: redirect to content
+          window.location.href = '/company-problems';
+          return;
+        }
+        alert(errMsg || "Failed to create payment request. Please try again.");
         setProcessingPayment(false);
         return;
       }
@@ -179,9 +189,9 @@ export default function Home() {
             <div className="flex items-center justify-between mb-3">
               <span className="text-[#E1D3CC]">One-time Payment</span>
               <div className="flex items-center gap-2">
-                <span className="text-[#E1D3CC] line-through text-sm">₹99</span>
-                <span className="text-2xl font-bold text-[#E1D4C1]">₹{oaPrice}</span>
-              </div>
+                    <span className="text-[#E1D3CC] line-through text-sm">{`₹${oaPrice > 0 ? oaPrice + 100 : 99}`}</span>
+                    <span className="text-2xl font-bold text-[#E1D4C1]">₹{oaPrice}</span>
+                  </div>
             </div>
             <div className="space-y-2 text-left">
               <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
@@ -212,7 +222,8 @@ export default function Home() {
             ) : (
               <>
                 <Sparkles className="w-5 h-5" />
-                Pay ₹{oaPrice} & Unlock Now
+                <span className="mr-2">Pay ₹{oaPrice} & Unlock Now</span>
+                <span className="text-xs text-gray-300 line-through">₹{oaPrice > 0 ? oaPrice + 100 : ''}</span>
               </>
             )}
           </button>
@@ -231,39 +242,26 @@ export default function Home() {
   // Memoized nav items - simplified for new navbar
   const navItems = useMemo(() => [
     { name: "About", link: "/about" },
-    { name: "Company Problems", link: "/company-problems" },
+    { name: "Roadmaps", link: "/explore" },
+    { name: "Top Questions", link: "/company-problems", premium: true },
+    { name: "Skill Tests", link: "/skill-tests", premium: true },
+    { name: "ATS Lab", link: "/ats-checker" },
     {
-      name: "Prepare",
-      dropdown: [
-        { name: "Blogs", link: "/blogs" },
-        { name: "Roadmaps", link: "/explore" },
-        { name: "Interview Experiences", link: "/interview-experiences" },
-        { name: "Skill Tests", link: "/skill-tests" },
-      ],
-    },
-    {
-      name: "Wrapped 2025",
-      dropdown: [
-        { name: "GitHub Wrapped", link: "/github-wrapped" },
-        { name: "Codeforces Wrapped", link: "/codeforces-wrapped" },
-        { name: "LeetCode Wrapped", link: "/leetcode-wrapped" },
-      ],
-    },
-    {
-      name: "Resume",
+      name: "Tools",
       dropdown: [
         { name: "Resume Builder", link: "/resume-builder" },
-        { name: "ATS Checker", link: "/ats-checker" },
+        { name: "Resume Screening", link: "/resume-screening/bulk" },
+        { name: "Mock Interviews", link: "/interview" },
+        { name: "Coding Arena", link: "/top-interviews" },
+        { name: "Compensation Data", link: "/placement-data" },
       ],
     },
     {
-      name: "Interview",
+      name: "Interview Prep",
       dropdown: [
-        { name: "Mock Interview", link: "/interview" },
-        { name: "Prepare for Interviews", link: "/prepare-interviews" },
-        { name: "Coding Arena", link: "/top-interviews" },
-        { name: "Contest History", link: "/top-interview-history" },
-        { name: "Compensation Data", link: "/placement-data" },
+        { name: "Blogs", link: "/blogs" },
+        { name: "Core CS Notes", link: "/about" },
+        { name: "Interview Experiences", link: "/interview-experiences" },
       ],
     },
   ], []);

@@ -399,7 +399,7 @@ export default function BulkResumeScreeningPage() {
     setPurchaseLoading(true);
     try {
       // Create Instamojo payment request
-      const response = await axios.post("/api/payment/resume-screening/create");
+      const response = await axios.post("/api/payment/resume-screening/create", {}, { withCredentials: true });
       
       if (response.data.success && response.data.paymentUrl) {
         // Redirect to Instamojo payment page
@@ -409,7 +409,14 @@ export default function BulkResumeScreeningPage() {
         toast.error("Please sign in to complete the purchase");
         router.push(`/auth/login?returnTo=/ats-checker`);
       } else {
-        toast.error(response.data.error || "Failed to create payment request");
+        const err = response.data?.error;
+        const errMsg = typeof err === 'object' ? (err?.message || JSON.stringify(err)) : err;
+        if (response.data?.code === 'ALREADY_PURCHASED') {
+          toast.success(errMsg || 'Already purchased');
+          router.push('/resume-screening/bulk');
+          return;
+        }
+        toast.error(errMsg || "Failed to create payment request");
       }
     } catch (error: any) {
       // If server returns 401
@@ -417,7 +424,9 @@ export default function BulkResumeScreeningPage() {
         toast.error("Please sign in to complete the purchase");
         router.push(`/auth/login?returnTo=/resume-screening/bulk`);
       } else {
-        toast.error(error.response?.data?.error || "Failed to initiate payment");
+        const err = error.response?.data?.error;
+        const errMsg = typeof err === 'object' ? (err?.message || JSON.stringify(err)) : err;
+        toast.error(errMsg || "Failed to initiate payment");
       }
     } finally {
       setPurchaseLoading(false);
@@ -495,7 +504,10 @@ export default function BulkResumeScreeningPage() {
             </p>
             <div className="flex items-center justify-between mb-4">
               <div className="text-xs text-gray-400">One-time purchase</div>
-              <div className="text-xl font-bold text-emerald-400">₹{premiumPrice}</div>
+              <div className="text-xl font-bold text-emerald-400">
+                <span className="text-sm text-gray-400 line-through mr-2">{`₹${premiumPrice > 0 ? premiumPrice + 100 : ''}`}</span>
+                ₹{premiumPrice}
+              </div>
             </div>
             <div className="flex gap-3">
               <button
@@ -560,7 +572,8 @@ export default function BulkResumeScreeningPage() {
                     ) : (
                       <>
                         <Zap className="w-5 h-5" />
-                        Get Premium - ₹{premiumPrice}
+                        <span className="mr-2">Get Premium - ₹{premiumPrice}</span>
+                        <span className="text-xs text-gray-300 line-through">₹{premiumPrice > 0 ? premiumPrice + 100 : ''}</span>
                       </>
                     )}
                   </button>
@@ -663,7 +676,7 @@ export default function BulkResumeScreeningPage() {
                       </p>
                       <p className="text-xs text-gray-500">
                         {isPremium ? "Click to select files" : (
-                          <span className="text-yellow-400">Premium - ₹{premiumPrice}</span>
+                          <span className="text-yellow-400">Premium - ₹{premiumPrice} <span className="text-xs ml-2 line-through">₹{premiumPrice > 0 ? premiumPrice + 100 : ''}</span></span>
                         )}
                       </p>
                     </label>
@@ -1028,6 +1041,7 @@ export default function BulkResumeScreeningPage() {
             {/* Price */}
             <div className="text-center mb-6">
               <div className="inline-flex items-baseline gap-1">
+                <span className="text-sm text-gray-400 line-through mr-2">{`₹${premiumPrice > 0 ? premiumPrice + 100 : ''}`}</span>
                 <span className="text-4xl font-bold text-white">₹{premiumPrice}</span>
                 <span className="text-gray-400">only</span>
               </div>
@@ -1049,7 +1063,8 @@ export default function BulkResumeScreeningPage() {
                 ) : (
                   <>
                     <Zap className="w-5 h-5" />
-                    Get Premium Now - ₹{premiumPrice}
+                    <span className="mr-2">Get Premium Now - ₹{premiumPrice}</span>
+                    <span className="text-xs text-gray-300 line-through">₹{premiumPrice > 0 ? premiumPrice + 100 : ''}</span>
                   </>
                 )}
               </button>

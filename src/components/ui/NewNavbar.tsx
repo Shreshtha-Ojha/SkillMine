@@ -12,6 +12,7 @@ interface NavItem {
   name: string;
   link?: string;
   dropdown?: { name: string; link: string }[];
+  premium?: boolean; // highlight as premium feature
 }
 
 export const FloatingNav = ({
@@ -26,6 +27,7 @@ export const FloatingNav = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownRect, setDropdownRect] = useState<DOMRect | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -85,19 +87,27 @@ export const FloatingNav = ({
                 <Link
                   key={item.name}
                   href={item.link}
-                  className="px-4 py-2 text-sm text-[#E1D4C1] hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.premium ? 'text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
                 >
-                  {item.name}
+                  <span className={item.premium ? 'font-semibold' : ''}>{item.name}</span>
+
                 </Link>
               ) : item.dropdown ? (
                 <div
                   key={item.name}
                   className="relative"
                   onMouseEnter={(e) => {
+                    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
                     setOpenDropdown(item.name);
                     setDropdownRect((e.currentTarget as HTMLElement).getBoundingClientRect());
                   }}
-                  onMouseLeave={() => setOpenDropdown(null)}
+                  onMouseLeave={() => {
+                    // small delay to allow pointer to travel to dropdown portal
+                    closeTimerRef.current = window.setTimeout(() => {
+                      setOpenDropdown(null);
+                      closeTimerRef.current = null;
+                    }, 220);
+                  }}
                 >
                   <button
                     className="flex items-center gap-1 px-4 py-2 text-sm text-[#E1D4C1] hover:text-white hover:bg-white/5 rounded-lg transition-all"
@@ -110,7 +120,19 @@ export const FloatingNav = ({
                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
                   </button>
                   {openDropdown === item.name && dropdownRect && (
-                    <DropdownPortal rect={dropdownRect} open>
+                    <DropdownPortal
+                      rect={dropdownRect}
+                      open
+                      onMouseEnter={() => {
+                        if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+                      }}
+                      onMouseLeave={() => {
+                        closeTimerRef.current = window.setTimeout(() => {
+                          setOpenDropdown(null);
+                          closeTimerRef.current = null;
+                        }, 220);
+                      }}
+                    >
                       <div className="w-48 bg-[#E1D4C1] text-[#7E102C] border border-[#7E102C]/20 rounded-xl p-2 shadow-lg">
                         {item.dropdown.map((subItem) => (
                           <Link
@@ -177,7 +199,7 @@ export const FloatingNav = ({
                       key={item.name}
                       href={item.link}
                       onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-3 text-[#7E102C] hover:bg-[#D7A9A8]/20 rounded-lg transition-all"
+                      className={`block px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 font-semibold' : 'text-[#7E102C]'}`}
                     >
                       {item.name}
                     </Link>
@@ -185,9 +207,11 @@ export const FloatingNav = ({
                     <div key={item.name}>
                       <button
                         onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
-                        className="w-full flex items-center justify-between px-4 py-3 text-[#7E102C] hover:bg-[#D7A9A8]/20 rounded-lg transition-all"
+                        className={`w-full flex items-center justify-between px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 font-semibold' : 'text-[#7E102C]'}`}
                       >
-                        {item.name}
+                        <div className="flex items-center gap-2">
+                          <span>{item.name}</span>
+                        </div>
                         <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? "rotate-180" : ""}`} />
                       </button>
                       <AnimatePresence>

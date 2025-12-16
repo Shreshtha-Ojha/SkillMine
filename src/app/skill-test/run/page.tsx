@@ -308,7 +308,7 @@ export default function SkillTestRunner() {
                   if (user === undefined) return;
                   if (!user) { setShowLoginModal(true); return; }
                   try {
-                    const res = await fetch('/api/payment/skill-test/create', { method: 'POST' });
+                      const res = await fetch('/api/payment/skill-test/create', { method: 'POST', credentials: 'include' });
                     const j = await res.json();
                     if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
                     if (!res.ok) throw new Error(j.error || 'Payment initiation failed');
@@ -423,7 +423,7 @@ export default function SkillTestRunner() {
               if (user === undefined) return;
               if (!user) { setShowLoginModal(true); return; }
               try {
-                const res = await fetch('/api/payment/skill-test/create', { method: 'POST' });
+                const res = await fetch('/api/payment/skill-test/create', { method: 'POST', credentials: 'include' });
                 const j = await res.json();
                 if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
                 if (!res.ok) throw new Error(j.error || 'Payment initiation failed');

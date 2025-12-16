@@ -88,7 +88,7 @@ Return exactly this JSON structure:
     console.log(`\n=== Screening Resume: ${fileName} ===`);
     console.log(`Resume text length: ${resumeText.length} characters`);
     
-    // Use the new Gemini SDK with gemini-2.5-flash
+    // Use the new Gemini SDK with gemini-2.5-flash-preview-09-2025
     console.log("[BulkScreen] Calling Gemini API...");
     
     // Call Gemini API with reduced tokens to avoid timeouts

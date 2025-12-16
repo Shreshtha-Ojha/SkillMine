@@ -38,6 +38,7 @@ export default function ATSCheckerClient() {
   const [lastLLMResponseRaw, setLastLLMResponseRaw] = useState<string | null>(null);
   const [usageLimitReached, setUsageLimitReached] = useState<string | null>(null);
   const [retryRequested, setRetryRequested] = useState<boolean>(false);
+  const [betaNotice, setBetaNotice] = useState<string | null>(null);
   const user = useCurrentUser();
   const router = useRouter();
 
@@ -171,12 +172,18 @@ export default function ATSCheckerClient() {
         // Call server-side Gemini instead of Puter CDN
         const res = await fetch('/api/ai/gemini-ats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, resume: resumeText, jd: jdText }) });
         const json = await res.json().catch(() => ({}));
+        // Show any beta notice coming from the server (free Gemini tier)
+        setBetaNotice(json?.betaNotice || null);
         if (!res.ok) {
           if (res.status === 401) { setError(json?.message || 'Please login'); setLoading(false); return; }
           if (res.status === 403 && json?.error === 'usage_limit_reached') { setUsageLimitReached(json?.message || 'Usage limit reached'); setLoading(false); return; }
+          if (res.status === 503) { setError((json?.error ? String(json.error) : 'Model overloaded. Please try again.') + (Array.isArray(json?.keywords) ? ' (' + json.keywords.join(', ') + ')' : '')); setLoading(false); return; }
+          if (res.status === 504) { setError((json?.error ? String(json.error) : 'LLM request timed out. Please try again later.')); setLoading(false); return; }
           throw new Error(json?.error || 'LLM backend failed');
         }
         const text = json?.raw || '';
+        // Also pick up beta notice on successful responses
+        setBetaNotice(json?.betaNotice || null);
         try { setLastLLMResponseRaw(text); } catch (_) {}
 
         // If server parsed it, use that parsed object
@@ -258,6 +265,7 @@ export default function ATSCheckerClient() {
 
         <div className="mt-4 flex items-center gap-3">
           <div className="text-sm text-[var(--color-accent)] mr-4">Testing mode — logged-in users only. Each user gets one free ATS check.</div>
+          {betaNotice && <div className="text-sm text-yellow-300 ml-2">{betaNotice}</div>}
           <button onClick={analyze} disabled={loading || user === undefined || user === null || (user && user.atsChecker && !user.atsChecker.allowedByAdmin && (user.atsChecker.used || 0) >= 1)} className="px-4 py-2 bg-[var(--color-primary)] text-[var(--color-foreground)] rounded-md hover:bg-[#6b0f26]">{loading ? 'Analyzing...' : 'Analyze'} </button>
 
           <button onClick={() => { setResumeText(''); setJdText(''); setResult(null); setLastLLMResponseRaw(null); setUsageLimitReached(null); }} className="px-3 py-2 bg-white/5 rounded">Reset</button>

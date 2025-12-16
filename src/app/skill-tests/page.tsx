@@ -169,10 +169,11 @@ export default function SkillTestsPage() {
                   if (!user) { setShowLoginModal(true); return; }
                   try {
                     // Initiate purchase flow (admin price is validated server-side)
-                    const res = await fetch("/api/payment/skill-test/create", { method: "POST" });
+                    const res = await fetch("/api/payment/skill-test/create", { method: "POST", credentials: 'include' });
                     const j = await res.json();
                     if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
-                    if (!res.ok) throw new Error(j.error || "Failed to initiate purchase");
+                    const errMsg = typeof j?.error === 'object' ? (j?.error?.message || JSON.stringify(j?.error)) : j?.error;
+                    if (!res.ok) throw new Error(errMsg || "Failed to initiate purchase");
                     if (j.paymentUrl) window.location.href = j.paymentUrl;
                   } catch (e: any) {
                     toast.error(e?.message || "Failed to initiate purchase");
@@ -204,13 +205,18 @@ export default function SkillTestsPage() {
                     if (user === undefined) return;
                     if (!user) { setShowLoginModal(true); return; }
                     try {
-                      const res = await fetch('/api/payment/skill-test/create', { method: 'POST' });
+                      const res = await fetch('/api/payment/skill-test/create', { method: 'POST', credentials: 'include' });
                       const j = await res.json();
                       if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
                       if (!res.ok) throw new Error(j.error || 'Payment initiation failed');
                       if (j.paymentUrl) window.location.href = j.paymentUrl;
                     } catch (e:any) { alert(e?.message || 'Failed to initiate purchase'); }
-                  }}>Buy Premium — ₹{skillPrice}</button>
+                  }}> 
+                    <span className="mr-2">Buy Premium — ₹{skillPrice}</span>
+                    <span className="text-xs text-gray-300 line-through">
+                      ₹{skillPrice != null && skillPrice > 0 ? skillPrice + 100 : ''}
+                    </span>
+                  </button>
                   <button className="px-4 py-2 bg-white/5 rounded" onClick={() => setShowPremiumModal(false)}>Continue without premium</button>
                 </div>
               </div>

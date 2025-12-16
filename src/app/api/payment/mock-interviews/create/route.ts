@@ -58,32 +58,67 @@ export async function POST(request: NextRequest) {
     // Create Instamojo payment request
     const redirectUrl = `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/payment/verify-mock-interviews`;
 
-    const response = await fetch("https://www.instamojo.com/api/1.1/payment-requests/", {
-      method: "POST",
-      headers: {
-        "X-Api-Key": process.env.INSTAMOJO_API_KEY!,
-        "X-Auth-Token": process.env.INSTAMOJO_AUTH_TOKEN!,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        purpose: `MOCK_INTERVIEWS_${userId}`,
-        amount: String(pricing.mockInterviews),
-        buyer_name: user.username || user.fullName || "User",
-        email: user.email,
-        redirect_url: redirectUrl,
-        allow_repeated_payments: "false",
-      }),
-    });
+    // Use fetch with timeout + retries for robustness
+    async function fetchWithTimeoutAndRetry(url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) {
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const res = await fetch(url, { ...opts, signal: controller.signal });
+          clearTimeout(timer);
+          return res;
+        } catch (err: any) {
+          clearTimeout(timer);
+          const isLast = attempt === retries;
+          console.warn(`Instamojo request attempt ${attempt + 1} failed`, err?.message || err);
+          if (isLast) throw err;
+          await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+        }
+      }
+      throw new Error('Failed to reach Instamojo');
+    }
 
-    const data = await response.json();
+    let response;
+    try {
+      response = await fetchWithTimeoutAndRetry("https://www.instamojo.com/api/1.1/payment-requests/", {
+        method: "POST",
+        headers: {
+          "X-Api-Key": process.env.INSTAMOJO_API_KEY!,
+          "X-Auth-Token": process.env.INSTAMOJO_AUTH_TOKEN!,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: (() => {
+          const params: Record<string,string> = {
+            purpose: `MOCK_INTERVIEWS_${userId}`,
+            amount: String(pricing.mockInterviews),
+            buyer_name: user.username || user.fullName || "User",
+            email: user.email,
+            redirect_url: redirectUrl,
+            allow_repeated_payments: "false",
+          };
+          try {
+            // include sanitized phone only when valid
+            const { sanitizeIndianPhone } = require('@/lib/phoneUtils');
+            const phone = sanitizeIndianPhone(user.contactNumber || null);
+            if (phone) params.phone = phone; else console.warn(`Mock-interviews create: omitting invalid phone for user ${userId}`);
+          } catch (e) {
+            console.warn('Mock-interviews create: phone sanitizer failed', String(e?.message || e));
+          }
+          return new URLSearchParams(params);
+        })(),
+      });
+    } catch (err:any) {
+      console.error("Instamojo request failed:", err?.message || err);
+      const isAbort = String(err?.name || '').toLowerCase().includes('abort') || String(err?.message || '').toLowerCase().includes('timed out');
+      return NextResponse.json({ error: isAbort ? 'Payment provider timed out. Please try again.' : 'Failed to contact payment provider. Please try again.' }, { status: isAbort ? 504 : 502 });
+    }
 
+    let data: any;
+    try { data = await response.json(); } catch (e) { const t = await response.text().catch(()=> ''); data = { message: t || 'Invalid response' }; }
     if (!response.ok || !data.success) {
-      console.error("Instamojo error:", data);
-      const errorMessage = typeof data.message === 'object' ? JSON.stringify(data.message) : (data.message || "Payment gateway error");
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: 500 }
-      );
+      console.error("Instamojo error:", response.status, data);
+      const errorMessage = data?.message || data?.error || (typeof data === 'string' ? data : JSON.stringify(data).slice(0,500));
+      return NextResponse.json({ error: String(errorMessage) }, { status: response.status || 500 });
     }
 
     return NextResponse.json({

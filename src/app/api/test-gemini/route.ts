@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         message: "Gemini API is working!",
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-flash-preview-09-2025",
         geminiResponse: response
       });
     } catch (error: any) {

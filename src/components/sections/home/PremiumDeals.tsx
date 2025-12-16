@@ -17,6 +17,7 @@ import {
   BadgeCheck,
   Flame
 } from "lucide-react";
+import { computeOriginalPrice, computeDiscountPercent } from "@/lib/priceUtils";
 
 interface Pricing {
   oaQuestions: number;
@@ -58,7 +59,7 @@ export default function PremiumDeals() {
       title: "Company Questions Pack",
       subtitle: "450+ OA Problems",
       price: pricing.oaQuestions,
-      originalPrice: 99,
+      originalPrice: null,
       icon: Code,
       features: [
         "450+ curated company questions",
@@ -75,7 +76,7 @@ export default function PremiumDeals() {
       title: "Skill Test Premium",
       subtitle: "Unlimited attempts & premium features",
       price: pricing.skillTestPremium ?? null,
-      originalPrice: 99,
+      originalPrice: null,
       icon: Crown,
       features: [
         "Unlimited attempts for skill tests",
@@ -191,11 +192,26 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
 
                 {/* Pricing */}
                 <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-3xl font-bold text-[#E1D4C1]">{deal.price != null ? `₹${deal.price}` : 'TBD'}</span>
-                  <span className="text-[#E1D3CC] line-through text-sm">₹{deal.originalPrice}</span>
-                  <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">
-                    {deal.price != null ? Math.round((1 - deal.price / deal.originalPrice) * 100) + '% OFF' : '—'}
-                  </span>
+                  {deal.price != null ? (
+                    (() => {
+                      const original = computeOriginalPrice(deal.price) ?? deal.originalPrice ?? null;
+                      const percent = computeDiscountPercent(deal.price, original);
+                      return (
+                        <>
+                          <span className="text-3xl font-bold text-[#E1D4C1]">₹{deal.price}</span>
+                          {original ? <span className="text-[#E1D3CC] line-through text-sm">₹{original}</span> : null}
+                          <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">
+                            {percent != null ? `${percent}% OFF` : '—'}
+                          </span>
+                        </>
+                      );
+                    })()
+                  ) : (
+                    <>
+                      <span className="text-3xl font-bold text-[#E1D4C1]">TBD</span>
+                      <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">—</span>
+                    </>
+                  )}
                 </div>
 
                 {/* Features */}

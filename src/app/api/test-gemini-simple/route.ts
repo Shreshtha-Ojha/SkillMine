@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     console.log("[TestGemini] Calling Gemini API...");
     
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-preview-09-2025",
       contents: "Say 'Hello, the API is working!' in exactly those words.",
     });
     
