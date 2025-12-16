@@ -67,6 +67,9 @@ interface User {
     codeforces?: CodingProfile;
     codechef?: CodingProfile;
   };
+  // Problems marked/solved by user
+  solvedProblems?: string[];
+  reviewProblems?: string[];
   sampleTestAttempt?: {
     completed: boolean;
     score: number;
@@ -137,7 +140,7 @@ export default function ProfilePage() {
   const [blogRequest, setBlogRequest] = useState<any>(null);
   const [canCreateBlog, setCanCreateBlog] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'history' | 'certificates' | 'tests' | 'skill-tests' | 'coding'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'history' | 'certificates' | 'tests' | 'skill-tests' | 'coding' | 'problems'>('overview');
   const [certifications, setCertifications] = useState<any[]>([]);
   const [loadingCerts, setLoadingCerts] = useState(true);
   const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
@@ -150,6 +153,9 @@ export default function ProfilePage() {
   const [showCodingModal, setShowCodingModal] = useState(false);
   const [codingProfiles, setCodingProfiles] = useState<any>({});
   const [loadingProfiles, setLoadingProfiles] = useState(false);
+
+  // Busy state for toggling problem marks / solved
+  const [busyProblem, setBusyProblem] = useState<string | null>(null);
 
   // Cached user data fetching
   const fetchUserDetails = useCallback(async () => {
@@ -605,6 +611,7 @@ export default function ProfilePage() {
             { id: 'overview', label: 'Overview', icon: User },
             { id: 'coding', label: 'Coding Profiles', icon: Code2 },
             { id: 'progress', label: 'Progress', icon: BarChart3 },
+            { id: 'problems', label: 'Problems', icon: BookOpen },
             { id: 'tests', label: 'Certificate Tests', icon: FileText },
             { id: 'skill-tests', label: 'Skill Tests', icon: FileText },
             { id: 'certificates', label: 'Certificates', icon: Award },
@@ -1294,6 +1301,98 @@ export default function ProfilePage() {
                 </button>
               </motion.div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'problems' && (
+          <div className="space-y-6">
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-white">Marked Questions</h3>
+                  <p className="text-sm text-gray-400">Questions you've marked for review</p>
+                </div>
+                <div className="text-sm text-[#E1D3CC]">{(userData?.reviewProblems || []).length} marked</div>
+              </div>
+
+              {(userData?.reviewProblems || []).length === 0 ? (
+                <p className="text-[#E1D3CC]">No marked questions yet.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {(userData?.reviewProblems || []).map((link: string, idx: number) => (
+                    <li key={idx} className="flex items-center justify-between">
+                      <a href={link} target="_blank" rel="noreferrer" className="text-sm text-[#E1D4C1] hover:underline truncate max-w-[80%]">{link}</a>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (busyProblem) return; setBusyProblem(link);
+                            try {
+                              const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: link, action: 'toggleReview' }), credentials: 'include' });
+                              const j = await res.json().catch(()=>({}));
+                              if (!res.ok) {
+                                alert(j?.error || 'Failed to update review status');
+                              } else {
+                                await fetchUserDetails();
+                              }
+                            } catch (err) {
+                              alert('Network error');
+                            } finally { setBusyProblem(null); }
+                          }}
+                          className="text-sm text-[#D7A9A8] hover:text-yellow-400"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-white">Solved Questions</h3>
+                  <p className="text-sm text-gray-400">Problems you've marked as solved</p>
+                </div>
+                <div className="text-sm text-[#E1D3CC]">{(userData?.solvedProblems || []).length} solved</div>
+              </div>
+
+              {(userData?.solvedProblems || []).length === 0 ? (
+                <p className="text-[#E1D3CC]">No solved questions yet.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {(userData?.solvedProblems || []).map((link: string, idx: number) => (
+                    <li key={idx} className="flex items-center justify-between">
+                      <a href={link} target="_blank" rel="noreferrer" className="text-sm text-[#E1D4C1] hover:underline truncate max-w-[80%]">{link}</a>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (busyProblem) return; setBusyProblem(link);
+                            try {
+                              const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: link, action: 'toggleSolved' }), credentials: 'include' });
+                              const j = await res.json().catch(()=>({}));
+                              if (!res.ok) {
+                                alert(j?.error || 'Failed to update solved status');
+                              } else {
+                                await fetchUserDetails();
+                              }
+                            } catch (err) {
+                              alert('Network error');
+                            } finally { setBusyProblem(null); }
+                          }}
+                          className="text-sm text-red-400 hover:text-red-500"
+                        >
+                          Unmark
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         )}
 

@@ -67,6 +67,9 @@ const userSchema = new Schema({
     gender: { type: String },
     contactNumber: { type: String },
     savedQuestions: { type: [String], default: [] },
+    // Track per-user problem states
+    solvedProblems: { type: [String], default: [] },
+    reviewProblems: { type: [String], default: [] },
     // Purchases
     purchases: {
         oaQuestions: {

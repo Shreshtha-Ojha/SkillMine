@@ -63,7 +63,7 @@ export default function ResumeScreeningPage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
+        <Loader2 className="w-12 h-12 text-[var(--color-primary)] animate-spin" />
         <p className="text-gray-400 text-sm">Redirecting to ATS Checker...</p>
       </div>
     </div>

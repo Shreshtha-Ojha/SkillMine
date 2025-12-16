@@ -19,7 +19,9 @@ import {
   Unlock,
   Crown,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Flag,
+  Check
 } from "lucide-react";
 
 interface Problem {
@@ -120,6 +122,10 @@ export default function CompanyProblemsPage() {
   }, []);
 
   const user = useCurrentUser();
+  // Local sets for quick membership checks (kept in sync with server)
+  const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set());
+  const [reviewSet, setReviewSet] = useState<Set<string>>(new Set());
+  const [busyProblem, setBusyProblem] = useState<string | null>(null);
 
   // Check if a company is free
   const isCompanyFree = (companyName: string) => {
@@ -236,6 +242,17 @@ export default function CompanyProblemsPage() {
   useEffect(() => {
     fetchCompanies();
   }, [fetchCompanies]);
+
+  // Initialize solved/review sets from user object
+  useEffect(() => {
+    if (user && user !== null) {
+      setSolvedSet(new Set(user.solvedProblems || []));
+      setReviewSet(new Set(user.reviewProblems || []));
+    } else {
+      setSolvedSet(new Set());
+      setReviewSet(new Set());
+    }
+  }, [user]);
 
   // Filter problems based on search and difficulty
   useEffect(() => {
@@ -657,6 +674,106 @@ export default function CompanyProblemsPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
+              {/* User Quick Lists (Solved / Marked for this company) */}
+              {user && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="p-4 bg-[#0f0f13] border border-white/5 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-[#E1D4C1]">Solved Questions <span className="text-sm text-[#E1D3CC]">({Array.from(solvedSet).filter(s => problems.some(p => p.link === s)).length})</span></h4>
+                      <a href="/profile?tab=problems" className="text-sm text-[#E1D3CC] hover:text-[#E1D4C1]">View all</a>
+                    </div>
+
+                    {problems.filter(p => solvedSet.has(p.link)).length === 0 ? (
+                      <p className="text-[#E1D3CC] text-sm">No solved questions for this company</p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {problems.filter(p => solvedSet.has(p.link)).slice(0,6).map((p, i) => (
+                          <li key={i} className="flex items-center justify-between">
+                            <a className="text-sm text-[#E1D4C1] hover:underline" href={p.link} target="_blank" rel="noreferrer">{p.title}</a>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  if (busyProblem) return; setBusyProblem(p.link);
+                                  // optimistic
+                                  setSolvedSet(prev => { const n = new Set(prev); n.delete(p.link); return n; });
+                                  try {
+                                    const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: p.link, action: 'toggleSolved' }), credentials: 'include' });
+                                    const j = await res.json().catch(()=>({}));
+                                    if (!res.ok) {
+                                      // revert
+                                      setSolvedSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                      alert(j?.error || 'Failed to update solved status');
+                                    } else {
+                                      setSolvedSet(new Set(j.solvedProblems || []));
+                                      setReviewSet(new Set(j.reviewProblems || []));
+                                    }
+                                  } catch (err) {
+                                    setSolvedSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                    alert('Network error');
+                                  } finally { setBusyProblem(null); }
+                                }}
+                                className="text-sm text-red-400 hover:text-red-500"
+                                title="Unmark solved"
+                              >
+                                Unmark
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-[#0f0f13] border border-white/5 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-[#E1D4C1]">Marked Questions <span className="text-sm text-[#E1D3CC]">({Array.from(reviewSet).filter(s => problems.some(p => p.link === s)).length})</span></h4>
+                      <a href="/profile?tab=problems" className="text-sm text-[#E1D3CC] hover:text-[#E1D4C1]">View all</a>
+                    </div>
+
+                    {problems.filter(p => reviewSet.has(p.link)).length === 0 ? (
+                      <p className="text-[#E1D3CC] text-sm">No marked questions for this company</p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {problems.filter(p => reviewSet.has(p.link)).slice(0,6).map((p, i) => (
+                          <li key={i} className="flex items-center justify-between">
+                            <a className="text-sm text-[#E1D4C1] hover:underline" href={p.link} target="_blank" rel="noreferrer">{p.title}</a>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  if (busyProblem) return; setBusyProblem(p.link);
+                                  // optimistic
+                                  setReviewSet(prev => { const n = new Set(prev); n.delete(p.link); return n; });
+                                  try {
+                                    const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: p.link, action: 'toggleReview' }), credentials: 'include' });
+                                    const j = await res.json().catch(()=>({}));
+                                    if (!res.ok) {
+                                      setReviewSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                      alert(j?.error || 'Failed to update review status');
+                                    } else {
+                                      setReviewSet(new Set(j.reviewProblems || []));
+                                      setSolvedSet(new Set(j.solvedProblems || []));
+                                    }
+                                  } catch (err) {
+                                    setReviewSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                    alert('Network error');
+                                  } finally { setBusyProblem(null); }
+                                }}
+                                className="text-sm text-[#D7A9A8] hover:text-yellow-400"
+                                title="Remove mark"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Filters */}
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
@@ -736,7 +853,8 @@ export default function CompanyProblemsPage() {
                   <p className="text-[#E1D3CC]">No problems found</p>
                 </div>
               ) : (
-                /* Problems Table */
+                <>
+                {/* Problems Table */}
                 <div className="bg-[#111118] border border-white/5 rounded-2xl overflow-hidden">
                   {/* Table Header */}
                   <div className="grid grid-cols-12 gap-4 p-4 bg-white/5 border-b border-white/5 text-sm font-medium text-[#E1D3CC]">
@@ -782,7 +900,99 @@ export default function CompanyProblemsPage() {
                             <span className="text-[#E1D4C1] text-sm">{problem.frequency}</span>
                           </div>
                         </div>
-                        <div className="col-span-2 text-right">
+                        <div className="col-span-2 text-right flex items-center justify-end gap-2">
+                          {/* Mark Solved toggle */}
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!user) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+                              const link = problem.link;
+                              if (busyProblem) return; // prevent double
+                              setBusyProblem(link);
+                              // optimistic update
+                              const willSolve = !solvedSet.has(link);
+                              setSolvedSet(prev => {
+                                const n = new Set(prev);
+                                if (willSolve) n.add(link); else n.delete(link);
+                                return n;
+                              });
+                              try {
+                                const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: link, action: 'toggleSolved' }), credentials: 'include' });
+                                const j = await res.json().catch(() => ({}));
+                                if (!res.ok) {
+                                  // revert
+                                  setSolvedSet(prev => {
+                                    const n = new Set(prev);
+                                    if (willSolve) n.delete(link); else n.add(link);
+                                    return n;
+                                  });
+                                  alert(j?.error || 'Failed to update solved status');
+                                } else {
+                                  // ensure sync with server arrays
+                                  setSolvedSet(new Set(j.solvedProblems || []));
+                                  setReviewSet(new Set(j.reviewProblems || []));
+                                }
+                              } catch (err) {
+                                // revert
+                                setSolvedSet(prev => {
+                                  const n = new Set(prev);
+                                  if (willSolve) n.delete(link); else n.add(link);
+                                  return n;
+                                });
+                                alert('Network error');
+                              } finally { setBusyProblem(null); }
+                            }}
+                            aria-pressed={solvedSet.has(problem.link)}
+                            className={`inline-flex items-center gap-2 px-3 py-1 rounded text-sm font-medium transition ${solvedSet.has(problem.link) ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>{solvedSet.has(problem.link) ? 'Solved' : 'Mark solved'}</span>
+                          </button>
+
+                          {/* Mark for review toggle */}
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!user) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+                              const link = problem.link;
+                              if (busyProblem) return;
+                              setBusyProblem(link);
+                              const willMark = !reviewSet.has(link);
+                              setReviewSet(prev => {
+                                const n = new Set(prev);
+                                if (willMark) n.add(link); else n.delete(link);
+                                return n;
+                              });
+                              try {
+                                const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: link, action: 'toggleReview' }), credentials: 'include' });
+                                const j = await res.json().catch(()=>({}));
+                                if (!res.ok) {
+                                  setReviewSet(prev => {
+                                    const n = new Set(prev);
+                                    if (willMark) n.delete(link); else n.add(link);
+                                    return n;
+                                  });
+                                  alert(j?.error || 'Failed to update review status');
+                                } else {
+                                  setReviewSet(new Set(j.reviewProblems || []));
+                                  setSolvedSet(new Set(j.solvedProblems || []));
+                                }
+                              } catch (err) {
+                                setReviewSet(prev => {
+                                  const n = new Set(prev);
+                                  if (willMark) n.delete(link); else n.add(link);
+                                  return n;
+                                });
+                                alert('Network error');
+                              } finally { setBusyProblem(null); }
+                            }}
+                            aria-pressed={reviewSet.has(problem.link)}
+                            className={`inline-flex items-center gap-2 px-3 py-1 rounded text-sm font-medium transition ${reviewSet.has(problem.link) ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                          >
+                            <Flag className="w-4 h-4" />
+                            <span>{reviewSet.has(problem.link) ? 'For review' : 'Mark review'}</span>
+                          </button>
+
                           <a
                             href={problem.link}
                             target="_blank"
@@ -797,6 +1007,106 @@ export default function CompanyProblemsPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* Company-specific Solved / Marked Lists */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-[#0f0f13] border border-white/5 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-[#E1D4C1]">Solved in {selectedCompany?.displayName}</h4>
+                      <span className="text-sm text-[#E1D3CC]">{Array.from(solvedSet).filter(s => problems.some(p => p.link === s)).length} solved</span>
+                    </div>
+
+                    {problems.filter(p => solvedSet.has(p.link)).length === 0 ? (
+                      <p className="text-[#E1D3CC] text-sm">No solved questions for this company</p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {problems.filter(p => solvedSet.has(p.link)).map((p, i) => (
+                          <li key={i} className="flex items-center justify-between">
+                            <a className="text-sm text-[#E1D4C1] hover:underline" href={p.link} target="_blank" rel="noreferrer">{p.title}</a>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  if (busyProblem) return; setBusyProblem(p.link);
+                                  // optimistic
+                                  setSolvedSet(prev => { const n = new Set(prev); n.delete(p.link); return n; });
+                                  try {
+                                    const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: p.link, action: 'toggleSolved' }), credentials: 'include' });
+                                    const j = await res.json().catch(()=>({}));
+                                    if (!res.ok) {
+                                      // revert
+                                      setSolvedSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                      alert(j?.error || 'Failed to update solved status');
+                                    } else {
+                                      setSolvedSet(new Set(j.solvedProblems || []));
+                                      setReviewSet(new Set(j.reviewProblems || []));
+                                    }
+                                  } catch (err) {
+                                    setSolvedSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                    alert('Network error');
+                                  } finally { setBusyProblem(null); }
+                                }}
+                                className="text-sm text-red-400 hover:text-red-500"
+                                title="Unmark solved"
+                              >
+                                Unmark
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-[#0f0f13] border border-white/5 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-[#E1D4C1]">Marked for review in {selectedCompany?.displayName}</h4>
+                      <span className="text-sm text-[#E1D3CC]">{Array.from(reviewSet).filter(s => problems.some(p => p.link === s)).length} marked</span>
+                    </div>
+
+                    {problems.filter(p => reviewSet.has(p.link)).length === 0 ? (
+                      <p className="text-[#E1D3CC] text-sm">No marked questions for this company</p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {problems.filter(p => reviewSet.has(p.link)).map((p, i) => (
+                          <li key={i} className="flex items-center justify-between">
+                            <a className="text-sm text-[#E1D4C1] hover:underline" href={p.link} target="_blank" rel="noreferrer">{p.title}</a>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  if (busyProblem) return; setBusyProblem(p.link);
+                                  // optimistic
+                                  setReviewSet(prev => { const n = new Set(prev); n.delete(p.link); return n; });
+                                  try {
+                                    const res = await fetch('/api/user/problem-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problemLink: p.link, action: 'toggleReview' }), credentials: 'include' });
+                                    const j = await res.json().catch(()=>({}));
+                                    if (!res.ok) {
+                                      setReviewSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                      alert(j?.error || 'Failed to update review status');
+                                    } else {
+                                      setReviewSet(new Set(j.reviewProblems || []));
+                                      setSolvedSet(new Set(j.solvedProblems || []));
+                                    }
+                                  } catch (err) {
+                                    setReviewSet(prev => { const n = new Set(prev); n.add(p.link); return n; });
+                                    alert('Network error');
+                                  } finally { setBusyProblem(null); }
+                                }}
+                                className="text-sm text-[#D7A9A8] hover:text-yellow-400"
+                                title="Remove mark"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+                </>
+
               )}
             </motion.div>
           )}

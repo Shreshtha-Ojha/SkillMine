@@ -82,7 +82,7 @@ function VerifyContent() {
       {status === "loading" && (
         <>
           <div className="w-20 h-20 mx-auto mb-6 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <Loader2 className="w-10 h-10 text-blue-400 animate-spin" />
+            <Loader2 className="w-10 h-10 text-[var(--color-primary)] animate-spin" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-3">
             Verifying Payment...
@@ -150,7 +150,7 @@ export default function VerifyMockInterviewsPage() {
       
       <Suspense fallback={
         <div className="flex items-center justify-center">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+          <Loader2 className="w-10 h-10 text-[var(--color-primary)] animate-spin" />
         </div>
       }>
         <VerifyContent />

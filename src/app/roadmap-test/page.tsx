@@ -55,7 +55,7 @@ function TestLoading() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
+        <Loader2 className="w-12 h-12 text-[var(--color-primary)] animate-spin mx-auto mb-4" />
         <p className="text-gray-400">Loading test...</p>
       </div>
     </div>
@@ -427,7 +427,7 @@ function RoadmapTestContent() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 text-[var(--color-primary)] animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading...</p>
         </div>
       </div>

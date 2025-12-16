@@ -220,7 +220,7 @@ export default function TestManagementPage() {
         <div className="bg-[#111118] border border-white/5 rounded-xl overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+              <Loader2 className="w-8 h-8 text-[var(--color-primary)] animate-spin" />
             </div>
           ) : filteredAttempts.length === 0 ? (
             <div className="text-center py-12">
