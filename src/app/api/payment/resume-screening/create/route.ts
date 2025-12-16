@@ -8,6 +8,31 @@ connect();
 
 import getUserFromRequest from '@/lib/getUserFromRequest';
 
+// Use the shared pattern: fetch with timeout + retries and robust error handling
+async function fetchWithTimeoutAndRetry(
+  url: string,
+  opts: any,
+  timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000),
+  retries = Number(process.env.PAYMENT_RETRIES || 2)
+) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...opts, signal: controller.signal });
+      clearTimeout(timer);
+      return res;
+    } catch (err: any) {
+      clearTimeout(timer);
+      const isLast = attempt === retries;
+      console.warn(`Instamojo request attempt ${attempt + 1} failed`, err?.message || err);
+      if (isLast) throw err;
+      await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+    }
+  }
+  throw new Error('Failed to reach Instamojo');
+}
+
 async function debugGetUser(request: NextRequest) {
   const user = await getUserFromRequest(request as unknown as Request);
   if (!user) {
@@ -72,7 +97,7 @@ export async function POST(request: NextRequest) {
         console.warn(`Resume-screening create: omitting invalid phone for user ${user._id}`);
       }
     } catch (e) {
-      console.warn('Resume-screening create: phone sanitizer failed', String(e?.message || e));
+      console.warn('Resume-screening create: phone sanitizer failed', typeof e === 'object' && e && 'message' in e ? String((e as any).message) : String(e));
     }
 
     // Only add webhook if not localhost
@@ -81,24 +106,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Use the shared pattern: fetch with timeout + retries and robust error handling
-    async function fetchWithTimeoutAndRetry(url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) {
-      for (let attempt = 0; attempt <= retries; attempt++) {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), timeoutMs);
-        try {
-          const res = await fetch(url, { ...opts, signal: controller.signal });
-          clearTimeout(timer);
-          return res;
-        } catch (err: any) {
-          clearTimeout(timer);
-          const isLast = attempt === retries;
-          console.warn(`Instamojo request attempt ${attempt + 1} failed`, err?.message || err);
-          if (isLast) throw err;
-          await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
-        }
-      }
-      throw new Error('Failed to reach Instamojo');
-    }
 
     let response;
     try {

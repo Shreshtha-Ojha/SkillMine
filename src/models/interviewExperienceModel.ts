@@ -14,7 +14,9 @@ const InterviewExperienceSchema = new Schema({
   author: { type: String, required: true },
   authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   tags: { type: [String], default: [] },
+  // Legacy `likes` kept for backwards compatibility; prefer `upvotes`
   likes: { type: [String], default: [] },
+  upvotes: { type: [String], default: [] },
   comments: [
     {
       userId: { type: String },

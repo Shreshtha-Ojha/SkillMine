@@ -24,7 +24,7 @@ export default async function getUserFromRequest(req: Request) {
     let decoded: any;
     try {
       decoded = jwt.verify(decodeURIComponent(token), process.env.TOKEN_SECRET!) as { id: string };
-    } catch (err) {
+    } catch (err: any) {
       console.warn('getUserFromRequest: token verification failed', String(err?.message || err));
       return null;
     }

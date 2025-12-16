@@ -41,14 +41,14 @@ export async function POST(request: NextRequest) {
       const { sanitizeIndianPhone } = await import('@/lib/phoneUtils');
       const phone = sanitizeIndianPhone(user.contactNumber || null);
       if (phone) bodyParams.phone = phone; else console.warn(`Skill-test create: omitting invalid phone for user ${user._id}`);
-    } catch (e) {
+    } catch (e: any) {
       console.warn('Skill-test create: phone sanitizer failed', String(e?.message || e));
     }
 
     if (webhookUrl) bodyParams.webhook = webhookUrl;
 
     // Use fetch with timeout + retries
-    async function fetchWithTimeoutAndRetry(url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) {
+    const fetchWithTimeoutAndRetry = async (url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) => {
       for (let attempt = 0; attempt <= retries; attempt++) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         }
       }
       throw new Error('Failed to reach Instamojo');
-    }
+    };
 
     let response;
     try {

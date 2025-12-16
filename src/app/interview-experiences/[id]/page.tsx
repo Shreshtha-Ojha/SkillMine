@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Heart, MessageCircle, Send, Share2 } from "lucide-react";
+import { ArrowLeft, ArrowUp, MessageCircle, Send, Share2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function InterviewExperienceDetail({ params }: { params: { id: string } }) {
@@ -10,8 +10,8 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
   const [exp, setExp] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
+  const [upvoted, setUpvoted] = useState(false);
+  const [upvotesCount, setUpvotesCount] = useState(0);
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
@@ -28,11 +28,11 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
         ]);
         const experience = expRes.data.experience;
         setExp(experience);
-        setLikesCount(experience.likes?.length || 0);
+        setUpvotesCount((experience.upvotes && experience.upvotes.length) || (experience.likes && experience.likes.length) || 0);
         setComments(experience.comments || []);
         if (meRes?.data?.user) {
           setUser(meRes.data.user);
-          setLiked(experience.likes?.includes(meRes.data.user._id) || false);
+          setUpvoted((experience.upvotes && experience.upvotes.includes(meRes.data.user._id)) || (experience.likes && experience.likes.includes(meRes.data.user._id)) || false);
         }
       } catch (err) {
         setExp(null);
@@ -60,9 +60,10 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
     }
     try {
     const res = await axios.post('/api/interview-experience/like', { expId: params.id });
-      setLiked(res.data.liked);
-      setLikesCount(res.data.likesCount);
-      if (res.data.liked) toast.success('Added to likes');
+      // Backend returns both legacy and new keys; prefer upvote keys when available
+      setUpvoted(res.data.upvoted ?? res.data.liked ?? false);
+      setUpvotesCount(res.data.upvotesCount ?? res.data.likesCount ?? 0);
+      if (res.data.upvoted ?? res.data.liked) toast.success(res.data.upvoted ? 'Upvoted' : 'Removed upvote');
     } catch (err) {
       toast.error('Failed to update like');
     }
@@ -114,9 +115,9 @@ export default function InterviewExperienceDetail({ params }: { params: { id: st
               <div className="text-gray-400">by {exp.authorId?.username || exp.author} • {new Date(exp.createdAt).toLocaleDateString()}</div>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={handleLike} aria-label={liked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${liked ? 'bg-[var(--color-primary)] text-[var(--color-foreground)]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}>
-                <Heart className="w-4 h-4" />
-                <span className="text-sm">{likesCount}</span>
+              <button onClick={handleLike} aria-label={upvoted ? 'Remove upvote' : 'Upvote'} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${upvoted ? 'bg-[var(--color-primary)] text-[var(--color-foreground)]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}>
+                <ArrowUp className="w-4 h-4" />
+                <span className="text-sm">{upvotesCount}</span>
               </button>
               <button onClick={() => { setShowComments((s) => !s); setTimeout(() => commentInputRef.current?.focus(), 150); }} aria-label="Toggle comments" className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/5 hover:text-white">
                 <MessageCircle className="w-4 h-4" />

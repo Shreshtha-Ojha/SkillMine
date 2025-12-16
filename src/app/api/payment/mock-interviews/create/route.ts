@@ -59,7 +59,12 @@ export async function POST(request: NextRequest) {
     const redirectUrl = `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/payment/verify-mock-interviews`;
 
     // Use fetch with timeout + retries for robustness
-    async function fetchWithTimeoutAndRetry(url: string, opts: any, timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000), retries = Number(process.env.PAYMENT_RETRIES || 2)) {
+    const fetchWithTimeoutAndRetry = async (
+      url: string,
+      opts: any,
+      timeoutMs = Number(process.env.PAYMENT_TIMEOUT_MS || 10000),
+      retries = Number(process.env.PAYMENT_RETRIES || 2)
+    ) => {
       for (let attempt = 0; attempt <= retries; attempt++) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -76,7 +81,7 @@ export async function POST(request: NextRequest) {
         }
       }
       throw new Error('Failed to reach Instamojo');
-    }
+    };
 
     let response;
     try {
@@ -101,7 +106,7 @@ export async function POST(request: NextRequest) {
             const { sanitizeIndianPhone } = require('@/lib/phoneUtils');
             const phone = sanitizeIndianPhone(user.contactNumber || null);
             if (phone) params.phone = phone; else console.warn(`Mock-interviews create: omitting invalid phone for user ${userId}`);
-          } catch (e) {
+          } catch (e: any) {
             console.warn('Mock-interviews create: phone sanitizer failed', String(e?.message || e));
           }
           return new URLSearchParams(params);

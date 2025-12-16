@@ -15,15 +15,27 @@ export async function POST(req: Request) {
     if (!exp) {
       return NextResponse.json({ error: "Experience not found" }, { status: 404 });
     }
-    if (!exp.likes) exp.likes = [];
-    const hasLiked = exp.likes.includes(userId);
-    if (hasLiked) {
-      exp.likes = exp.likes.filter((id: string) => id !== userId);
+    // Support both legacy `likes` and new `upvotes` field. Prefer `upvotes` and keep `likes` in sync for compatibility.
+    if (!exp.upvotes || !Array.isArray(exp.upvotes)) exp.upvotes = (exp.likes && Array.isArray(exp.likes)) ? exp.likes.slice() : [];
+    const hasUpvoted = exp.upvotes.includes(userId);
+    if (hasUpvoted) {
+      exp.upvotes = exp.upvotes.filter((id: string) => id !== userId);
     } else {
-      exp.likes.push(userId);
+      exp.upvotes.push(userId);
     }
+    // Keep legacy likes in sync to avoid breaking older clients
+    exp.likes = exp.upvotes.slice();
     await exp.save();
-    return NextResponse.json({ success: true, liked: !hasLiked, likesCount: exp.likes.length });
+
+    return NextResponse.json({
+      success: true,
+      // backward compatible keys
+      liked: !hasUpvoted,
+      likesCount: exp.upvotes.length,
+      // new keys for upvote semantics
+      upvoted: !hasUpvoted,
+      upvotesCount: exp.upvotes.length,
+    });
   } catch (err) {
     console.error("exp-like error", err);
     return NextResponse.json({ error: "Failed to update like" }, { status: 500 });
