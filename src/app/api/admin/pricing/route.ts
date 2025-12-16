@@ -41,22 +41,27 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({
-      success: true,
-      pricing: {
-        oaQuestions: pricing.oaQuestions,
-        resumeScreeningPremium: pricing.resumeScreeningPremium,
-        topInterviews: pricing.topInterviews,
-        mockInterviews: pricing.mockInterviews || 10,
-        skillTestPremium: pricing.skillTestPremium ?? null,
-        updatedAt: pricing.updatedAt,
+    const origin = request.headers.get("origin") || "*";
+    return NextResponse.json(
+      {
+        success: true,
+        pricing: {
+          oaQuestions: pricing.oaQuestions,
+          resumeScreeningPremium: pricing.resumeScreeningPremium,
+          topInterviews: pricing.topInterviews,
+          mockInterviews: pricing.mockInterviews || 10,
+          skillTestPremium: pricing.skillTestPremium ?? null,
+          updatedAt: pricing.updatedAt,
+        },
       },
-    });
+      { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
+    );
   } catch (error: any) {
     console.error("Error fetching pricing:", error);
+    const origin = request.headers.get("origin") || "*";
     return NextResponse.json(
       { error: "Failed to fetch pricing" },
-      { status: 500 }
+      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
     );
   }
 }
@@ -121,9 +126,28 @@ export async function PUT(request: NextRequest) {
     });
   } catch (error: any) {
     console.error("Error updating pricing:", error);
+    const origin = request.headers.get("origin") || "*";
     return NextResponse.json(
       { error: "Failed to update pricing" },
-      { status: 500 }
+      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
     );
+  }
+}
+
+// OPTIONS - handle preflight CORS checks (browsers send OPTIONS before PUT with JSON)
+export async function OPTIONS(request: NextRequest) {
+  try {
+    const origin = request.headers.get("origin") || "*";
+    return new NextResponse(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Credentials": "true",
+      },
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to handle preflight" }, { status: 500 });
   }
 }

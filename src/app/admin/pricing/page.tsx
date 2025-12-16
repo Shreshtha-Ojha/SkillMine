@@ -48,7 +48,7 @@ export default function PricingManagementPage() {
 
   const fetchPricing = async () => {
     try {
-      const response = await axios.get("/api/admin/pricing");
+      const response = await axios.get("/api/admin/pricing", { withCredentials: true });
       if (response.data.success) {
         setPricing(response.data.pricing);
         setOriginalPricing(response.data.pricing);
@@ -69,7 +69,7 @@ export default function PricingManagementPage() {
 
     setSaving(true);
     try {
-      const response = await axios.put("/api/admin/pricing", pricing);
+      const response = await axios.put("/api/admin/pricing", pricing, { withCredentials: true });
       if (response.data.success) {
         toast.success("Pricing updated successfully!");
         setOriginalPricing(response.data.pricing);
