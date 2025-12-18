@@ -37,7 +37,7 @@ export default function RoadmapQuestionsPage() {
   };
 
   const handleAddRow = () => {
-    setQuestions([...questions, { question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+    setQuestions([...questions, { question: "", options: ["", "", "", ""], correctAnswer: 0, explanation: '' }]);
   };
 
   // Permanent DB delete removed; use Remove then Save to update question bank.
@@ -176,6 +176,12 @@ export default function RoadmapQuestionsPage() {
                   <input key={oi} value={opt} onChange={(e) => { const arr = [...questions]; arr[idx].options[oi] = e.target.value; setQuestions(arr); }} className="p-2 bg-[#0b0b10] border border-white/10 rounded-md text-white" placeholder={`Option ${oi + 1}`} />
                 ))}
               </div>
+
+              <div className="mb-2">
+                <label className="text-sm text-gray-300">Explanation (optional)</label>
+                <textarea value={(q as any).explanation || ''} onChange={(e) => { const arr = [...questions]; (arr[idx] as any).explanation = e.target.value; setQuestions(arr); }} className="w-full p-2 bg-[#0b0b10] border border-white/10 rounded-md mt-1 text-white" placeholder="Optional explanation to show after submission" />
+              </div>
+
               <div className="flex items-center gap-3">
                 <label className="text-gray-400">Correct Answer</label>
                 <select value={q.correctAnswer} onChange={(e) => { const arr = [...questions]; arr[idx].correctAnswer = parseInt(e.target.value); setQuestions(arr); }} className="px-3 py-2 bg-[#111118] border border-white/10 rounded-md text-white">

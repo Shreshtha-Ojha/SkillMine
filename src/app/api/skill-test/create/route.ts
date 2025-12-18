@@ -41,11 +41,11 @@ export async function POST(request: NextRequest) {
     const user = await getUserFromRequest(request as any);
     // Enforce attempt limits for non-premium users: max 2 attempts lifetime
     if (user) {
-      const isPremium = !!user.purchases?.skillTestPremium?.purchased;
+      const isPremium = !!user.purchases?.premium?.purchased;
       if (!isPremium) {
         const attemptsCount = await SkillAttempt.countDocuments({ userId: user._id });
         if (attemptsCount >= 2) {
-          return NextResponse.json({ error: 'Attempt limit reached. Purchase Skill Test Premium to unlock unlimited attempts.' }, { status: 403 });
+          return NextResponse.json({ error: 'Attempt limit reached. Purchase Premium to unlock unlimited attempts.' }, { status: 403 });
         }
       }
     }

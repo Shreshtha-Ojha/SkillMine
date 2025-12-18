@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
       }
       // Normalize marks to 1
       q.marks = 1;
+      // keep optional explanation if provided
+      if (q.explanation && typeof q.explanation === 'string') q.explanation = q.explanation;
     });
 
     // Upsert RoadmapTest

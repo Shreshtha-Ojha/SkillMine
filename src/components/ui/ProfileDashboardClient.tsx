@@ -41,7 +41,12 @@ export default function ProfileDashboardClient({ profile, githubData, leetData, 
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-extrabold text-[#E1D4C1]">{profile.fullName || profile.username}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-extrabold text-[#E1D4C1]">{profile.fullName || profile.username}</h1>
+              {profile?.premium?.purchased && (
+                <div className="ml-3 inline-flex items-center px-2 py-1 bg-yellow-400 text-black rounded-full text-sm font-semibold">Premium</div>
+              )}
+            </div>
             <div className="flex items-center gap-3 mt-1">
               <div className="text-sm text-[#E1D4C1]/80">@{profile.username}</div>
               <div className="text-xs text-[#E1D4C1]/50">•</div>

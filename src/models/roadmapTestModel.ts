@@ -7,6 +7,7 @@ const mcqQuestionSchema = new Schema({
   options: [{ type: String, required: true }], // 4 options
   correctAnswer: { type: Number, required: true }, // Index of correct option (0-3)
   marks: { type: Number, default: 1 },
+  explanation: { type: String },
 });
 
 

@@ -5,6 +5,7 @@ const mcqQuestionSchema = new Schema({
   options: [{ type: String, required: true }],
   correctAnswer: { type: Number, required: true },
   marks: { type: Number, default: 1 },
+  explanation: { type: String }, // optional explanation for admins to provide
 });
 
 const skillSchema = new Schema({

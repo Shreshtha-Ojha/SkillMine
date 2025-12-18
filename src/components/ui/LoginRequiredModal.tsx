@@ -12,9 +12,9 @@ export default function LoginRequiredModal({ open, onClose, callbackUrl }: { ope
   const cb = callbackUrl || window.location.href;
 
   return (
-    <div className="fixed  inset-0 z-[100] flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative z-10 bg-[#0b0b10] border border-white/10 rounded-2xl p-6 max-w-md w-full">
+    <div className="fixed inset-0 z-[1000000] flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/60 z-[999998]" onClick={onClose} />
+      <div className="relative z-[1000001] bg-[#0b0b10] border border-white/10 rounded-2xl p-6 max-w-md w-full">
         <h3 className="text-lg font-semibold mb-2">Sign in to continue</h3>
         <p className="text-sm text-gray-300 mb-4">You need to be signed in to start or access Skill Tests. Please sign in to continue.</p>
         <div className="flex gap-3 justify-end">

@@ -43,7 +43,12 @@ export async function GET(request: NextRequest) {
             isAdmin: (user as any).isAdmin,
             completedRoadmaps: (user as any).completedRoadmaps || [],
             createdAt: (user as any).createdAt,
-            updatedAt: (user as any).updatedAt
+            updatedAt: (user as any).updatedAt,
+            // Premium purchase status
+            premium: {
+                purchased: !!(user as any).purchases?.premium?.purchased,
+                purchasedAt: (user as any).purchases?.premium?.purchasedAt || null
+            }
         };
 
         return NextResponse.json(

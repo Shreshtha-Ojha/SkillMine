@@ -29,39 +29,21 @@ export async function GET(request: NextRequest) {
     
     let pricing = await PricingSettings.findOne({ key: "pricing" });
     
-    // Create default pricing if doesn't exist
-    if (!pricing) {
-      pricing = await PricingSettings.create({
-        key: "pricing",
-        oaQuestions: 10,
-        resumeScreeningPremium: 10,
-        topInterviews: 10,
-        mockInterviews: 10,
-        // do not set skillTestPremium by default; admin must set explicitly
-      });
-    }
-
     const origin = request.headers.get("origin") || "*";
+
     return NextResponse.json(
       {
         success: true,
-        pricing: {
-          oaQuestions: pricing.oaQuestions,
-          resumeScreeningPremium: pricing.resumeScreeningPremium,
-          topInterviews: pricing.topInterviews,
-          mockInterviews: pricing.mockInterviews || 10,
-          skillTestPremium: pricing.skillTestPremium ?? null,
-          updatedAt: pricing.updatedAt,
-        },
+        pricing: pricing ? { premium: pricing.premium ?? null, updatedAt: pricing.updatedAt } : null,
       },
-      { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
+      { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } }
     );
   } catch (error: any) {
     console.error("Error fetching pricing:", error);
     const origin = request.headers.get("origin") || "*";
     return NextResponse.json(
       { error: "Failed to fetch pricing" },
-      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
+      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } }
     );
   }
 }
@@ -78,11 +60,11 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { oaQuestions, resumeScreeningPremium, topInterviews, mockInterviews, skillTestPremium } = body;
+    const { premium } = body;
 
-    // Validate minimum prices (Instamojo requires minimum ₹9)
+    // Validate minimum price (Instamojo requires minimum ₹9)
     const minPrice = 9;
-    if (oaQuestions < minPrice || resumeScreeningPremium < minPrice || topInterviews < minPrice || mockInterviews < minPrice || (skillTestPremium !== undefined && skillTestPremium < minPrice)) {
+    if ((premium || 0) < minPrice) {
       return NextResponse.json(
         { error: `Minimum price is ₹${minPrice} (payment gateway requirement)` },
         { status: 400 }
@@ -92,44 +74,35 @@ export async function PUT(request: NextRequest) {
     // Update or create pricing
     let pricing = await PricingSettings.findOne({ key: "pricing" });
     
-    if (pricing) {
-      pricing.oaQuestions = oaQuestions;
-      pricing.resumeScreeningPremium = resumeScreeningPremium;
-      pricing.topInterviews = topInterviews;
-      pricing.mockInterviews = mockInterviews;
-      if (skillTestPremium !== undefined) pricing.skillTestPremium = skillTestPremium;
-      pricing.updatedBy = admin._id.toString();
-      await pricing.save();
-    } else {
-      pricing = await PricingSettings.create({
-        key: "pricing",
-        oaQuestions,
-        resumeScreeningPremium,
-        topInterviews,
-        mockInterviews,
-        skillTestPremium: skillTestPremium === undefined ? undefined : skillTestPremium,
-        updatedBy: admin._id.toString(),
-      });
-    }
+    // Log incoming update for diagnostics
+    console.log(`Admin ${admin._id} requested pricing update -> ${premium}`);
 
+    // Use findOneAndUpdate with upsert to avoid pre-save hook issues and ensure atomic update
+    const updated = await PricingSettings.findOneAndUpdate(
+      { key: "pricing" },
+      { $set: { premium, updatedBy: admin._id.toString() } },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    ).lean();
+
+    // Log post-update value
+    console.log("Pricing after update:", updated);
+
+    const origin = request.headers.get("origin") || "*";
     return NextResponse.json({
       success: true,
       message: "Pricing updated successfully",
       pricing: {
-        oaQuestions: pricing.oaQuestions,
-        resumeScreeningPremium: pricing.resumeScreeningPremium,
-        topInterviews: pricing.topInterviews,
-        mockInterviews: pricing.mockInterviews,
-        skillTestPremium: pricing.skillTestPremium ?? null,
-        updatedAt: pricing.updatedAt,
+        premium: updated?.premium,
+        updatedAt: updated?.updatedAt,
+        id: updated?._id
       },
-    });
+    }, { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } });
   } catch (error: any) {
     console.error("Error updating pricing:", error);
     const origin = request.headers.get("origin") || "*";
     return NextResponse.json(
       { error: "Failed to update pricing" },
-      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true" } }
+      { status: 500, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } }
     );
   }
 }

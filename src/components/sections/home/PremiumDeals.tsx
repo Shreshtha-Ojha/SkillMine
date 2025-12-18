@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import useCurrentUser from '@/lib/useCurrentUser';
 import {
   Crown,
   Sparkles,
@@ -15,35 +16,30 @@ import {
   TrendingUp,
   Users,
   BadgeCheck,
-  Flame
+  Flame,
+  Github
 } from "lucide-react";
 import { computeOriginalPrice, computeDiscountPercent } from "@/lib/priceUtils";
 
 interface Pricing {
-  oaQuestions: number;
-  resumeScreeningPremium: number;
-  topInterviews: number;
-  mockInterviews: number;
-  skillTestPremium?: number | null;
+  premium: number;
 }
 
 export default function PremiumDeals() {
   const [pricing, setPricing] = useState<Pricing>({
-    oaQuestions: 10,
-    resumeScreeningPremium: 10,
-    topInterviews: 10,
-    mockInterviews: 10,
-    skillTestPremium: null
+    premium: 249,
   });
+
+  const user = useCurrentUser();
 
   useEffect(() => {
     const fetchPricing = async () => {
       try {
-        const res = await fetch("/api/admin/pricing");
+        const res = await fetch("/api/admin/pricing", { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          if (data.pricing) {
-            setPricing(data.pricing);
+          if (data.pricing?.premium) {
+            setPricing({ premium: data.pricing.premium });
           }
         }
       } catch (error) {
@@ -51,59 +47,48 @@ export default function PremiumDeals() {
       }
     };
     fetchPricing();
-  }, []);
+    // Listen for cross-tab pricing updates and re-fetch when it happens
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'pricing_updated_at') {
+        fetchPricing();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);  }, []);
 
   const deals = [
     {
-      id: "oa-questions",
-      title: "Company Questions Pack",
-      subtitle: "450+ OA Problems",
-      price: pricing.oaQuestions,
+      id: "free",
+      title: "Free",
+      subtitle: "Core features at no cost",
+      price: 0,
       originalPrice: null,
-      icon: Code,
+      icon: Users,
       features: [
-        "450+ curated company questions",
-        "Google, Amazon, Meta, Apple & more",
-        "Frequency & acceptance data",
-        "Lifetime access",
-        "Regular updates"
+        "Limited company problems",
+        "Sample skill tests",
+        "Basic practice questions",
+        "Community content"
       ],
-      popular: true,
-      link: "/company-problems"
+      popular: false,
+      link: "/explore"
     },
     {
-      id: "skill-tests",
-      title: "Skill Test Premium",
-      subtitle: "Unlimited attempts & premium features",
-      price: pricing.skillTestPremium ?? null,
+      id: "premium",
+      title: "Premium",
+      subtitle: "All access — one price",
+      price: pricing.premium,
       originalPrice: null,
       icon: Crown,
       features: [
-        "Unlimited attempts for skill tests",
-        "Per-question timers and one-time visit enforcement",
-        "Priority support",
-        "Lifetime access"
+        "Unlock all company problems",
+        "Full skill tests & unlimited attempts",
+        "Complete practice access",
+        "Priority support & lifetime updates"
       ],
-      popular: false,
-      link: "/skill-tests"
-    },
-    {
-      id: "interview-experiences",
-      title: "Interview Experiences",
-      subtitle: "Real stories from top companies",
-      price: 0,
-      originalPrice: 49,
-      icon: Users,
-
-      features: [
-        "Read and share real interview stories",
-        "Insights from Google, Amazon, Meta, and more",
-        "Community-driven content",
-        "Free to access"
-      ],
-      popular: false,
-      link: "/interview-experiences"
-    },
+      popular: true,
+      link: "/company-problems"
+    }
   ];
 
   return (
@@ -227,6 +212,11 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
                 {/* CTA Button */}
                 {deal.id === 'skill-tests' && deal.price == null ? (
                   <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-[#E1D3CC] font-semibold" disabled>Price not set</button>
+                ) : deal.id === 'premium' && user?.purchases?.premium?.purchased ? (
+                  <a href={deal.link} className={`w-full py-3 px-4 rounded-xl bg-white/5 text-[#E1D3CC] font-semibold flex items-center justify-center gap-2`}>
+                    You're Premium — Explore
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
                 ) : (
                   <a
                     href={deal.link}
@@ -293,6 +283,24 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
           <div className="flex items-center gap-2 text-[#E1D3CC]">
             <BadgeCheck className="w-5 h-5 text-[#7E102C]" />
             <span className="text-sm">Secure Payment</span>
+          </div>
+
+          {/* Social / Tools links (GitHub, LinkedIn, Codeforces Wrap) */}
+          <div className="flex items-center gap-3 mt-2">
+            <a href={process.env.NEXT_PUBLIC_GITHUB_URL || '#'} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#E1D3CC] hover:text-white">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.09 3.29 9.41 7.86 10.94.57.11.78-.25.78-.55 0-.27-.01-1.02-.01-1.99-3.2.7-3.88-1.38-3.88-1.38-.52-1.33-1.27-1.69-1.27-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.56-.29-5.26-1.28-5.26-5.69 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.98 10.98 0 012.87-.39c.97.01 1.95.13 2.87.39 2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.82 1.18 3.08 0 4.42-2.71 5.39-5.29 5.67.41.36.77 1.08.77 2.18 0 1.57-.01 2.84-.01 3.23 0 .3.2.67.79.55A11.53 11.53 0 0023.5 12C23.5 5.74 18.27.5 12 .5z" />
+              </svg>
+              <span className="text-sm">GitHub</span>
+            </a>
+            <a href={process.env.NEXT_PUBLIC_LINKEDIN_URL || '#'} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#E1D3CC] hover:text-white">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6 1.12 6 0 4.88 0 3.5 0 2.12 1.12 1 2.5 1 3.88 1 4.98 2.12 4.98 3.5zM.22 8.98H4.78V24H.22zM8.98 8.98H13.4V11.2H13.5C14.2 9.7 16.1 8.98 18 8.98 22 8.98 24 11.6 24 16.2V24H19.44V16.9C19.44 14.7 18.7 13.4 16.9 13.4 15.5 13.4 14.6 14.4 14.2 15.3 14 16 13.9 17.2 13.9 18.5V24H9.36z"/></svg>
+              <span className="text-sm">LinkedIn</span>
+            </a>
+            <a href={process.env.NEXT_PUBLIC_CODEFORCES_URL || '#'} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#E1D3CC] hover:text-white">
+              <Code className="w-5 h-5" />
+              <span className="text-sm">Codeforces</span>
+            </a>
           </div>
         </motion.div>
       </div>

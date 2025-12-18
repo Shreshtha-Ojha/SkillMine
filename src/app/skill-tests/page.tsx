@@ -33,24 +33,26 @@ export default function SkillTestsPage() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   /* FETCH SKILLS */
+  const fetchPricing = async () => {
+    try {
+      const res = await fetch('/api/payment/skill-test');
+      let purchased = false;
+      if (res.ok) {
+        const j = await res.json(); purchased = !!j.purchased; setIsPremiumPurchased(purchased);
+      }
+      const pricingRes = await fetch('/api/admin/pricing');
+      if (pricingRes.ok) {
+        const p = await pricingRes.json(); setSkillPrice(p.pricing?.premium ?? null);
+        // Ensure fresh pricing if admin updated recently (bust cache on critical flows).
+      }
+      const ac = await fetch('/api/skill-test/attempts-count');
+      if (ac.ok) { const ajson = await ac.json(); setAttemptsCount(ajson.attempts || 0); }
+      const shown = sessionStorage.getItem('skillTestModalShown');
+      if (!shown && !purchased) { setShowPremiumModal(true); sessionStorage.setItem('skillTestModalShown', 'true'); }
+    } catch (e) { /* ignore */ }
+  };
+
   useEffect(() => {
-    const fetchPricing = async () => {
-      try {
-        const res = await fetch('/api/payment/skill-test');
-        let purchased = false;
-        if (res.ok) {
-          const j = await res.json(); purchased = !!j.purchased; setIsPremiumPurchased(purchased);
-        }
-        const pricingRes = await fetch('/api/admin/pricing');
-        if (pricingRes.ok) {
-          const p = await pricingRes.json(); setSkillPrice(p.pricing?.skillTestPremium ?? null);
-        }
-        const ac = await fetch('/api/skill-test/attempts-count');
-        if (ac.ok) { const ajson = await ac.json(); setAttemptsCount(ajson.attempts || 0); }
-        const shown = sessionStorage.getItem('skillTestModalShown');
-        if (!shown && !purchased) { setShowPremiumModal(true); sessionStorage.setItem('skillTestModalShown', 'true'); }
-      } catch (e) { /* ignore */ }
-    };
     fetchPricing();
 
     // fetch skills list
@@ -62,6 +64,9 @@ export default function SkillTestsPage() {
     };
     fetchSkills();
   }, []);
+
+  // Re-fetch pricing/purchase when user changes (e.g., after signing in)
+  useEffect(() => { fetchPricing(); }, [user]);
 
   // close premium modal if user becomes premium
   React.useEffect(() => { if (isPremiumPurchased) setShowPremiumModal(false); }, [isPremiumPurchased]);
@@ -166,17 +171,17 @@ export default function SkillTestsPage() {
               <button
                 onClick={async () => {
                   if (user === undefined) return; // still loading
-                  if (!user) { setShowLoginModal(true); return; }
+                  if (!user) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
                   try {
                     // Initiate purchase flow (admin price is validated server-side)
-                    const res = await fetch("/api/payment/skill-test/create", { method: "POST", credentials: 'include' });
+                    const res = await fetch('/api/payment/skill-test/create', { method: 'POST', credentials: 'include' });
                     const j = await res.json();
-                    if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+                    if (res.status === 401) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
                     const errMsg = typeof j?.error === 'object' ? (j?.error?.message || JSON.stringify(j?.error)) : j?.error;
-                    if (!res.ok) throw new Error(errMsg || "Failed to initiate purchase");
+                    if (!res.ok) throw new Error(errMsg || 'Failed to initiate purchase');
                     if (j.paymentUrl) window.location.href = j.paymentUrl;
                   } catch (e: any) {
-                    toast.error(e?.message || "Failed to initiate purchase");
+                    toast.error(e?.message || 'Failed to initiate purchase');
                   }
                 }}
                 className="px-4 py-2 bg-yellow-500 rounded text-black font-medium"
@@ -198,19 +203,19 @@ export default function SkillTestsPage() {
             <div className="fixed inset-0 z-50 flex items-center justify-center">
               <div className="absolute inset-0 bg-black/60" onClick={() => setShowPremiumModal(false)} />
               <div className="relative bg-[#0b0b10] border border-white/10 rounded-2xl p-6 max-w-xl w-full z-10">
-                <h3 className="text-xl font-semibold mb-2">Skill Test Premium</h3>
-                <p className="text-sm text-[#E1D4C1] mb-4">Unlock unlimited attempts and premium test features (per-question timers, one-time visit enforcement, priority support).</p>
+                <h3 className="text-xl font-semibold mb-2">Premium</h3>
+                <p className="text-sm text-[#E1D4C1] mb-4">Unlock unlimited attempts and premium test features (per-question timers, one-time visit enforcement, priority support). Upgrading to Premium also grants access to company problems and full practice content.</p>
                 <div className="flex gap-3">
                   <button className="px-4 py-2 bg-yellow-500 rounded font-medium" onClick={async ()=>{
                     if (user === undefined) return;
-                    if (!user) { setShowLoginModal(true); return; }
+                    if (!user) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
                     try {
                       const res = await fetch('/api/payment/skill-test/create', { method: 'POST', credentials: 'include' });
                       const j = await res.json();
-                      if (res.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+                      if (res.status === 401) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
                       if (!res.ok) throw new Error(j.error || 'Payment initiation failed');
                       if (j.paymentUrl) window.location.href = j.paymentUrl;
-                    } catch (e:any) { alert(e?.message || 'Failed to initiate purchase'); }
+                    } catch (e:any) { toast.error(e?.message || 'Failed to initiate purchase'); }
                   }}> 
                     <span className="mr-2">Buy Premium — ₹{skillPrice}</span>
                     <span className="text-xs text-gray-300 line-through">
@@ -369,7 +374,7 @@ export default function SkillTestsPage() {
             {isPremiumPurchased ? (
               <div>Premium active: unlimited attempts.</div>
             ) : (
-              <div>You have used <strong>{attemptsCount}</strong> of 2 free attempts. Purchase Skill Test Premium to unlock unlimited attempts.</div>
+              <div>You have used <strong>{attemptsCount}</strong> of 2 free attempts. Purchase Premium to unlock unlimited attempts.</div>
             )}
           </div>
           <div className="flex gap-4 pt-4">

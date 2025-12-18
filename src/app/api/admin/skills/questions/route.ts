@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       if (!q.question || !Array.isArray(q.options) || q.options.length < 4) continue;
       const ca = Number(q.correctAnswer);
       if (!Number.isInteger(ca) || ca < 0 || ca > 3) continue;
-      valid.push({ question: q.question, options: q.options.slice(0,4), correctAnswer: ca, marks: q.marks || 1 });
+      valid.push({ question: q.question, options: q.options.slice(0,4), correctAnswer: ca, marks: q.marks || 1, explanation: q.explanation || undefined });
     }
 
     if (append) {

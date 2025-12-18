@@ -190,6 +190,11 @@ export default function SkillTestResult() {
                     );
                   })}
                 </div>
+                {q.explanation && (
+                  <div className="mt-3 text-sm text-[#E1D3CC]">
+                    <strong>Explanation:</strong> {q.explanation}
+                  </div>
+                )}
               </div>
             );
           })}

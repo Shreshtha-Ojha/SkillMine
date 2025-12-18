@@ -5,6 +5,8 @@ import { CheckedDataProvider } from "@/context/checkedDataContext";
 import { DataCacheProvider } from "@/context/DataCacheContext";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/components/providers/AuthProvider";
+import React from 'react';
+import PremiumBanner from '@/components/ui/PremiumBanner';
 
 // Metadata for PrepSutra
 export const metadata: Metadata = {
@@ -71,7 +73,14 @@ export default function RootLayout({
         <AuthProvider>
           <DataCacheProvider>
             <CheckedDataProvider>
-                <Toaster position="top-right" reverseOrder={false} />
+                <Toaster position="top-right" reverseOrder={false} containerStyle={{ zIndex: 999999 }} />
+                {/* Site-wide premium banner for non-premium users */}
+                <script dangerouslySetInnerHTML={{ __html: "" }} />
+                {/* Client component: PremiumBanner */}
+                <React.Suspense fallback={null}>
+                  {/* @ts-ignore client component */}
+                  <PremiumBanner />
+                </React.Suspense>
                 {children}
             </CheckedDataProvider>
           </DataCacheProvider>

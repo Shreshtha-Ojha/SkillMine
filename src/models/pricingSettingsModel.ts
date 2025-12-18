@@ -3,11 +3,7 @@ import mongoose from "mongoose";
 export interface IPricingSettings {
   _id?: string;
   key: string;
-  oaQuestions: number;
-  resumeScreeningPremium: number;
-  topInterviews: number;
-  mockInterviews: number;
-  skillTestPremium?: number;
+  premium: number;
   updatedAt: Date;
   updatedBy?: string;
 }
@@ -20,34 +16,11 @@ const pricingSettingsSchema = new mongoose.Schema<IPricingSettings>(
       unique: true,
       default: "pricing",
     },
-    oaQuestions: {
+    premium: {
       type: Number,
-      required: true,
-      default: 10,
-      min: 9, // Instamojo minimum
-    },
-    resumeScreeningPremium: {
-      type: Number,
-      required: true,
-      default: 10,
-      min: 9,
-    },
-    topInterviews: {
-      type: Number,
-      required: true,
-      default: 10,
-      min: 9,
-    },
-    mockInterviews: {
-      type: Number,
-      required: true,
-      default: 10,
-      min: 9,
-    },
-    skillTestPremium: {
-      type: Number,
-      // optional: admin may set this; do not default to 10
-      min: 9,
+      required: false,
+      // do not hardcode a default; admin should set this explicitly
+      min: 9, // Instamojo minimum (validation when set)
     },
     updatedBy: {
       type: String,
@@ -70,4 +43,4 @@ const PricingSettings =
   mongoose.models.PricingSettings ||
   mongoose.model<IPricingSettings>("PricingSettings", pricingSettingsSchema);
 
-export default PricingSettings;
+export default PricingSettings; 

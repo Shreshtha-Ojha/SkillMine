@@ -58,28 +58,16 @@ export async function GET(request: NextRequest) {
 
         // Verify payment is successful
         if (payment?.status === "Credit" || data.payment_request?.status === "Completed") {
-          // Extract user ID and product type from purpose
+          // Extract user ID from purpose (we only support PREMIUM_ now)
           const purpose = data.payment_request?.purpose || "";
-          const isResumeScreening = purpose.startsWith("RESUME_SCREENING_PREMIUM_") || product === "resume-screening";
-          const isSkillTestPremium = purpose.startsWith("SKILL_TEST_PREMIUM_") || product === "skill-test" || product === "skill-test-premium";
-          const purposeUserId = purpose.replace("OA_QUESTIONS_", "").replace("RESUME_SCREENING_PREMIUM_", "").replace("SKILL_TEST_PREMIUM_", "");
+          const purposeUserId = purpose.replace("PREMIUM_", "");
 
           // Update user if logged in or use purpose userId
           const targetUserId = user?._id || purposeUserId;
           
           if (targetUserId) {
-            let updateField = "purchases.oaQuestions";
-            let amountToSet = pricing.oaQuestions;
-            let productName = "oa-questions";
-            if (isResumeScreening) {
-              updateField = "purchases.resumeScreeningPremium";
-              amountToSet = pricing.resumeScreeningPremium;
-              productName = "resume-screening";
-            } else if (isSkillTestPremium) {
-              updateField = "purchases.skillTestPremium";
-              amountToSet = pricing.skillTestPremium ?? pricing.oaQuestions;
-              productName = "skill-test";
-            }
+            const updateField = "purchases.premium";
+            const amountToSet = parseFloat(data.payment_request?.amount) || pricing.premium;
 
             await User.findByIdAndUpdate(targetUserId, {
               $set: {
@@ -88,7 +76,7 @@ export async function GET(request: NextRequest) {
                   purchasedAt: new Date(),
                   paymentId: paymentId,
                   paymentRequestId: paymentRequestId,
-                  amount: parseFloat(data.payment_request?.amount) || amountToSet,
+                  amount: amountToSet,
                 }
               }
             });
@@ -98,7 +86,7 @@ export async function GET(request: NextRequest) {
               verified: true,
               message: "Payment verified successfully",
               paymentId,
-              product: productName,
+              product: 'premium',
             });
           }
         }
@@ -107,29 +95,25 @@ export async function GET(request: NextRequest) {
       // If API verification failed but status was Credit, trust the redirect
       // (Webhook should have already updated the database)
       if (user) {
-        const isResumeScreening = product === "resume-screening";
-        const purchaseField = isResumeScreening ? "resumeScreeningPremium" : "oaQuestions";
-        const updateField = isResumeScreening ? "purchases.resumeScreeningPremium" : "purchases.oaQuestions";
-        
         const updatedUser = await User.findById(user._id);
-        if (updatedUser?.purchases?.[purchaseField]?.purchased) {
+        if (updatedUser?.purchases?.premium?.purchased) {
           return NextResponse.json({
             success: true,
             verified: true,
             message: "Payment already recorded",
-            product: isResumeScreening ? "resume-screening" : "oa-questions",
+            product: 'premium',
           });
         }
 
         // Update anyway since status was Credit
         await User.findByIdAndUpdate(user._id, {
           $set: {
-            [updateField]: {
+            'purchases.premium': {
               purchased: true,
               purchasedAt: new Date(),
               paymentId: paymentId,
               paymentRequestId: paymentRequestId,
-              amount: isResumeScreening ? pricing.resumeScreeningPremium : pricing.oaQuestions,
+              amount: pricing.premium,
             }
           }
         });
@@ -138,7 +122,7 @@ export async function GET(request: NextRequest) {
           success: true,
           verified: true,
           message: "Payment recorded successfully",
-          product: isResumeScreening ? "resume-screening" : "oa-questions",
+          product: 'premium',
         });
       }
 

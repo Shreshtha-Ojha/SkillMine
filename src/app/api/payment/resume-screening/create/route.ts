@@ -55,30 +55,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if already purchased
-    if (user.purchases?.resumeScreeningPremium?.purchased) {
-      console.warn(`User ${user._id} attempted to create resume-screening payment but already purchased`);
+    // Check if already purchased premium
+    if (user.purchases?.premium?.purchased) {
+      console.warn(`User ${user._id} attempted to create premium payment but already purchased`);
       return NextResponse.json(
-        { error: "You have already purchased Resume Screening Premium", code: "ALREADY_PURCHASED" },
+        { error: "You have already purchased Premium access", code: "ALREADY_PURCHASED" },
         { status: 400 }
       );
     }
 
     // Determine redirect URL based on environment
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.prepsutra.tech")?.replace(/\/$/, "");
-    const redirectUrl = `${baseUrl}/payment/verify-resume-screening`;
+    const redirectUrl = `${baseUrl}/payment/verify?product=premium`;
     
     // Webhook only works with public URLs (not localhost)
     const isLocalhost = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
-    const webhookUrl = isLocalhost ? undefined : `${baseUrl}/api/payment/webhook-resume-screening`;
+    const webhookUrl = isLocalhost ? undefined : `${baseUrl}/api/payment/webhook`;
 
     // Get dynamic pricing from admin settings
     const pricing = await getPricing();
 
     // Build request body with dynamic pricing
     const bodyParams: Record<string, string> = {
-      amount: pricing.resumeScreeningPremium.toString(), // Dynamic pricing
-      purpose: `RESUME_SCREENING_${user._id}`,
+      amount: pricing.premium.toString(), // Dynamic premium pricing
+      purpose: `PREMIUM_${user._id}`,
       buyer_name: user.fullName || user.username || "Customer",
       email: user.email,
       redirect_url: redirectUrl,

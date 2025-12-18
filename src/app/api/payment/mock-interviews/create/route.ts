@@ -44,10 +44,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if already subscribed
-    if (user.purchases?.mockInterviews?.purchased) {
+    // Check if already subscribed to Premium
+    if (user.purchases?.premium?.purchased) {
       return NextResponse.json(
-        { error: "You already have an active subscription" },
+        { error: "You already have Premium access" },
         { status: 400 }
       );
     }
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const pricing = await getPricing();
 
     // Create Instamojo payment request
-    const redirectUrl = `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/payment/verify-mock-interviews`;
+    const redirectUrl = `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/payment/verify?product=premium`;
 
     // Use fetch with timeout + retries for robustness
     const fetchWithTimeoutAndRetry = async (
@@ -94,8 +94,8 @@ export async function POST(request: NextRequest) {
         },
         body: (() => {
           const params: Record<string,string> = {
-            purpose: `MOCK_INTERVIEWS_${userId}`,
-            amount: String(pricing.mockInterviews),
+            purpose: `PREMIUM_${userId}`,
+            amount: String(pricing.premium),
             buyer_name: user.username || user.fullName || "User",
             email: user.email,
             redirect_url: redirectUrl,

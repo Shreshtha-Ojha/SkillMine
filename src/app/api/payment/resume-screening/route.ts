@@ -48,11 +48,11 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const purchased = user.purchases?.resumeScreeningPremium?.purchased || false;
+    const purchased = user.purchases?.premium?.purchased || false;
     
     return NextResponse.json({
       purchased,
-      purchasedAt: user.purchases?.resumeScreeningPremium?.purchasedAt || null,
+      purchasedAt: user.purchases?.premium?.purchasedAt || null,
     });
   } catch (error: any) {
     console.error("Error checking purchase status:", error);
@@ -88,16 +88,16 @@ export async function POST(request: NextRequest) {
     // Get dynamic pricing
     const pricing = await getPricing();
     
-    // Update user's purchase status
+    // Update user's purchase status (premium)
     const user = await User.findByIdAndUpdate(
       userId,
       {
         $set: {
-          "purchases.resumeScreeningPremium": {
+          "purchases.premium": {
             purchased: true,
             purchasedAt: new Date(),
-            paymentId: paymentId || `RSP_${Date.now()}`,
-            amount: amount || pricing.resumeScreeningPremium,
+            paymentId: paymentId || `PREM_${Date.now()}`,
+            amount: amount || pricing.premium,
           }
         }
       },

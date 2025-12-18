@@ -31,6 +31,9 @@ import { gsap } from "gsap";
 import Loading from "@/components/ui/Loading";
 import Head from "next/head";
 import useLocomotiveScroll from "@/hooks/useLocomotiveScroll";
+import useCurrentUser from '@/lib/useCurrentUser';
+import LoginRequiredModal from '@/components/ui/LoginRequiredModal';
+import { toast } from 'react-hot-toast';
 
 // Memoized Components for better performance
 // Old components - commented out
@@ -58,17 +61,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
-  const [oaPrice, setOaPrice] = useState<number>(10);
+  const [premiumPrice, setPremiumPrice] = useState<number | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const user = useCurrentUser();
 
   // Fetch dynamic pricing
   useEffect(() => {
     const fetchPricing = async () => {
       try {
-        const res = await fetch("/api/admin/pricing");
+        const res = await fetch("/api/admin/pricing", { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          if (data.pricing?.oaQuestions) {
-            setOaPrice(data.pricing.oaQuestions);
+          if (data.pricing?.premium) {
+            setPremiumPrice(data.pricing.premium);
           }
         }
       } catch (error) {
@@ -110,6 +115,9 @@ export default function Home() {
 
   // Handle payment
   const handlePurchase = async () => {
+    if (user === undefined) return; // still loading
+    if (!user) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
+
     setProcessingPayment(true);
     setShowPurchaseModal(false);
 
@@ -123,16 +131,15 @@ export default function Home() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
+        if (response.status === 401) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
         console.warn('Payment create-request failed', response.status, data);
         const errMsg = typeof data?.error === 'object' ? (data?.error?.message || JSON.stringify(data.error)) : data?.error;
         if (data?.code === 'ALREADY_PURCHASED') {
-          alert(errMsg || 'You already own this product.');
-          // optional: redirect to content
+          toast.success('You already own Premium access. Redirecting...');
           window.location.href = '/company-problems';
           return;
         }
-        alert(errMsg || "Failed to create payment request. Please try again.");
+        toast.error(errMsg || "Failed to create payment request. Please try again.");
         setProcessingPayment(false);
         return;
       }
@@ -140,12 +147,12 @@ export default function Home() {
       if (data.paymentUrl) {
         window.location.href = data.paymentUrl;
       } else {
-        alert("Payment URL not received. Please try again.");
+        toast.error("Payment URL not received. Please try again.");
         setProcessingPayment(false);
       }
     } catch (err) {
       console.error("Payment error:", err);
-      alert("Failed to initiate payment. Please try again.");
+      toast.error("Failed to initiate payment. Please try again.");
       setProcessingPayment(false);
     }
   };
@@ -179,32 +186,32 @@ export default function Home() {
             <Crown className="w-10 h-10 text-[#7E102C]" />
           </div>
           <h2 className="text-2xl font-bold text-[#E1D4C1] mb-3">
-            🎉 Special Offer: 450+ Company Questions
+            🎉 Get Premium Access
           </h2>
           <p className="text-[#E1D4C1]/80 mb-6">
-            Get access to curated LeetCode problems from 450+ top companies including Google, Amazon, Meta, Apple, Netflix, and many more!
+            Unlock company problems, skill tests and full practice access with a single Premium purchase.
           </p>
 
           <div className="bg-[#E1D3CC]/5 rounded-xl p-4 mb-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[#E1D3CC]">One-time Payment</span>
               <div className="flex items-center gap-2">
-                    <span className="text-[#E1D3CC] line-through text-sm">{`₹${oaPrice > 0 ? oaPrice + 100 : 99}`}</span>
-                    <span className="text-2xl font-bold text-[#E1D4C1]">₹{oaPrice}</span>
+                    <span className="text-[#E1D3CC] line-through text-sm">{premiumPrice ? `₹${premiumPrice + 100}` : '₹—'}</span>
+                    <span className="text-2xl font-bold text-[#E1D4C1]">₹{premiumPrice}</span>
                   </div>
             </div>
             <div className="space-y-2 text-left">
               <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Lifetime access to all company questions</span>
+                <span>Unlock Company Problems</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Regular updates with new problems</span>
+                <span>Full Skill Tests & Unlimited Attempts</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Frequency & acceptance data</span>
+                <span>Complete Practice Questions</span>
               </div>
             </div>
           </div>
@@ -222,8 +229,8 @@ export default function Home() {
             ) : (
               <>
                 <Sparkles className="w-5 h-5" />
-                <span className="mr-2">Pay ₹{oaPrice} & Unlock Now</span>
-                <span className="text-xs text-gray-300 line-through">₹{oaPrice > 0 ? oaPrice + 100 : ''}</span>
+                <span className="mr-2">Pay ₹{premiumPrice} & Unlock Now</span>
+                <span className="text-xs text-gray-300 line-through">{premiumPrice ? `₹${premiumPrice + 100}` : ''}</span>
               </>
             )}
           </button>
@@ -243,6 +250,7 @@ export default function Home() {
   const navItems = useMemo(() => [
     { name: "About", link: "/about" },
     { name: "Roadmaps", link: "/explore" },
+    { name: "Practice", link: "/practice" },
     { name: "Top Questions", link: "/company-problems", premium: true },
     { name: "Skill Tests", link: "/skill-tests", premium: true },
     { name: "ATS Lab", link: "/ats-checker" },
@@ -260,7 +268,6 @@ export default function Home() {
       name: "Interview Prep",
       dropdown: [
         { name: "Blogs", link: "/blogs" },
-        { name: "Core CS Notes", link: "/about" },
         { name: "Interview Experiences", link: "/interview-experiences" },
       ],
     },
@@ -314,6 +321,7 @@ export default function Home() {
       <AnimatePresence>
         {showPurchaseModal && <PurchaseModal />}
       </AnimatePresence>
+      <LoginRequiredModal open={showLoginModal} onClose={() => setShowLoginModal(false)} callbackUrl={typeof window !== 'undefined' ? window.location.href : '/'} />
 
       {/* Processing Payment Overlay */}
       <AnimatePresence>

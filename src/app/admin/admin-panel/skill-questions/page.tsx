@@ -117,7 +117,7 @@ export default function SkillQuestionsPage() {
 
           <div className="md:col-span-3 p-4 bg-[#0b0b10] border border-white/10 rounded-xl">
             <div className="flex items-center gap-3 mb-4">
-              <button disabled={!selected || creatingSkill} onClick={()=>{ if (!selected) return toast.error('Select a skill first'); setQuestions([...questions, { question: '', options: ['', '', '', ''], correctAnswer: 0 }]) }} className={`px-4 py-2 ${(!selected||creatingSkill)? 'bg-white/10 text-gray-400' : 'bg-blue-600 text-white'} rounded`}>
+              <button disabled={!selected || creatingSkill} onClick={()=>{ if (!selected) return toast.error('Select a skill first'); setQuestions([...questions, { question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }]) }} className={`px-4 py-2 ${(!selected||creatingSkill)? 'bg-white/10 text-gray-400' : 'bg-blue-600 text-white'} rounded`}>
                 {creatingSkill ? 'Creating...' : 'Add Question'}
               </button>
               <div className="ml-2">
@@ -149,6 +149,10 @@ export default function SkillQuestionsPage() {
                   <input value={q.question} onChange={(e)=>{ const arr=[...questions]; arr[idx].question = e.target.value; setQuestions(arr); }} className="w-full p-2 bg-[#0b0b10] border border-white/10 rounded-md mb-2 text-white" placeholder="Question text" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                     {q.options.map((opt:any, oi:number)=>(<input key={oi} value={opt} onChange={(e)=>{ const arr=[...questions]; arr[idx].options[oi]=e.target.value; setQuestions(arr); }} className="p-2 bg-[#0b0b10] border border-white/10 rounded-md text-white" placeholder={`Option ${oi+1}`} />))}
+                  </div>
+                  <div className="mb-2">
+                    <label className="text-sm text-gray-300">Explanation (optional)</label>
+                    <textarea value={q.explanation || ''} onChange={(e)=>{ const arr=[...questions]; arr[idx].explanation = e.target.value; setQuestions(arr); }} className="w-full p-2 bg-[#0b0b10] border border-white/10 rounded-md mt-1 text-white" placeholder="Optional explanation to show after submission" />
                   </div>
                   <div className="flex items-center gap-3">
                     <label className="text-gray-400">Correct Answer</label>

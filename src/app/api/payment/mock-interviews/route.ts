@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const subscribed = user.purchases?.mockInterviews?.purchased || false;
+    const subscribed = user.purchases?.premium?.purchased || false;
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
     
     // Check daily usage
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       canInterview,
       usageToday: usageCount,
       remainingFreeInterviews,
-      subscribedAt: user.purchases?.mockInterviews?.purchasedAt || null,
+      subscribedAt: user.purchases?.premium?.purchasedAt || null,
     });
   } catch (error: any) {
     console.error("Error checking mock interview status:", error);
@@ -96,16 +96,16 @@ export async function POST(request: NextRequest) {
     // Get dynamic pricing for fallback
     const pricing = await getPricing();
     
-    // Update user's subscription status
+    // Update user's subscription status (premium)
     const user = await User.findByIdAndUpdate(
       userId,
       {
         $set: {
-          "purchases.mockInterviews": {
+          "purchases.premium": {
             purchased: true,
             purchasedAt: new Date(),
-            paymentId: paymentId || `MI_${Date.now()}`,
-            amount: amount || pricing.mockInterviews,
+            paymentId: paymentId || `PREM_${Date.now()}`,
+            amount: amount || pricing.premium,
           }
         }
       },
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      message: "Mock interview subscription activated successfully",
+      message: "Premium access granted successfully",
       subscribed: true,
     });
   } catch (error: any) {

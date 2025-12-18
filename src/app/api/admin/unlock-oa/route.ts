@@ -21,7 +21,7 @@ async function getAdminUser(request: NextRequest) {
   }
 }
 
-// POST - Admin unlock OA questions for a user by email
+// POST - Admin unlock Premium for a user by email
 export async function POST(request: NextRequest) {
   try {
     const adminUser = await getAdminUser(request);
@@ -43,12 +43,12 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Find user by email and update purchase status
+    // Find user by email and update premium purchase status
     const user = await User.findOneAndUpdate(
       { email: email.toLowerCase() },
       {
         $set: {
-          "purchases.oaQuestions": {
+          "purchases.premium": {
             purchased: true,
             purchasedAt: new Date(),
             paymentId: paymentId || `ADMIN_UNLOCK_${Date.now()}`,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      message: `OA Questions unlocked for ${email}`,
+      message: `Premium unlocked for ${email}`,
       user: {
         email: user.email,
         username: user.username,
@@ -97,16 +97,16 @@ export async function GET(request: NextRequest) {
     }
     
     const users = await User.find({
-      "purchases.oaQuestions.purchased": true
-    }).select("email username purchases.oaQuestions");
+      "purchases.premium.purchased": true
+    }).select("email username purchases.premium");
     
     return NextResponse.json({
       count: users.length,
       users: users.map(u => ({
         email: u.email,
         username: u.username,
-        purchasedAt: u.purchases?.oaQuestions?.purchasedAt,
-        paymentId: u.purchases?.oaQuestions?.paymentId,
+        purchasedAt: u.purchases?.premium?.purchasedAt,
+        paymentId: u.purchases?.premium?.paymentId,
       }))
     });
   } catch (error: any) {

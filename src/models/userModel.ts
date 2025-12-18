@@ -72,28 +72,7 @@ const userSchema = new Schema({
     reviewProblems: { type: [String], default: [] },
     // Purchases
     purchases: {
-        oaQuestions: {
-            purchased: { type: Boolean, default: false },
-            purchasedAt: { type: Date },
-            paymentId: { type: String },
-            paymentRequestId: { type: String },
-            amount: { type: Number },
-        },
-        resumeScreeningPremium: {
-            purchased: { type: Boolean, default: false },
-            purchasedAt: { type: Date },
-            paymentId: { type: String },
-            paymentRequestId: { type: String },
-            amount: { type: Number },
-        },
-        skillTestPremium: {
-            purchased: { type: Boolean, default: false },
-            purchasedAt: { type: Date },
-            paymentId: { type: String },
-            paymentRequestId: { type: String },
-            amount: { type: Number },
-        },
-        mockInterviews: {
+        premium: {
             purchased: { type: Boolean, default: false },
             purchasedAt: { type: Date },
             paymentId: { type: String },
@@ -124,7 +103,6 @@ const userSchema = new Schema({
     linkedIn: { type: String },
     twitter: { type: String },
     portfolio: { type: String },
-    // Coding profiles
     codingProfiles: {
         github: {
             username: { type: String },

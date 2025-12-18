@@ -6,23 +6,34 @@ export default function useCurrentUser(): any {
   
   useEffect(() => {
     let isMounted = true;
-    
-    axios.get("/api/users/me")
-      .then(res => {
+
+    const fetchUser = async () => {
+      try {
+        // Ensure cookies are sent
+        const res = await axios.get("/api/users/me", { withCredentials: true });
         if (isMounted && res.data.user) {
           setUser(res.data.user);
         } else if (isMounted) {
           setUser(null);
         }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setUser(null);
-        }
-      });
-    
+      } catch (err) {
+        if (isMounted) setUser(null);
+      }
+    };
+
+    fetchUser();
+
+    // Listen for logout broadcasts from other tabs and clear user
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'user_logged_out_at') {
+        if (isMounted) setUser(null);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('storage', onStorage);
     };
   }, []);
   

@@ -59,15 +59,15 @@ export async function POST(request: NextRequest) {
     const pricing = await getPricing();
     const paidAmount = parseFloat(amount);
 
-    // Handle different purchase purposes
-    if (purpose?.startsWith("OA_QUESTIONS_")) {
-      const EXPECTED_AMOUNT = pricing.oaQuestions;
+    // Handle premium purchase purpose only
+    if (purpose?.startsWith("PREMIUM_")) {
+      const EXPECTED_AMOUNT = pricing.premium;
       if (paidAmount < EXPECTED_AMOUNT) {
         console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
         return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
       }
 
-      const userId = purpose.replace("OA_QUESTIONS_", "");
+      const userId = purpose.replace("PREMIUM_", "");
       if (!userId) {
         console.error("Invalid purpose format:", purpose);
         return NextResponse.json({ error: "Invalid purpose" }, { status: 400 });
@@ -77,12 +77,12 @@ export async function POST(request: NextRequest) {
         userId,
         {
           $set: {
-            "purchases.oaQuestions": {
+            "purchases.premium": {
               purchased: true,
               purchasedAt: new Date(),
               paymentId: payment_id,
               paymentRequestId: payment_request_id,
-              amount: parseFloat(amount) || pricing.oaQuestions,
+              amount: parseFloat(amount) || pricing.premium,
             }
           }
         },
@@ -94,49 +94,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
 
-      console.log(`Payment successful for user ${userId}, payment_id: ${payment_id}`);
+      console.log(`Premium payment successful for user ${userId}, payment_id: ${payment_id}`);
 
       return NextResponse.json({ success: true, message: "Payment recorded successfully" });
     }
 
-    if (purpose?.startsWith("SKILL_TEST_PREMIUM_")) {
-      const EXPECTED_AMOUNT = pricing.skillTestPremium ?? pricing.oaQuestions;
-      if (paidAmount < EXPECTED_AMOUNT) {
-        console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
-        return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
-      }
 
-      const userId = purpose.replace("SKILL_TEST_PREMIUM_", "");
-      if (!userId) {
-        console.error("Invalid purpose format:", purpose);
-        return NextResponse.json({ error: "Invalid purpose" }, { status: 400 });
-      }
-
-      const user = await User.findByIdAndUpdate(
-        userId,
-        {
-          $set: {
-            "purchases.skillTestPremium": {
-              purchased: true,
-              purchasedAt: new Date(),
-              paymentId: payment_id,
-              paymentRequestId: payment_request_id,
-              amount: parseFloat(amount) || (pricing.skillTestPremium || pricing.oaQuestions),
-            }
-          }
-        },
-        { new: true }
-      );
-
-      if (!user) {
-        console.error("User not found:", userId);
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
-      }
-
-      console.log(`Skill test premium payment successful for user ${userId}, payment_id: ${payment_id}`);
-
-      return NextResponse.json({ success: true, message: "Payment recorded successfully" });
-    }
 
     // Unknown purpose
     console.error("Unknown payment purpose:", purpose);

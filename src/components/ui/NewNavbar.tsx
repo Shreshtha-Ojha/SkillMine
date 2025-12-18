@@ -199,7 +199,7 @@ export const FloatingNav = ({
                       key={item.name}
                       href={item.link}
                       onClick={() => setMenuOpen(false)}
-                      className={`block px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 font-semibold' : 'text-[#7E102C]'}`}
+                      className={`block px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 bg-[#7E102C] font-semibold' : 'text-[#7E102C]'}`}
                     >
                       {item.name}
                     </Link>
@@ -207,7 +207,7 @@ export const FloatingNav = ({
                     <div key={item.name}>
                       <button
                         onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
-                        className={`w-full flex items-center justify-between px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 font-semibold' : 'text-[#7E102C]'}`}
+                        className={`w-full flex items-center justify-between px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-600 font-semibold' : 'text-[#7E102C]'}`}
                       >
                         <div className="flex items-center gap-2">
                           <span>{item.name}</span>

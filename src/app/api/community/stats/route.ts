@@ -13,11 +13,22 @@ let cachedStats: any = null;
 let lastCacheTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const url = new URL(request.url);
+    const force = url.searchParams.get('force') === '1';
+
+    // If force requested, ensure secret matches
+    if (force) {
+      const secret = request.headers.get('x-stats-refresh-secret') || '';
+      if (!process.env.STATS_REFRESH_SECRET || secret !== process.env.STATS_REFRESH_SECRET) {
+        return NextResponse.json({ error: 'Unauthorized to force refresh' }, { status: 401 });
+      }
+    }
+
     // Check if we have cached data that's still valid
     const now = Date.now();
-    if (cachedStats && (now - lastCacheTime) < CACHE_DURATION) {
+    if (!force && cachedStats && (now - lastCacheTime) < CACHE_DURATION) {
       console.log("Returning cached community stats");
       return NextResponse.json({ 
         ...cachedStats, 
@@ -89,5 +100,26 @@ export async function GET() {
       error: "Failed to fetch community statistics",
       details: error.message 
     }, { status: 500 });
+  }
+}
+
+// POST: force refresh cache (protected by secret header)
+export async function POST(request: Request) {
+  try {
+    const secret = request.headers.get('x-stats-refresh-secret') || '';
+    if (!process.env.STATS_REFRESH_SECRET || secret !== process.env.STATS_REFRESH_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Reset cache time so next GET will fetch fresh data
+    cachedStats = null;
+    lastCacheTime = 0;
+
+    // Trigger immediate fetch by invoking GET internally
+    const res = await GET(request as any);
+    return res;
+  } catch (error: any) {
+    console.error('Failed to refresh community stats cache', error);
+    return NextResponse.json({ error: 'Failed to refresh' }, { status: 500 });
   }
 }

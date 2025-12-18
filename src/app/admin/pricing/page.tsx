@@ -12,11 +12,7 @@ import useCurrentUser from "@/lib/useCurrentUser";
 import { Mic } from "lucide-react";
 
 interface PricingData {
-  oaQuestions: number;
-  resumeScreeningPremium: number;
-  topInterviews: number;
-  mockInterviews: number;
-  skillTestPremium?: number;
+  premium: number;
   updatedAt?: string;
 }
 
@@ -26,11 +22,7 @@ export default function PricingManagementPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [pricing, setPricing] = useState<PricingData>({
-    oaQuestions: 10,
-    resumeScreeningPremium: 10,
-    topInterviews: 10,
-    mockInterviews: 10,
-    skillTestPremium: 10,
+    premium: 249,
   });
   const [originalPricing, setOriginalPricing] = useState<PricingData | null>(null);
 
@@ -48,10 +40,10 @@ export default function PricingManagementPage() {
 
   const fetchPricing = async () => {
     try {
-      const response = await axios.get("/api/admin/pricing", { withCredentials: true });
+      const response = await axios.get(`/api/admin/pricing?t=${Date.now()}`, { withCredentials: true });
       if (response.data.success) {
-        setPricing(response.data.pricing);
-        setOriginalPricing(response.data.pricing);
+        setPricing({ premium: response.data.pricing.premium });
+        setOriginalPricing({ premium: response.data.pricing.premium, updatedAt: response.data.pricing.updatedAt });
       }
     } catch (error) {
       toast.error("Failed to fetch pricing");
@@ -61,19 +53,21 @@ export default function PricingManagementPage() {
   };
 
   const handleSave = async () => {
-    // Validate minimum price
-    if (pricing.oaQuestions < 9 || pricing.resumeScreeningPremium < 9 || pricing.topInterviews < 9 || pricing.mockInterviews < 9 || (pricing.skillTestPremium || 0) < 9) {
+    // Validate minimum price (Instamojo min ₹9)
+    if ((pricing.premium || 0) < 9) {
       toast.error("Minimum price is ₹9 (payment gateway requirement)");
       return;
     }
 
     setSaving(true);
     try {
-      const response = await axios.put("/api/admin/pricing", pricing, { withCredentials: true });
+      const response = await axios.put("/api/admin/pricing", { premium: pricing.premium }, { withCredentials: true });
       if (response.data.success) {
         toast.success("Pricing updated successfully!");
-        setOriginalPricing(response.data.pricing);
-        setPricing(response.data.pricing);
+        setOriginalPricing({ premium: response.data.pricing.premium, updatedAt: response.data.pricing.updatedAt });
+        setPricing({ premium: response.data.pricing.premium });
+        // Broadcast to other tabs/clients that pricing changed (storage event)
+        try { localStorage.setItem('pricing_updated_at', response.data.pricing.updatedAt || String(Date.now())); } catch(e){}
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to update pricing");
@@ -90,11 +84,7 @@ export default function PricingManagementPage() {
   };
 
   const hasChanges = originalPricing && (
-    pricing.oaQuestions !== originalPricing.oaQuestions ||
-    pricing.resumeScreeningPremium !== originalPricing.resumeScreeningPremium ||
-    pricing.topInterviews !== originalPricing.topInterviews ||
-    pricing.mockInterviews !== originalPricing.mockInterviews ||
-    (pricing.skillTestPremium || 0) !== (originalPricing.skillTestPremium || 0)
+    pricing.premium !== originalPricing.premium
   );
 
   if (loading) {
@@ -121,34 +111,12 @@ export default function PricingManagementPage() {
 
   const pricingItems = [
     {
-      key: "oaQuestions" as const,
-      label: "OA Questions Access",
-      description: "Unlock all company-wise OA questions",
-      icon: FileText,
-      color: "blue",
-    },
-    {
-      key: "resumeScreeningPremium" as const,
-      label: "Resume Screening Premium",
-      description: "Bulk resume analysis with AI",
-      icon: Users,
-      color: "purple",
-    },
-    {
-      key: "topInterviews" as const,
-      label: "Top Interviews",
-      description: "Access to premium interview preparation",
-      icon: Briefcase,
-      color: "green",
-    },
-    {
-      key: "skillTestPremium" as const,
-      label: "Skill Test Premium",
-      description: "Unlimited attempts for skill tests and premium features",
+      key: "premium" as const,
+      label: "Premium",
+      description: "All-access Premium price",
       icon: Crown,
       color: "yellow",
-    },
-
+    }
   ];
 
   const getColorClasses = (color: string) => {
@@ -225,52 +193,42 @@ export default function PricingManagementPage() {
           </div>
         </div>
 
-        {/* Pricing Cards */}
+        {/* Single Premium Pricing Card */}
         <div className="space-y-4">
-          {pricingItems.map((item) => {
-            const colors = getColorClasses(item.color);
-            const Icon = item.icon;
-            
-            return (
-              <div
-                key={item.key}
-                className={`bg-gray-900/50 border ${colors.border} rounded-2xl p-6`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 ${colors.bg} rounded-xl`}>
-                      <Icon className={`w-6 h-6 ${colors.text}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-white text-lg">{item.label}</h3>
-                      <p className="text-gray-400 text-sm mt-1">{item.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-gray-400">₹</span>
-                    <input
-                      type="number"
-                      min={9}
-                      value={pricing[item.key]}
-                      onChange={(e) => setPricing({
-                        ...pricing,
-                        [item.key]: Math.max(9, parseInt(e.target.value) || 9)
-                      })}
-                      className="w-24 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-2xl font-bold text-white text-center focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
+          <div className={`bg-gray-900/50 border border-gray-700 rounded-2xl p-6`}>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className={`p-3 bg-[#7E102C]/20 rounded-xl`}>
+                  <DollarSign className={`w-6 h-6 text-[#E1D4C1]`} />
                 </div>
-
-                {(pricing[item.key] ?? 0) < 9 && (
-                  <div className="mt-3 flex items-center gap-2 text-red-400 text-sm">
-                    <AlertCircle className="w-4 h-4" />
-                    Minimum price is ₹9
-                  </div>
-                )}
+                <div>
+                  <h3 className="font-semibold text-white text-lg">Premium</h3>
+                  <p className="text-gray-400 text-sm mt-1">Single premium plan that unlocks all premium sections</p>
+                </div>
               </div>
-            );
-          })}
+
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-gray-400">₹</span>
+                <input
+                  type="number"
+                  min={9}
+                  value={pricing.premium}
+                  onChange={(e) => setPricing({
+                    ...pricing,
+                    premium: Math.max(9, parseInt(e.target.value) || 9)
+                  })}
+                  className="w-32 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-2xl font-bold text-white text-center focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            { (pricing.premium ?? 0) < 9 && (
+              <div className="mt-3 flex items-center gap-2 text-red-400 text-sm">
+                <AlertCircle className="w-4 h-4" />
+                Minimum price is ₹9
+              </div>
+            ) }
+          </div>
         </div>
 
         {/* Last Updated */}

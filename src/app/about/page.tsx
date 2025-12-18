@@ -45,12 +45,7 @@ export default function AboutPage() {
           description: "Curated learning paths with YouTube tutorials",
           link: "/explore",
         },
-        {
-          icon: BookOpen,
-          title: "Core CS Topics",
-          description: "OS, DBMS, CN, and essential fundamentals",
-          link: "/explore",
-        },
+
         {
           icon: Award,
           title: "Certifications",

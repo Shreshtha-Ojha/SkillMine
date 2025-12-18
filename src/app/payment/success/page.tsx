@@ -23,13 +23,13 @@ function PaymentSuccessContent() {
         console.log("Payment params:", { paymentId, paymentStatus, paymentRequestId });
 
         // Fetch dynamic pricing
-        let oaPrice = 10;
+        let premiumPrice = 249;
         try {
           const pricingRes = await fetch("/api/admin/pricing");
           if (pricingRes.ok) {
             const pricingData = await pricingRes.json();
-            if (pricingData.pricing?.oaQuestions) {
-              oaPrice = pricingData.pricing.oaQuestions;
+            if (pricingData.pricing?.premium) {
+              premiumPrice = pricingData.pricing.premium;
             }
           }
         } catch (e) {
@@ -47,19 +47,19 @@ function PaymentSuccessContent() {
             body: JSON.stringify({
               paymentId: paymentId || paymentRequestId || `INS_${Date.now()}`,
               status: "success",
-              amount: oaPrice,
+              amount: premiumPrice,
             }),
           });
 
           if (response.ok) {
             setStatus("success");
-            setMessage("Payment successful! You now have access to all 450+ company questions.");
+            setMessage("Payment successful! You now have Premium access.");
           } else {
             const data = await response.json();
             // If user not authenticated, still show success but ask to login
             if (response.status === 401) {
               setStatus("success");
-              setMessage("Payment successful! Please login to access all company questions.");
+              setMessage("Payment successful! Please login to access your Premium content.");
             } else {
               setStatus("error");
               setMessage(data.error || "Failed to verify payment. Please contact support with your payment ID: " + paymentId);
@@ -75,7 +75,7 @@ function PaymentSuccessContent() {
             const data = await checkResponse.json();
             if (data.purchased) {
               setStatus("success");
-              setMessage("You already have access to all company questions!");
+              setMessage("You already have Premium access!");
             } else {
               setStatus("error");
               setMessage("No payment information found. If you've completed payment, please contact support.");

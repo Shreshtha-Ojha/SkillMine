@@ -20,7 +20,7 @@ async function unlockOA(email) {
       { email: email.toLowerCase() },
       {
         $set: {
-          'purchases.oaQuestions': {
+          'purchases.premium': {
             purchased: true,
             purchasedAt: new Date(),
             paymentId: `MANUAL_UNLOCK_${Date.now()}`,
@@ -33,9 +33,9 @@ async function unlockOA(email) {
     if (result.matchedCount === 0) {
       console.log(`❌ User not found with email: ${email}`);
     } else if (result.modifiedCount > 0) {
-      console.log(`✅ Successfully unlocked OA questions for: ${email}`);
+      console.log(`✅ Successfully unlocked Premium for: ${email}`);
     } else {
-      console.log(`ℹ️ User already has OA access: ${email}`);
+      console.log(`ℹ️ User already has Premium access: ${email}`);
     }
 
   } catch (error) {

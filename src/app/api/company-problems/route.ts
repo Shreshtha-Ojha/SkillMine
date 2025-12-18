@@ -61,12 +61,12 @@ export async function GET(request: NextRequest) {
 
     // Fetching problems for a specific company
     const user = await getUserFromRequest(request);
-    const hasPurchased = user?.purchases?.oaQuestions?.purchased || false;
+    const hasPurchased = user?.purchases?.premium?.purchased || false;
     
     // Check if user can access this company
     if (!isCompanyFree(companyName) && !hasPurchased) {
       return NextResponse.json(
-        { error: "Please purchase access to view this company's problems" },
+        { error: "Please purchase Premium access to view this company's problems" },
         { status: 403 }
       );
     }

@@ -115,10 +115,10 @@ export default function OAPurchasesPage() {
           </Link>
           <h1 className="text-2xl font-bold text-white flex items-center gap-3">
             <Crown className="w-8 h-8 text-[#E1D4C1]" />
-            OA Questions Purchases
+            Premium Purchases
           </h1>
           <p className="text-gray-400 mt-1">
-            Manage OA questions access for users
+            Manage Premium access for users
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export default function OAPurchasesPage() {
         <div className="bg-[#111118] border border-white/10 rounded-xl p-6 mb-8">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Unlock className="w-5 h-5 text-green-400" />
-            Unlock OA Questions for User
+            Unlock Premium for User
           </h2>
           
           <form onSubmit={handleUnlock} className="space-y-4">
@@ -181,7 +181,7 @@ export default function OAPurchasesPage() {
         <div className="bg-[#111118] border border-white/10 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-400" />
-            Users with OA Access ({purchasedUsers.length})
+            Users with Premium Access ({purchasedUsers.length})
           </h2>
 
           {purchasedUsers.length === 0 ? (

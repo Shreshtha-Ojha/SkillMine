@@ -29,11 +29,11 @@ function VerifyContent() {
         }
 
         // Fetch dynamic pricing
-        let premiumPrice = 10;
+        let premiumPrice = 249;
         try {
-          const pricingRes = await axios.get("/api/admin/pricing");
-          if (pricingRes.data.pricing?.resumeScreeningPremium) {
-            premiumPrice = pricingRes.data.pricing.resumeScreeningPremium;
+          const pricingRes = await axios.get(`/api/admin/pricing?t=${Date.now()}`);
+          if (pricingRes.data.pricing?.premium) {
+            premiumPrice = pricingRes.data.pricing.premium;
           }
         } catch (e) {
           console.error("Failed to fetch pricing:", e);
@@ -54,7 +54,7 @@ function VerifyContent() {
 
           if (response.data.success) {
             setStatus("success");
-            setMessage("Payment successful! You now have access to the ATS Checker feature.");
+            setMessage("Payment successful! You now have Premium access.");
           } else {
             setStatus("error");
             setMessage(response.data.error || "Failed to activate premium access.");

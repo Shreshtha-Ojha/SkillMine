@@ -32,18 +32,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if already purchased
-    if (user.purchases?.oaQuestions?.purchased) {
-      console.warn(`User ${user._id} attempted to create OA payment but already purchased`);
+    // Check if already purchased premium
+    if (user.purchases?.premium?.purchased) {
+      console.warn(`User ${user._id} attempted to create premium payment but already purchased`);
       return NextResponse.json(
-        { error: "You have already purchased OA Questions access", code: "ALREADY_PURCHASED" },
+        { error: "You have already purchased Premium access", code: "ALREADY_PURCHASED" },
         { status: 400 }
       );
     }
 
     // Determine redirect URL based on environment
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.prepsutra.tech")?.replace(/\/$/, "");
-    const redirectUrl = `${baseUrl}/payment/verify`;
+    const redirectUrl = `${baseUrl}/payment/verify?product=premium`;
     
     // Webhook only works with public URLs (not localhost)
     const isLocalhost = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
@@ -54,15 +54,15 @@ export async function POST(request: NextRequest) {
 
     // Build request body
     const bodyParams: Record<string, string> = {
-      amount: pricing.oaQuestions.toString(), // Dynamic pricing from admin panel
-      purpose: `OA_QUESTIONS_${user._id}`,
+      amount: pricing.premium.toString(), // Dynamic pricing from admin panel
+      purpose: `PREMIUM_${user._id}`,
       buyer_name: user.fullName || user.username || "Customer",
       email: user.email,
       redirect_url: redirectUrl,
       send_email: "false",
       send_sms: "false",
       allow_repeated_payments: "false",
-    };
+    }; 
 
     // Sanitize phone number; only include if valid (avoid provider 400 on invalid formats)
     try {

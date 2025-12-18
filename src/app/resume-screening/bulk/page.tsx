@@ -245,9 +245,9 @@ export default function BulkResumeScreeningPage() {
     // Fetch dynamic pricing
     const fetchPricing = async () => {
       try {
-        const res = await axios.get("/api/admin/pricing");
+        const res = await axios.get(`/api/admin/pricing?t=${Date.now()}`);
         if (res.data.pricing) {
-          setPremiumPrice(res.data.pricing.resumeScreeningPremium || 10);
+          setPremiumPrice(res.data.pricing.premium || 10);
         }
       } catch (error) {
         console.error("Failed to fetch pricing:", error);

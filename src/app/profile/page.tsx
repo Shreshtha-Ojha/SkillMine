@@ -15,7 +15,7 @@ import {
   Edit3, Save, X, LogOut, Key, ChevronRight, BarChart3,
   Trophy, BookOpen, ArrowLeft, Menu, Settings, PenSquare,
   CheckCircle, AlertCircle, Award, FileText, Eye, Download,
-  Camera, Code2, Share2, ExternalLink, Github, Zap
+  Camera, Code2, Share2, ExternalLink, Github, Zap, Star
 } from "lucide-react";
 
 interface CodingProfile {
@@ -407,9 +407,23 @@ export default function ProfilePage() {
 
   const logout = async () => {
     try {
-      await axios.get("/api/users/logout");
+      await axios.get("/api/users/logout", { withCredentials: true });
+
+      // Clear client-side token and user data to ensure a clean logout
+      try { localStorage.removeItem('token'); } catch (e) {}
+      try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+      try { sessionStorage.removeItem('homeOaModalShown'); } catch (e) {}
+      try { sessionStorage.removeItem('oaModalShown'); } catch (e) {}
+      try { sessionStorage.removeItem('skillTestModalShown'); } catch (e) {}
+
+      // Broadcast logout to other tabs so they can clear user state
+      try { localStorage.setItem('user_logged_out_at', String(Date.now())); } catch (e) {}
+
+      setUserData(null);
       toast.success("Logout successful");
-      router.push("/auth/login");
+
+      // Ensure the whole app reloads so server-side cookies are no longer sent
+      window.location.href = "/auth/login";
     } catch (error: any) {
       console.error(error.message);
       toast.error(error.message);
@@ -561,6 +575,11 @@ export default function ProfilePage() {
                 {userData?.isAdmin && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#7E102C]/10 text-[#E1D4C1] border border-[#7E102C]/20">
                     <Settings className="w-3 h-3" /> Admin
+                  </span>
+                )}
+                {userData?.purchases?.premium?.purchased && (
+                  <span title={userData?.purchases?.premium?.purchasedAt ? new Date(userData.purchases.premium.purchasedAt).toLocaleString() : ''} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-yellow-400 text-black border border-yellow-500/20">
+                    <Star className="w-3 h-3" /> Premium
                   </span>
                 )}
                 {userData?.college && (

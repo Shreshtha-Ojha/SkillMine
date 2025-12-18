@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const decoded = jwt.verify(cookie, process.env.TOKEN_SECRET!) as { id: string };
     const user = await User.findById(decoded.id);
     if (!user) return NextResponse.json({ purchased: false }, { status: 200 });
-    return NextResponse.json({ purchased: !!user.purchases?.skillTestPremium?.purchased, purchases: user.purchases || {} });
+    return NextResponse.json({ purchased: !!user.purchases?.premium?.purchased, purchases: user.purchases || {} });
   } catch (err) {
     return NextResponse.json({ purchased: false }, { status: 200 });
   }

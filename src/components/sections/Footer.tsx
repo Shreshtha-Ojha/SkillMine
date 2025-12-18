@@ -398,6 +398,7 @@ export function Footer() {
                   <span className="text-purple-400 font-semibold">PrepSutra</span>
                   . All Rights Reserved.
                 </div>
+
                 <div className="h-1 w-1 bg-gray-600 rounded-full hidden md:block"></div>
                 <div className="text-gray-500 text-center md:text-left">
                   Privacy Policy • Terms of Service
@@ -405,16 +406,9 @@ export function Footer() {
               </div>
               
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400 text-xs sm:text-sm">
-                  <span>Crafted with</span>
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-red-400"
-                  >
-                    <FaHeart className="h-3 w-3 sm:h-4 sm:w-4" />
-                  </motion.div>
-                  <span>for developers worldwide</span>
+                <div className="text-center md:text-right mt-2 md:mt-0">
+                  <span className="text-sm text-[#E1D3CC]">Crafted with <FaHeart className="inline text-red-400 ml-1 mr-1" /> by </span>
+                  <a href="/navrion" className="text-yellow-300 font-semibold hover:underline">NAVRION</a>
                 </div>
                 <div className="h-3 sm:h-4 w-px bg-gray-600"></div>
                 <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full text-xs text-green-300 border border-green-500/30">

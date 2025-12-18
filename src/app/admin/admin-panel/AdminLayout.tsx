@@ -134,6 +134,13 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    label: "Premium Users",
+    href: "/admin/admin-panel/premium-users",
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a7 7 0 00-7 7v3a7 7 0 007 7 7 7 0 007-7V9a7 7 0 00-7-7z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.5 10.5a2.5 2.5 0 115 0" /></svg>
+    ),
+  },
 ];
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {

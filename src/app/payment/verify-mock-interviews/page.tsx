@@ -29,11 +29,11 @@ function VerifyContent() {
         }
 
         // Fetch dynamic pricing
-        let mockPrice = 10;
+        let premiumPrice = 249;
         try {
-          const pricingRes = await axios.get("/api/admin/pricing");
-          if (pricingRes.data.pricing?.mockInterviews) {
-            mockPrice = pricingRes.data.pricing.mockInterviews;
+          const pricingRes = await axios.get(`/api/admin/pricing?t=${Date.now()}`);
+          if (pricingRes.data.pricing?.premium) {
+            premiumPrice = pricingRes.data.pricing.premium;
           }
         } catch (e) {
           console.error("Failed to fetch pricing:", e);
@@ -47,14 +47,14 @@ function VerifyContent() {
           const response = await axios.post("/api/payment/mock-interviews", {
             paymentId: paymentId || paymentRequestId,
             status: "success",
-            amount: mockPrice
+            amount: premiumPrice
           });
 
           console.log("[VerifyPayment] API response:", response.data);
 
           if (response.data.success) {
             setStatus("success");
-            setMessage("Payment successful! You now have unlimited mock interviews.");
+            setMessage("Payment successful! You now have Premium access.");
           } else {
             setStatus("error");
             setMessage(response.data.error || "Failed to activate subscription.");

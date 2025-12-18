@@ -27,7 +27,7 @@ async function getUserIdFromRequest(request: NextRequest): Promise<string | null
   }
 }
 
-// GET - Check if user has purchased OA questions
+// GET - Check if user has purchased Premium
 export async function GET(request: NextRequest) {
   try {
     const userId = await getUserIdFromRequest(request);
@@ -48,11 +48,11 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const purchased = user.purchases?.oaQuestions?.purchased || false;
+    const purchased = user.purchases?.premium?.purchased || false;
     
     return NextResponse.json({
       purchased,
-      purchasedAt: user.purchases?.oaQuestions?.purchasedAt || null,
+      purchasedAt: user.purchases?.premium?.purchasedAt || null,
     });
   } catch (error: any) {
     console.error("Error checking purchase status:", error);
@@ -88,16 +88,16 @@ export async function POST(request: NextRequest) {
     // Get dynamic pricing
     const pricing = await getPricing();
     
-    // Update user's purchase status
+    // Update user's purchase status (premium)
     const user = await User.findByIdAndUpdate(
       userId,
       {
         $set: {
-          "purchases.oaQuestions": {
+          "purchases.premium": {
             purchased: true,
             purchasedAt: new Date(),
-            paymentId: paymentId || `INS_${Date.now()}`,
-            amount: amount || pricing.oaQuestions,
+            paymentId: paymentId || `PREM_${Date.now()}`,
+            amount: amount || pricing.premium,
           }
         }
       },
