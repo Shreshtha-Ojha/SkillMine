@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useCheckedData } from "@/context/checkedDataContext";
 import Cookies from "js-cookie";
-import { Menu, X, ChevronDown, User, Shield } from "lucide-react";
+import { Menu, X, ChevronDown, User, Shield, Star } from "lucide-react";
 import DropdownPortal from "./DropdownPortal";
 
 interface NavItem {
@@ -13,6 +13,8 @@ interface NavItem {
   link?: string;
   dropdown?: { name: string; link: string }[];
   premium?: boolean; // highlight as premium feature
+  desktopOnlyDropdown?: boolean; // show dropdown only on desktop (hide from mobile menu)
+  hideOnDesktop?: boolean; // hide this item from the desktop top-level nav (show on mobile)
 }
 
 export const FloatingNav = ({
@@ -73,23 +75,26 @@ export const FloatingNav = ({
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img 
-              src="/official_logo.png" 
-              alt="PrepSutra Logo" 
-              className="w-8 h-8 rounded-lg object-contain"
-            />
-            <span className="hidden sm:block text-[#E1D4C1] font-semibold">PrepSutra</span>
+            <span className="text-[#E1D4C1] font-semibold">PrepSutra</span>
           </Link>
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-2">
-            {navItems.map((item) =>
+            {navItems.filter((item) => !item.hideOnDesktop).map((item) =>
               item.link ? (
                 <Link
                   key={item.name}
                   href={item.link}
-                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.premium ? 'text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
+                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'Premium' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : item.premium ? 'text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
+                  aria-label={item.name === 'Premium' ? 'Upgrade to Premium' : undefined}
                 >
-                  <span className={item.premium ? 'font-semibold' : ''}>{item.name}</span>
+                  {item.name === 'Premium' ? (
+                    <span className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-white" />
+                      <span>{item.name}</span>
+                    </span>
+                  ) : (
+                    <span className={item.premium ? 'font-semibold' : ''}>{item.name}</span>
+                  )}
 
                 </Link>
               ) : item.dropdown ? (
@@ -110,14 +115,24 @@ export const FloatingNav = ({
                   }}
                 >
                   <button
-                    className="flex items-center gap-1 px-4 py-2 text-sm text-[#E1D4C1] hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                    className={`flex items-center gap-1 px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'Premium' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
                     onClick={(e) => {
                       setOpenDropdown(openDropdown === item.name ? null : item.name);
                       setDropdownRect((e.currentTarget as HTMLElement).getBoundingClientRect());
                     }}
                   >
-                    {item.name}
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                    {item.name === 'Premium' ? (
+                      <span className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-white" />
+                        <span>{item.name}</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                      </span>
+                    ) : (
+                      <>
+                        {item.name}
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                      </>
+                    )}
                   </button>
                   {openDropdown === item.name && dropdownRect && (
                     <DropdownPortal
@@ -162,6 +177,9 @@ export const FloatingNav = ({
                 <span className="hidden md:inline">Admin</span>
               </Link>
             )}
+
+
+
             <Link
               href={isLoggedIn ? "/profile" : "/auth/login"}
               className="flex items-center gap-2 px-4 py-2 bg-[#7E102C] text-[#E1D4C1] text-sm font-medium rounded-lg hover:bg-[#58423F] transition-all border border-[#0a0a0f]"
@@ -189,11 +207,11 @@ export const FloatingNav = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden mt-2 p-4 bg-[#E1D4C1] text-[#7E102C] rounded-2xl shadow-lg border border-[#7E102C]/20"
-              style={{ color: "#7E102C" }}
+              className="lg:hidden mt-2 p-4 bg-[#E1D4C1] text-[#7E102C] rounded-2xl shadow-lg border border-[#7E102C]/20 max-h-[60vh] overflow-y-auto"
+              style={{ color: "#7E102C", WebkitOverflowScrolling: "touch" }}
             >
               <div className="space-y-1">
-                {navItems.map((item) =>
+                {navItems.filter((item) => !item.desktopOnlyDropdown).map((item) =>
                   item.link ? (
                     <Link
                       key={item.name}
@@ -248,6 +266,8 @@ export const FloatingNav = ({
                     Admin Panel
                   </Link>
                 )}
+
+
               </div>
             </motion.div>
           )}

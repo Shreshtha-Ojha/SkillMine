@@ -250,9 +250,20 @@ export default function Home() {
   const navItems = useMemo(() => [
     { name: "About", link: "/about" },
     { name: "Roadmaps", link: "/explore" },
-    { name: "Practice", link: "/practice" },
-    { name: "Top Questions", link: "/company-problems", premium: true },
-    { name: "Skill Tests", link: "/skill-tests", premium: true },
+    {
+      name: "Premium",
+      dropdown: [
+        { name: "Company-wise DSA", link: "/company-problems" },
+        { name: "Practice", link: "/practice" },
+        { name: "Skill Tests", link: "/skill-tests" },
+      ],
+      premium: true,
+      desktopOnlyDropdown: true,
+    },
+    // Mobile-only top level access so menu works on small screens
+    { name: "Practice", link: "/practice", hideOnDesktop: true },
+    { name: "Top Questions", link: "/company-problems", premium: true, hideOnDesktop: true },
+    { name: "Skill Tests", link: "/skill-tests", premium: true, hideOnDesktop: true },
     { name: "ATS Lab", link: "/ats-checker" },
     {
       name: "Tools",
@@ -262,6 +273,9 @@ export default function Home() {
         { name: "Mock Interviews", link: "/interview" },
         { name: "Coding Arena", link: "/top-interviews" },
         { name: "Compensation Data", link: "/placement-data" },
+        { name: "GitHub Wrapped", link: "/github-wrapped" },
+        { name: "LeetCode Wrapped", link: "/leetcode-wrapped" },
+        { name: "Codeforces Wrapped", link: "/codeforces-wrapped" },
       ],
     },
     {
