@@ -9,7 +9,7 @@ export async function getPricing(): Promise<Pricing> {
   try {
     await connect();
     
-    const pricing = await PricingSettings.findOne({ key: "pricing" }).lean();
+    const pricing = await PricingSettings.findOne({ key: "pricing" }).lean() as { premium?: number | null } | null;
     if (!pricing) return { premium: null };
 
     return {

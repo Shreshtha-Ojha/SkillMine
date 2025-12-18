@@ -74,6 +74,13 @@ export async function POST(request: NextRequest) {
 
     // Get dynamic pricing from admin settings
     const pricing = await getPricing();
+    if (pricing.premium == null) {
+      console.error("Premium pricing is not set in admin settings");
+      return NextResponse.json(
+        { error: "Premium pricing is not available. Please contact support." },
+        { status: 500 }
+      );
+    }
 
     // Build request body with dynamic pricing
     const bodyParams: Record<string, string> = {

@@ -62,6 +62,10 @@ export async function POST(request: NextRequest) {
     // Handle premium purchase purpose only
     if (purpose?.startsWith("PREMIUM_")) {
       const EXPECTED_AMOUNT = pricing.premium;
+      if (EXPECTED_AMOUNT == null) {
+        console.error("Expected premium amount is not defined in pricing.");
+        return NextResponse.json({ error: "Pricing not available" }, { status: 500 });
+      }
       if (paidAmount < EXPECTED_AMOUNT) {
         console.error(`Invalid amount: expected ₹${EXPECTED_AMOUNT}, got ₹${paidAmount}`);
         return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });

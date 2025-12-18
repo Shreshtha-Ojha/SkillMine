@@ -80,6 +80,14 @@ interface User {
     completedAt: string;
     answers: any[];
   };
+  purchases?: {
+    premium?: {
+      purchased?: boolean;
+      purchasedAt?: string | Date;
+      [key: string]: any;
+    };
+    [key: string]: any;
+  };
 }
 
 // Cache management

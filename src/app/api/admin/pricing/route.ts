@@ -87,14 +87,17 @@ export async function PUT(request: NextRequest) {
     // Log post-update value
     console.log("Pricing after update:", updated);
 
+    // Ensure updated is not an array before accessing properties
+    const updatedDoc = Array.isArray(updated) ? updated[0] : updated;
+
     const origin = request.headers.get("origin") || "*";
     return NextResponse.json({
       success: true,
       message: "Pricing updated successfully",
       pricing: {
-        premium: updated?.premium,
-        updatedAt: updated?.updatedAt,
-        id: updated?._id
+        premium: updatedDoc?.premium,
+        updatedAt: updatedDoc?.updatedAt,
+        id: updatedDoc?._id
       },
     }, { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } });
   } catch (error: any) {

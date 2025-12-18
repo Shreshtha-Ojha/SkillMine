@@ -53,6 +53,13 @@ export async function POST(request: NextRequest) {
     const pricing = await getPricing();
 
     // Build request body
+    if (pricing.premium == null) {
+      console.error("Pricing for premium is not set");
+      return NextResponse.json(
+        { error: "Pricing for premium is not available. Please try again later." },
+        { status: 500 }
+      );
+    }
     const bodyParams: Record<string, string> = {
       amount: pricing.premium.toString(), // Dynamic pricing from admin panel
       purpose: `PREMIUM_${user._id}`,

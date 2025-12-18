@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 interface Roadmap { _id: string; title: string }
-interface MCQ { _id?: string; question: string; options: string[]; correctAnswer: number }
+interface MCQ { _id?: string; question: string; options: string[]; correctAnswer: number; explanation?: string }
 
 export default function RoadmapQuestionsPage() {
   const user = useCurrentUser();
