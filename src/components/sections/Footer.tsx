@@ -57,21 +57,21 @@ export function Footer() {
   const socialLinks = [
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/in/ayush-tiwari-84a823281/",
+      href: "https://www.linkedin.com/in/shreshtha-ojha/",
       icon: <FaLinkedin className="h-5 w-5" />,
       color: "hover:from-blue-600 hover:to-blue-400",
       bgColor: "from-blue-500/20 to-blue-600/20"
     },
     {
       name: "Instagram", 
-      href: "https://www.instagram.com/quants_programmer?igsh=bzNiejJmMnRrZnpv",
+      href: "https://www.instagram.com/pro_gram?igsh=bzNiejJmMnRrZnpv",
       icon: <FaInstagram className="h-5 w-5" />,
       color: "hover:from-pink-600 hover:to-purple-400",
       bgColor: "from-pink-500/20 to-purple-500/20"
     },
     {
       name: "GitHub",
-      href: "https://github.com/Ayush5071", 
+      href: "https://github.com/shreshtha-ojha", 
       icon: <FaGithub className="h-5 w-5" />,
       color: "hover:from-gray-600 hover:to-gray-400",
       bgColor: "from-gray-500/20 to-gray-600/20"
@@ -173,7 +173,7 @@ export function Footer() {
               
               {/* Buy Me Coffee Button */}
               <motion.a
-                href="https://www.buymeacoffee.com/quantsprogrammer"
+                href="https://www.buymeacoffee.com/pro-gram"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -386,14 +386,9 @@ export function Footer() {
               <div className="flex flex-col md:flex-row items-center gap-3 sm:gap-4 md:gap-6 text-gray-400 text-xs sm:text-sm">
                 <div className="text-center md:text-left">
                   &copy; {new Date().getFullYear()}{" "}
-                  <a
-                    href="https://ayush-delta.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 transition-colors duration-300 font-semibold hover:underline"
-                  >
-                    Ayush Tiwari
-                  </a>
+                  <span className="text-blue-400 font-semibold">
+                    Shreshtha Ojha
+                  </span>
                   {" "}X{" "}
                   <span className="text-purple-400 font-semibold">PrepSutra</span>
                   . All Rights Reserved.

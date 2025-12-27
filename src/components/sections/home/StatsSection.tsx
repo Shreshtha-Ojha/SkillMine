@@ -8,40 +8,34 @@ export default function StatsSection() {
   const { stats, isLoading } = useStats();
 
   const statItems = [
-    { 
-      icon: Users, 
-      value: stats?.activeUsers || "1K+", 
+    {
+      icon: Users,
+      value: isLoading ? "—" : (stats?.activeUsers ?? 0),
       label: "Active Users",
       color: "text-[#E1D4C1]"
     },
-    { 
-      icon: Mic, 
-      value: stats?.totalInterviews || "5K+", 
+    {
+      icon: Mic,
+      value: isLoading ? "—" : (stats?.totalInterviews ?? 0),
       label: "Interviews Taken",
       color: "text-[#D7A9A8]"
     },
-    { 
-      icon: FileText, 
-      value: stats?.publishedBlogs || "500+", 
+    {
+      icon: FileText,
+      value: isLoading ? "—" : (stats?.publishedBlogs ?? 0),
       label: "Blogs Published",
       color: "text-[#7E102C]"
     },
-    { 
-      icon: Map, 
-      value: stats?.availableRoadmaps || "20+", 
+    {
+      icon: Map,
+      value: isLoading ? "—" : (stats?.availableRoadmaps ?? 0),
       label: "Roadmaps",
       color: "text-[#E1D3CC]"
     },
-    { 
-      icon: Award, 
-      value: stats?.certificatesEarned || "2K+", 
+    {
+      icon: Award,
+      value: isLoading ? "—" : (stats?.certificatesEarned ?? 0),
       label: "Certificates",
-      color: "text-[#D7A9A8]"
-    },
-    { 
-      icon: TrendingUp, 
-      value: "95%", 
-      label: "Success Rate",
       color: "text-[#D7A9A8]"
     },
   ];

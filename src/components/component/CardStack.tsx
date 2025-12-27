@@ -31,7 +31,7 @@ export const Highlight = ({
 const CARDS = [
   {
     id: 0,
-    name: "Ayush Tiwari",
+    name: "Shreshtha Ojha",
     designation: "Aspiring Software Engineer",
     content: (
       <p>
@@ -43,7 +43,7 @@ const CARDS = [
   },
   {
     id: 1,
-    name: "Ayush Tiwari",
+    name: "Shreshtha Ojha",
     designation: "Aspiring Software Engineer",
     content: (
       <p>
@@ -55,7 +55,7 @@ const CARDS = [
   },
   {
     id: 2,
-    name: "Ayush Tiwari",
+    name: "Shreshtha Ojha",
     designation: "Aspiring Software Engineer",
     content: (
       <p>

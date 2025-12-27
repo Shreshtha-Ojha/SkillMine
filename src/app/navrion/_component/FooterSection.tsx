@@ -30,15 +30,15 @@ export default function FooterSection() {
             <h4 className="text-sm font-semibold text-white tracking-wide mb-1">Contact</h4>
 
             <a
-              href="mailto:quantsprogrammer@gmail.com"
+              href="mailto:pro-gram@gmail.com"
               className="flex items-center gap-2 text-gray-300 text-sm hover:text-pink-300 transition"
             >
               <Mail className="w-4 h-4 text-pink-300" />
-              quantsprogrammer@gmail.com
+              pro-gram@gmail.com
             </a>
 
             <a
-              href="https://www.linkedin.com/in/ayush-tiwari-84a823281"
+              href="https://www.linkedin.com/in/shreshtha-ojha"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-300 text-sm hover:text-blue-300 transition"

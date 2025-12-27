@@ -25,10 +25,6 @@ export default function AnalysisPage() {
   const [selected, setSelected] = useState<any | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
 
-  // Purchase gating
-  const [hasPurchased, setHasPurchased] = useState<boolean | null>(null);
-  const [checkingPurchase, setCheckingPurchase] = useState<boolean>(true);
-
   const fetchList = useCallback(async () => {
     try {
       setLoading(true);
@@ -39,11 +35,6 @@ export default function AnalysisPage() {
       if (search) params.set("search", search);
 
       const res = await fetch(`/api/company-problems/analysis?${params}`);
-      if (res.status === 403) {
-        // locked
-        setHasPurchased(false);
-        return;
-      }
       const j = await res.json();
       if (!res.ok) throw new Error(j?.error || "Failed");
 
@@ -60,37 +51,12 @@ export default function AnalysisPage() {
     fetchList();
   }, [fetchList]);
 
-  // Check purchase status for access
-  useEffect(() => {
-    const checkPurchase = async () => {
-      try {
-        setCheckingPurchase(true);
-        const res = await fetch('/api/payment/oa-questions', { credentials: 'include' });
-        if (!res.ok) {
-          setHasPurchased(false);
-        } else {
-          const j = await res.json();
-          const purchased = !!j.purchased;
-          setHasPurchased(purchased);
-          if (purchased) fetchList();
-        }
-      } catch (err) {
-        console.error('Failed to check purchase status', err);
-        setHasPurchased(false);
-      } finally {
-        setCheckingPurchase(false);
-      }
-    };
-    checkPurchase();
-  }, []);
-
   const fetchDetails = async (title: string) => {
     try {
       setDetailsLoading(true);
       const res = await fetch(
         `/api/company-problems/analysis?title=${encodeURIComponent(title)}`
       );
-      if (res.status === 403) { setHasPurchased(false); return; }
       const j = await res.json();
       if (!res.ok) throw new Error(j?.error || "Failed");
       setSelected(j);
@@ -202,21 +168,7 @@ export default function AnalysisPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* ================= QUESTION LIST ================= */}
           <div className="lg:col-span-2 bg-[#111118] border border-white/5 rounded-2xl overflow-hidden">
-            {checkingPurchase ? (
-              <div className="p-10 flex items-center justify-center gap-3 text-[#E1D3CC]">
-                <Loader2 className="animate-spin" />
-                Verifying access…
-              </div>
-            ) : hasPurchased === false ? (
-              <div className="p-10 flex flex-col items-center justify-center gap-4 text-center text-[#E1D3CC]">
-                <div className="text-2xl font-semibold text-[#E1D4C1]">Analysis is Premium</div>
-                <div className="max-w-md">This analysis is available only to users who have purchased Company Problems access. Sign in or purchase to continue.</div>
-                <div className="flex items-center gap-3">
-                  <Link href="/auth/login" className="px-4 py-2 bg-white/5 rounded-xl text-[#E1D4C1]">Sign in</Link>
-                  <Link href="/company-problems" className="px-4 py-2 bg-[#7E102C] text-[#E1D4C1] rounded-xl font-semibold">Purchase access</Link>
-                </div>
-              </div>
-            ) : loading ? (
+            {loading ? (
               <div className="p-10 flex items-center justify-center gap-3 text-[#E1D3CC]">
                 <Loader2 className="animate-spin" />
                 Fetching insights…

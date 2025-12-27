@@ -19,7 +19,7 @@ export default function ContactSection() {
     );
 
     window.open(
-      `https://mail.google.com/mail/?view=cm&fs=1&to=quantsprogrammer@gmail.com&su=${subject}&body=${body}`,
+      `https://mail.google.com/mail/?view=cm&fs=1&to=pro-gram@gmail.com&su=${subject}&body=${body}`,
       "_blank"
     );
   };

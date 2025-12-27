@@ -876,7 +876,7 @@ export default function GitHubWrappedPage() {
               
               <div className="mt-6 pt-4 border-t border-[#30363d] flex items-center justify-center gap-2 text-[#8b949e]">
                 <IconBrandGithub size={16} />
-                <span className="text-sm">quantsprogrammer.com</span>
+                <span className="text-sm">pro-gram.com</span>
               </div>
             </motion.div>
             

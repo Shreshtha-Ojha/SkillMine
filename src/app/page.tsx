@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, memo, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Crown, Sparkles, CheckCircle2, Loader2, X } from "lucide-react";
+import { motion } from "framer-motion";
 // Old imports - commented out for new design
 // import { HeroPage } from "@/components/sections/HeroPage";
 // import { IconMessage, IconUser, IconCoffee } from "@tabler/icons-react";
@@ -25,15 +24,10 @@ import HowItWorks from "@/components/sections/home/HowItWorks";
 import FAQSection from "@/components/sections/home/FAQSection";
 import CTASection from "@/components/sections/home/CTASection";
 import GitHubWrappedPromo from "@/components/sections/home/GitHubWrappedPromo";
-import PremiumDeals from "@/components/sections/home/PremiumDeals";
 
 import { gsap } from "gsap";
 import Loading from "@/components/ui/Loading";
 import Head from "next/head";
-import useLocomotiveScroll from "@/hooks/useLocomotiveScroll";
-import useCurrentUser from '@/lib/useCurrentUser';
-import LoginRequiredModal from '@/components/ui/LoginRequiredModal';
-import { toast } from 'react-hot-toast';
 
 // Memoized Components for better performance
 // Old components - commented out
@@ -54,216 +48,28 @@ const MemoizedHowItWorks = memo(HowItWorks);
 const MemoizedFAQSection = memo(FAQSection);
 const MemoizedCTASection = memo(CTASection);
 const MemoizedGitHubWrappedPromo = memo(GitHubWrappedPromo);
-const MemoizedPremiumDeals = memo(PremiumDeals);
 const MemoizedFooter = memo(Footer);
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-  const [processingPayment, setProcessingPayment] = useState(false);
-  const [premiumPrice, setPremiumPrice] = useState<number | null>(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const user = useCurrentUser();
-
-  // Fetch dynamic pricing
-  useEffect(() => {
-    const fetchPricing = async () => {
-      try {
-        const res = await fetch("/api/admin/pricing", { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.pricing?.premium) {
-            setPremiumPrice(data.pricing.premium);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch pricing:", error);
-      }
-    };
-    fetchPricing();
-  }, []);
-
-  // Check if user should see purchase modal on first visit
-  useEffect(() => {
-    const checkAndShowModal = async () => {
-      // Check if modal was already shown in this session
-      const modalShown = sessionStorage.getItem("homeOaModalShown");
-      if (modalShown) return;
-
-      // Check if user has already purchased
-      try {
-        const response = await fetch("/api/payment/oa-questions");
-        if (response.ok) {
-          const data = await response.json();
-          if (data.purchased) return; // User already purchased, don't show modal
-        }
-      } catch (err) {
-        // If error checking, still show modal
-      }
-
-      // Show modal after a short delay
-      setTimeout(() => {
-        setShowPurchaseModal(true);
-        sessionStorage.setItem("homeOaModalShown", "true");
-      }, 3000); // Show after 3 seconds
-    };
-
-    if (!loading) {
-      checkAndShowModal();
-    }
-  }, [loading]);
-
-  // Handle payment
-  const handlePurchase = async () => {
-    if (user === undefined) return; // still loading
-    if (!user) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
-
-    setProcessingPayment(true);
-    setShowPurchaseModal(false);
-
-    try {
-      const response = await fetch("/api/payment/create-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
-        console.warn('Payment create-request failed', response.status, data);
-        const errMsg = typeof data?.error === 'object' ? (data?.error?.message || JSON.stringify(data.error)) : data?.error;
-        if (data?.code === 'ALREADY_PURCHASED') {
-          toast.success('You already own Premium access. Redirecting...');
-          window.location.href = '/company-problems';
-          return;
-        }
-        toast.error(errMsg || "Failed to create payment request. Please try again.");
-        setProcessingPayment(false);
-        return;
-      }
-
-      if (data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
-        toast.error("Payment URL not received. Please try again.");
-        setProcessingPayment(false);
-      }
-    } catch (err) {
-      console.error("Payment error:", err);
-      toast.error("Failed to initiate payment. Please try again.");
-      setProcessingPayment(false);
-    }
-  };
-
-  // Purchase Modal Component
-  const PurchaseModal = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-      onClick={() => setShowPurchaseModal(false)}
-    >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        onClick={(e) => e.stopPropagation()}
-        className="bg-[#0a0a0f] border border-[#7E102C]/20 rounded-2xl p-8 max-w-lg w-full relative"
-      >
-        {/* Close button */}
-        <button
-          onClick={() => setShowPurchaseModal(false)}
-          className="absolute top-4 right-4 p-2 text-[#E1D4C1] hover:text-[#D7A9A8] transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="text-center">
-          <div className="w-20 h-20 mx-auto mb-6 bg-[#E1D4C1]/20 rounded-full flex items-center justify-center">
-            <Crown className="w-10 h-10 text-[#7E102C]" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#E1D4C1] mb-3">
-            🎉 Get Premium Access
-          </h2>
-          <p className="text-[#E1D4C1]/80 mb-6">
-            Unlock company problems, skill tests and full practice access with a single Premium purchase.
-          </p>
-
-          <div className="bg-[#E1D3CC]/5 rounded-xl p-4 mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[#E1D3CC]">One-time Payment</span>
-              <div className="flex items-center gap-2">
-                    <span className="text-[#E1D3CC] line-through text-sm">{premiumPrice ? `₹${premiumPrice + 100}` : '₹—'}</span>
-                    <span className="text-2xl font-bold text-[#E1D4C1]">₹{premiumPrice}</span>
-                  </div>
-            </div>
-            <div className="space-y-2 text-left">
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Unlock Company Problems</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Full Skill Tests & Unlimited Attempts</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Complete Practice Questions</span>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={handlePurchase}
-            disabled={processingPayment}
-            className="w-full py-4 bg-[#7E102C] text-[#E1D4C1] font-bold rounded-xl hover:bg-[#6a0f27] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {processingPayment ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-5 h-5" />
-                <span className="mr-2">Pay ₹{premiumPrice} & Unlock Now</span>
-                <span className="text-xs text-gray-300 line-through">{premiumPrice ? `₹${premiumPrice + 100}` : ''}</span>
-              </>
-            )}
-          </button>
-          
-          <button
-            onClick={() => setShowPurchaseModal(false)}
-            className="mt-4 text-[#E1D4C1] hover:text-[#D7A9A8] text-sm transition"
-          >
-            Maybe later
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
 
   // Memoized nav items - simplified for new navbar
   const navItems = useMemo(() => [
     { name: "About", link: "/about" },
     { name: "Roadmaps", link: "/explore" },
     {
-      name: "Premium",
+      name: "DSA Prep",
       dropdown: [
         { name: "Company-wise DSA", link: "/company-problems" },
         { name: "Practice", link: "/practice" },
         { name: "Skill Tests", link: "/skill-tests" },
       ],
-      premium: true,
       desktopOnlyDropdown: true,
     },
     // Mobile-only top level access so menu works on small screens
     { name: "Practice", link: "/practice", hideOnDesktop: true },
-    { name: "Top Questions", link: "/company-problems", premium: true, hideOnDesktop: true },
-    { name: "Skill Tests", link: "/skill-tests", premium: true, hideOnDesktop: true },
+    { name: "Top Questions", link: "/company-problems", hideOnDesktop: true },
+    { name: "Skill Tests", link: "/skill-tests", hideOnDesktop: true },
     { name: "ATS Lab", link: "/ats-checker" },
     {
       name: "Tools",
@@ -293,7 +99,7 @@ export default function Home() {
     if (!hasVisited) {
       setLoading(true);
       localStorage.setItem("hasVisited", "true");
-      const timer = setTimeout(() => setLoading(false), 1500); // Reduced from 2000ms
+      const timer = setTimeout(() => setLoading(false), 1500);
       return () => clearTimeout(timer);
     } else {
       setLoading(false);
@@ -312,15 +118,15 @@ export default function Home() {
         coffeeBtn,
         { scale: 1 },
         {
-          scale: 1.05, // Reduced from 1.1
-          duration: 2, // Increased duration for smoother animation
+          scale: 1.05,
+          duration: 2,
           repeat: -1,
           yoyo: true,
           ease: "power1.inOut",
         }
       );
     }
-  }, [loading]); // Only run after loading is complete
+  }, [loading]);
 
 
   return (
@@ -331,42 +137,18 @@ export default function Home() {
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
 
-      {/* Purchase Modal */}
-      <AnimatePresence>
-        {showPurchaseModal && <PurchaseModal />}
-      </AnimatePresence>
-      <LoginRequiredModal open={showLoginModal} onClose={() => setShowLoginModal(false)} callbackUrl={typeof window !== 'undefined' ? window.location.href : '/'} />
-
-      {/* Processing Payment Overlay */}
-      <AnimatePresence>
-        {processingPayment && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          >
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 text-[#E1D4C1] animate-spin mx-auto mb-4" />
-              <p className="text-white text-lg">Redirecting to payment...</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {loading ? (
         <Loading />
       ) : (
         <div className="relative bg-[#0a0a0f] overflow-x-hidden min-h-screen" data-scroll-container>
           {/* Navigation */}
           <FloatingNav navItems={navItems} />
-          
+
           {/* Main Content */}
           <main className="relative z-10 flex flex-col pt-20 pb-0">
             {/* New Modern Sections */}
             <MemoizedNewHero />
             <MemoizedStatsSection />
-            <MemoizedPremiumDeals />
             <MemoizedFeaturesGrid />
             <MemoizedGitHubWrappedPromo />
             <MemoizedPrepareSection />

@@ -39,16 +39,7 @@ export async function POST(request: NextRequest) {
 
     // Create attempt record (user optional)
     const user = await getUserFromRequest(request as any);
-    // Enforce attempt limits for non-premium users: max 2 attempts lifetime
-    if (user) {
-      const isPremium = !!user.purchases?.premium?.purchased;
-      if (!isPremium) {
-        const attemptsCount = await SkillAttempt.countDocuments({ userId: user._id });
-        if (attemptsCount >= 2) {
-          return NextResponse.json({ error: 'Attempt limit reached. Purchase Premium to unlock unlimited attempts.' }, { status: 403 });
-        }
-      }
-    }
+    // All users now have unlimited attempts - no premium check needed
     const minutes = Number(timeLimitMinutes) || 60;
     if (!Number.isInteger(minutes) || minutes < 1 || minutes > 1000) return NextResponse.json({ error: 'timeLimitMinutes must be an integer between 1 and 1000' }, { status: 400 });
     const perQEnabled = !!perQuestionTimerEnabled;

@@ -653,7 +653,7 @@ export default function CodeForcesWrappedPage() {
               </div>
 
               <div className="text-center mt-3 text-xs text-gray-600">
-                cfwrapped.quantsprogrammer.com
+                cfwrapped.pro-gram.com
               </div>
             </motion.div>
 

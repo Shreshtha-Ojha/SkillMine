@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Company-wise DSA Questions | PrepSutra - 450+ Companies LeetCode Problems",
+  title: "Company-wise DSA Questions | PrepSutra - Top Companies LeetCode Problems",
   description:
-    "Access company-wise DSA and LeetCode problems from 450+ top companies like Google, Amazon, Microsoft, Meta, Apple, Netflix, Adobe, Goldman Sachs, Uber, and more. Prepare for your coding interviews with frequently asked questions and acceptance rates.",
+    "Access company-wise DSA and LeetCode problems from top companies like Google, Amazon, Microsoft, Meta, Apple, Netflix, Adobe, Goldman Sachs, Uber, and more. Prepare for your coding interviews with frequently asked questions and acceptance rates.",
   keywords:
     "company-wise questions, DSA questions, LeetCode problems, Google interview questions, Amazon coding questions, Microsoft interview prep, Meta interview problems, FAANG interview preparation, coding interview, technical interview, software engineer interview, data structures, algorithms",
   

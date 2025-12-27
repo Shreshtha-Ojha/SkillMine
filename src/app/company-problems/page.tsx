@@ -5,25 +5,18 @@ import LoginRequiredModal from '@/components/ui/LoginRequiredModal';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { 
-  Search, 
-  Building2, 
-  ExternalLink, 
+import {
+  Search,
+  Building2,
+  ExternalLink,
   ArrowLeft,
   Loader2,
   Code2,
   TrendingUp,
-  Filter,
-  ChevronDown,
   Star,
   BookOpen,
-  Lock,
-  Unlock,
-  Crown,
-  Sparkles,
   CheckCircle2,
   Flag,
-  Check
 } from "lucide-react";
 
 interface Problem {
@@ -42,12 +35,9 @@ interface Company {
 
 // Popular companies to feature
 const FEATURED_COMPANIES = [
-  "Google", "Amazon", "Microsoft", "Meta", "Apple", "Netflix", 
+  "Google", "Amazon", "Microsoft", "Meta", "Apple", "Netflix",
   "Adobe", "Goldman Sachs", "Uber", "Salesforce", "Oracle", "IBM"
 ];
-
-// Free companies available without purchase
-const FREE_COMPANIES = ["Google", "Amazon", "Microsoft"];
 
 export default function CompanyProblemsPage() {
   const router = useRouter();
@@ -61,127 +51,12 @@ export default function CompanyProblemsPage() {
   const [companySearch, setCompanySearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
   const [error, setError] = useState<string | null>(null);
-  const [hasPurchased, setHasPurchased] = useState<boolean>(false);
-  const [checkingPurchase, setCheckingPurchase] = useState(true);
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-  const [processingPayment, setProcessingPayment] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [premiumPrice, setPremiumPrice] = useState<number | null>(null);
-
-
-
-  // Fetch dynamic pricing
-  useEffect(() => {
-    const fetchPricing = async () => {
-      try {
-        const res = await fetch("/api/admin/pricing", { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.pricing?.premium) {
-            setPremiumPrice(data.pricing.premium);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch pricing:", error);
-      }
-    };
-    fetchPricing();    const onStorage = (e: StorageEvent) => { if (e.key === 'pricing_updated_at') fetchPricing(); };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);  }, []);
-
-  // Check if user has purchased OA questions and show modal on page load
-  useEffect(() => {
-    const checkPurchaseStatus = async () => {
-      try {
-        const response = await fetch("/api/payment/oa-questions");
-        if (response.ok) {
-          const data = await response.json();
-          setHasPurchased(data.purchased || false);
-          
-          // Show purchase modal on page load if user hasn't purchased
-          // Check if modal was already shown in this session
-          const modalShown = sessionStorage.getItem("oaModalShown");
-          if (!data.purchased && !modalShown) {
-            // Small delay to let page render first
-            setTimeout(() => {
-              setShowPurchaseModal(true);
-              sessionStorage.setItem("oaModalShown", "true");
-            }, 1500);
-          }
-        } else {
-          // Not logged in - show modal to encourage purchase/signup
-          const modalShown = sessionStorage.getItem("oaModalShown");
-          if (!modalShown) {
-            setTimeout(() => {
-              setShowPurchaseModal(true);
-              sessionStorage.setItem("oaModalShown", "true");
-            }, 1500);
-          }
-        }
-      } catch (err) {
-        console.error("Error checking purchase status:", err);
-      } finally {
-        setCheckingPurchase(false);
-      }
-    };
-    checkPurchaseStatus();
-  }, []);
-
   const user = useCurrentUser();
   // Local sets for quick membership checks (kept in sync with server)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set());
   const [reviewSet, setReviewSet] = useState<Set<string>>(new Set());
   const [busyProblem, setBusyProblem] = useState<string | null>(null);
-
-  // Check if a company is free
-  const isCompanyFree = (companyName: string) => {
-    return FREE_COMPANIES.some(fc => 
-      companyName.toLowerCase().includes(fc.toLowerCase())
-    );
-  };
-
-  // Handle payment - Create payment request and redirect
-  const handlePurchase = async () => {
-    setProcessingPayment(true);
-    setShowPurchaseModal(false);
-
-    try {
-      // Create payment request via our API
-      const response = await fetch("/api/payment/create-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) { window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`; return; }
-        console.warn('Payment create-request failed', response.status, data);
-        const errMsg = typeof data?.error === 'object' ? (data?.error?.message || JSON.stringify(data?.error)) : data?.error;
-        if (data?.code === 'ALREADY_PURCHASED') {
-          alert(errMsg || 'You already own this product.');
-          window.location.href = '/company-problems';
-          return;
-        }
-        alert(errMsg || "Failed to create payment request. Please try again.");
-        setProcessingPayment(false);
-        return;
-      }
-
-      if (data.paymentUrl) {
-        // Redirect to Instamojo payment page
-        window.location.href = data.paymentUrl;
-      } else {
-        alert("Payment URL not received. Please try again.");
-        setProcessingPayment(false);
-      }
-    } catch (err) {
-      console.error("Payment error:", err);
-      alert("Failed to initiate payment. Please try again.");
-      setProcessingPayment(false);
-    }
-  };
 
   // Fetch company list from secure API
   const fetchCompanies = useCallback(async () => {
@@ -215,25 +90,19 @@ export default function CompanyProblemsPage() {
     }
   }, []);
 
-  // Fetch problems for selected company via secure API
+  // Fetch problems for selected company via API
   const fetchProblems = useCallback(async (companyName: string) => {
     try {
       setLoadingProblems(true);
       setError(null);
-      
-      // Fetch from our secure API (checks purchase status server-side)
+
       const response = await fetch(`/api/company-problems?company=${encodeURIComponent(companyName)}`);
-      
+
       if (!response.ok) {
         const data = await response.json();
-        if (response.status === 403) {
-          // User needs to purchase
-          setShowPurchaseModal(true);
-          setSelectedCompany(null);
-        }
         throw new Error(data.error || "No problems found for this company");
       }
-      
+
       const data = await response.json();
       setProblems(data.problems || []);
       setFilteredProblems(data.problems || []);
@@ -296,12 +165,6 @@ export default function CompanyProblemsPage() {
   };
 
   const handleCompanySelect = (company: Company) => {
-    // Check if company is locked
-    if (!hasPurchased && !isCompanyFree(company.displayName)) {
-      setShowPurchaseModal(true);
-      return;
-    }
-    
     setSelectedCompany(company);
     setProblems([]);
     setSearchQuery("");
@@ -309,146 +172,10 @@ export default function CompanyProblemsPage() {
     fetchProblems(company.name);
   };
 
-  // Purchase Modal Component
-  const PurchaseModal = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-      onClick={() => setShowPurchaseModal(false)}
-    >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="bg-[#0a0a0f] border border-white/10 rounded-2xl p-8 max-w-lg w-full"
-      >
-        <div className="text-center">
-          <div className="w-20 h-20 mx-auto mb-6 bg-[#7E102C]/20 rounded-full flex items-center justify-center">
-            <Crown className="w-10 h-10 text-[#E1D4C1]" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#E1D4C1] mb-3">
-            Unlock 450+ Company Questions
-          </h2>
-          <p className="text-[#E1D3CC] mb-6">
-            Get access to curated LeetCode problems from 450+ top companies including Meta, Apple, Netflix, Adobe, and many more!
-          </p>
-
-          <div className="bg-white/5 rounded-xl p-4 mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[#E1D3CC]">One-time Payment</span>
-              <div className="flex items-center gap-2">
-                    <span className="text-[#E1D3CC] line-through text-sm">{premiumPrice ? `₹${premiumPrice + 100}` : '₹—'}</span>
-                    <span className="text-2xl font-bold text-[#E1D4C1]">₹{premiumPrice}</span>
-              </div>
-            </div>
-            <div className="space-y-2 text-left">
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Lifetime access to all company questions</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Regular updates with new problems</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#E1D4C1]">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span>Frequency & acceptance data</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Purchase CTA / Login handling / Hide if already purchased */}
-          {hasPurchased ? (
-            <div className="text-center p-4 bg-[#071010]/50 rounded-lg">
-              <p className="text-green-400 font-semibold">You already have Premium access</p>
-            </div>
-          ) : user === null ? (
-            <div className="space-y-3">
-              <p className="text-[#E1D3CC]">You need to login to purchase premium access.</p>
-              <div className="flex gap-2">
-                <button onClick={() => { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); }} className="w-full inline-flex items-center justify-center py-3 bg-white/5 border border-white/10 rounded-lg text-[#E1D4C1] font-semibold">Log in</button>
-                <button onClick={() => { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); }} className="w-full py-3 bg-[#7E102C] text-[#E1D4C1] font-bold rounded-xl hover:bg-[#58423F] transition flex items-center justify-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  <span className="mr-2">Pay ₹{premiumPrice} & Unlock</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              onClick={async () => {
-                if (user === undefined) return; // still loading
-                if (!user) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
-                if (hasPurchased) return; // double safety
-                setProcessingPayment(true);
-                try {
-                  const response = await fetch('/api/payment/create-request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
-                  const j = await response.json();
-                  if (!response.ok) {
-                    if (response.status === 401) { toast.error('Please sign in to purchase Premium'); setShowLoginModal(true); return; }
-                    toast.error(j.error || 'Failed to create payment request');
-                    setProcessingPayment(false);
-                    return;
-                  }
-                  if (j.paymentUrl) window.location.href = j.paymentUrl;
-                } catch (err:any) {
-                  toast.error(err?.message || 'Failed to initiate purchase');
-                } finally { setProcessingPayment(false); }
-              }}
-              disabled={processingPayment}
-              className="w-full py-4 bg-[#7E102C] text-[#E1D4C1] font-bold rounded-xl hover:bg-[#58423F] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {processingPayment ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  <span className="mr-2">Pay ₹{premiumPrice} & Unlock</span>
-                </>
-              )}
-            </button>
-          )}
-          
-          <button
-            onClick={() => setShowPurchaseModal(false)}
-            className="mt-4 text-[#E1D3CC] hover:text-[#E1D4C1] text-sm transition"
-          >
-            Maybe later
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
-      {/* Purchase Modal */}
-      <AnimatePresence>
-        {showPurchaseModal && <PurchaseModal />}
-      </AnimatePresence>
       <LoginRequiredModal open={showLoginModal} onClose={() => setShowLoginModal(false)} />
-      
-      {/* Processing Payment Overlay */}
-      <AnimatePresence>
-        {processingPayment && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          >
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 text-[#E1D4C1] animate-spin mx-auto mb-4" />
-              <p className="text-white font-medium">Redirecting to payment...</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
       
       {/* Background effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -484,32 +211,15 @@ export default function CompanyProblemsPage() {
             </div>
 
             <div className="flex items-center gap-3 flex-wrap">
-              {!hasPurchased && !checkingPurchase && (
-                <button
-                  onClick={() => setShowPurchaseModal(true)}
-                  className="px-4 py-2 bg-[#7E102C]/10 border border-[#7E102C]/30 rounded-xl text-[#E1D4C1] font-medium flex items-center gap-2 hover:bg-[#7E102C]/20 transition"
-                >
-                  <Crown className="w-4 h-4" />
-                  Unlock All 450+ Companies
-                </button>
-              )}
-              {hasPurchased && (
-                <span className="px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 font-medium flex items-center gap-2">
-                  <Unlock className="w-4 h-4" />
-                  Premium Access
-                </span>
-              )}
-
               {/* Solved / Marked - dedicated page */}
               <button onClick={() => router.push('/company-problems/marked')} className="px-3 py-2 bg-yellow-400 text-black rounded-xl font-semibold text-sm hover:opacity-95 transition flex items-center gap-2">
                 Solved / Marked
               </button>
 
-              {/* Analysis link (premium) */}
-              <button onClick={(e)=>{ e.stopPropagation(); if(!hasPurchased) { setShowPurchaseModal(true); } else { window.location.href = '/company-problems/analysis'; } }} className="px-3 py-2 text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20 rounded-xl font-semibold text-sm hover:opacity-90 transition flex items-center gap-2">
+              {/* Analysis link */}
+              <button onClick={() => { window.location.href = '/company-problems/analysis'; }} className="px-3 py-2 text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20 rounded-xl font-semibold text-sm hover:opacity-90 transition flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
                 Analysis
-                <span className="ml-1 px-2 py-0.5 text-xs bg-black/10 rounded-full">Premium</span>
               </button>
 
               {selectedCompany && (
@@ -568,64 +278,32 @@ export default function CompanyProblemsPage() {
                     <h2 className="text-lg font-semibold text-[#E1D4C1] mb-4 flex items-center gap-2">
                       <Star className="w-5 h-5 text-[#E1D4C1]" />
                       Featured Companies
-                      {!hasPurchased && (
-                        <span className="text-xs text-[#E1D3CC] font-normal ml-2">
-                          ({FREE_COMPANIES.length} free, rest require purchase)
-                        </span>
-                      )}
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                       {filteredCompanies
-                        .filter(c => FEATURED_COMPANIES.some(fc => 
+                        .filter(c => FEATURED_COMPANIES.some(fc =>
                           c.displayName.toLowerCase().includes(fc.toLowerCase())
                         ))
                         .slice(0, 12)
-                        .map((company, idx) => {
-                          const isFree = isCompanyFree(company.displayName);
-                          const isLocked = !hasPurchased && !isFree;
-                          
-                          return (
-                            <motion.div
-                              key={company.name}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: idx * 0.05 }}
-                              onClick={() => handleCompanySelect(company)}
-                              className={`group relative p-4 bg-white/5 border rounded-xl cursor-pointer transition-all ${
-                                isLocked 
-                                  ? "border-white/5 hover:border-[#7E102C]/30" 
-                                  : "border-white/10 hover:border-[#7E102C]/30 hover:bg-white/5"
-                              }`}
-                            >
-                              {isLocked && (
-                                <div className="absolute top-2 right-2">
-                                  <Lock className="w-4 h-4 text-[#7E102C]/70" />
-                                </div>
-                              )}
-                              {isFree && !hasPurchased && (
-                                <div className="absolute top-2 right-2">
-                                  <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-full">
-                                    FREE
-                                  </span>
-                                </div>
-                              )}
-                              <div className="flex flex-col items-center text-center">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${
-                                  isLocked 
-                                    ? "bg-[#7E102C]/20" 
-                                    : "bg-[#111118]/50" 
-                                }`}>
-                                  <Building2 className={`w-6 h-6 ${isLocked ? "text-[#E1D3CC]" : "text-[#E1D4C1]"}`} />
-                                </div>
-                                <h3 className={`text-sm font-medium truncate w-full ${
-                                  isLocked ? "text-[#E1D3CC]" : "text-[#E1D4C1]"
-                                }`}>
-                                  {company.displayName}
-                                </h3>
+                        .map((company, idx) => (
+                          <motion.div
+                            key={company.name}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.05 }}
+                            onClick={() => handleCompanySelect(company)}
+                            className="group relative p-4 bg-white/5 border border-white/10 hover:border-[#7E102C]/30 hover:bg-white/5 rounded-xl cursor-pointer transition-all"
+                          >
+                            <div className="flex flex-col items-center text-center">
+                              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform bg-[#111118]/50">
+                                <Building2 className="w-6 h-6 text-[#E1D4C1]" />
                               </div>
-                            </motion.div>
-                          );
-                        })}
+                              <h3 className="text-sm font-medium truncate w-full text-[#E1D4C1]">
+                                {company.displayName}
+                              </h3>
+                            </div>
+                          </motion.div>
+                        ))}
                     </div>
                   </div>
 
@@ -634,69 +312,27 @@ export default function CompanyProblemsPage() {
                     <h2 className="text-lg font-semibold text-[#E1D4C1] mb-4 flex items-center gap-2">
                       <BookOpen className="w-5 h-5 text-[#E1D4C1]" />
                       All Companies ({filteredCompanies.length})
-                      {!hasPurchased && (
-                        <button
-                          onClick={() => setShowPurchaseModal(true)}
-                          className="text-xs text-[#E1D4C1] font-normal ml-auto flex items-center gap-1 hover:text-[#D7A9A8] transition"
-                        >
-                          <Lock className="w-3 h-3" />
-                          Unlock all for ₹{premiumPrice ?? '—'} <span className="text-xs ml-2 line-through">₹{premiumPrice != null && premiumPrice > 0 ? premiumPrice + 100 : ''}</span>
-                        </button>
-                      )}
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                      {filteredCompanies.map((company, idx) => {
-                        const isFree = isCompanyFree(company.displayName);
-                        const isLocked = !hasPurchased && !isFree;
-                        
-                        return (
-                          <motion.div
-                            key={company.name}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: Math.min(idx * 0.02, 0.5) }}
-                            onClick={() => handleCompanySelect(company)}
-                            className={`group relative p-3 bg-[#111118] border rounded-xl cursor-pointer transition-all ${
-                              isLocked 
-                                ? "border-white/5 hover:border-[#7E102C]/20" 
-                                : "border-white/5 hover:border-[#7E102C]/30 hover:bg-white/5"
-                            }`}
-                          >
-                            {isLocked && (
-                              <div className="absolute top-2 right-2">
-                                <Lock className="w-3 h-3 text-[#7E102C]/50" />
-                              </div>
-                            )}
-                            {isFree && !hasPurchased && (
-                              <div className="absolute top-2 right-2">
-                                <span className="text-[8px] px-1 py-0.5 bg-green-500/20 text-green-400 rounded">
-                                  FREE
-                                </span>
-                              </div>
-                            )}
-                            <div className="flex items-center gap-3">
-                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition ${
-                                isLocked 
-                                  ? "bg-white/5 group-hover:bg-[#7E102C]/10" 
-                                  : "bg-white/5 group-hover:bg-[#7E102C]/10"
-                              }`}>
-                                <Building2 className={`w-4 h-4 transition ${
-                                  isLocked 
-                                    ? "text-[#E1D3CC] group-hover:text-[#E1D4C1]" 
-                                    : "text-[#E1D3CC] group-hover:text-[#E1D4C1]"
-                                }`} />
-                              </div>
-                              <span className={`text-sm truncate transition ${
-                                isLocked 
-                                  ? "text-[#E1D3CC] group-hover:text-[#E1D4C1]" 
-                                  : "text-[#E1D4C1] group-hover:text-[#E1D4C1]"
-                              }`}>
-                                {company.displayName}
-                              </span>
+                      {filteredCompanies.map((company, idx) => (
+                        <motion.div
+                          key={company.name}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: Math.min(idx * 0.02, 0.5) }}
+                          onClick={() => handleCompanySelect(company)}
+                          className="group relative p-3 bg-[#111118] border border-white/5 hover:border-[#7E102C]/30 hover:bg-white/5 rounded-xl cursor-pointer transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center transition bg-white/5 group-hover:bg-[#7E102C]/10">
+                              <Building2 className="w-4 h-4 transition text-[#E1D3CC] group-hover:text-[#E1D4C1]" />
                             </div>
-                          </motion.div>
-                        );
-                      })}
+                            <span className="text-sm truncate transition text-[#E1D4C1] group-hover:text-[#E1D4C1]">
+                              {company.displayName}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
                 </>

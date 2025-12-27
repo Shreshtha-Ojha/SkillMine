@@ -27,12 +27,7 @@ export async function GET(request: NextRequest) {
     const perPage = Math.min(100, Math.max(10, parseInt(searchParams.get('perPage') || '25', 10)));
     const titleQuery = searchParams.get('title')?.toLowerCase() || null;
 
-    // Enforce premium access
-    const user = await getUserFromRequest(request);
-    const hasPurchased = user?.purchases?.oaQuestions?.purchased || false;
-    if (!hasPurchased) {
-      return NextResponse.json({ error: "Please purchase access to view analysis" }, { status: 403 });
-    }
+    // All users can access analysis (paywall removed)
 
     // Fetch list of companies
     const response = await fetch(

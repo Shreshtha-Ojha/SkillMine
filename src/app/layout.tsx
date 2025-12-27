@@ -12,15 +12,14 @@ import PremiumBanner from '@/components/ui/PremiumBanner';
 export const metadata: Metadata = {
   title: "PrepSutra - Technical Roadmaps and Blogs",
   description:
-    "Learn programming and grow your skills with technical roadmaps and blogs on PrepSutra. Created by Ayush Tiwari, a second-year undergrad from MNNIT Allahabad.",
+    "Learn programming and grow your skills with technical roadmaps and blogs on PrepSutra. Created by Shreshtha Ojha.",
   keywords:
     "programming, roadmaps, blogs, web development, machine learning, data science, programming skills, learning resources",
 
   // Corrected authors to use objects in array
   authors: [
     {
-      name: "Ayush Tiwari",
-      url: "https://ayush-delta.vercel.app",
+      name: "Shreshtha Ojha",
     },
   ],
 

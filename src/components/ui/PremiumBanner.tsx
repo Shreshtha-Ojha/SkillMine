@@ -1,15 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import useCurrentUser from '@/lib/useCurrentUser';
-import LoginRequiredModal from '@/components/ui/LoginRequiredModal';
-import { toast } from 'react-hot-toast';
-import { ArrowRight, X } from 'lucide-react';
-
-const DISMISS_KEY = 'premium_banner_dismissed_at';
-const DISMISS_MS = 10 * 60 * 1000; // 10 minutes
-
+// Premium banner disabled - all features are now free
 export default function PremiumBanner() {
+  return null; // All features are free now
   const user = useCurrentUser();
   const [pricing, setPricing] = useState<number | null>(null);
   const [processing, setProcessing] = useState(false);

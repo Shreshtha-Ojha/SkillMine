@@ -5,7 +5,7 @@ require('dotenv').config();
 const User = require('../src/models/userModel').default || require('../src/models/userModel');
 
 async function main() {
-  const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/quantsprogrammer';
+  const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/pro-gram';
   await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
   console.log('Connected to DB');
 

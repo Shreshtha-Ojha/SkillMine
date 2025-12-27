@@ -246,8 +246,8 @@ prepsutra/
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/Ayush5071/quantsprogrammer.git
-cd quantsprogrammer
+git clone https://github.com/Ayush5071/Pro-gram.git
+cd Pro-gram
 ```
 
 2. **Install dependencies**
@@ -354,18 +354,7 @@ This project is proprietary software. All rights reserved.
 ## 👨‍💻 Author
 
 <p align="center">
-  <img src="https://avatars.githubusercontent.com/Ayush5071" width="100" height="100" style="border-radius: 50%;" alt="Ayush Tiwari" />
-</p>
-
-<p align="center">
-  <strong>Ayush Tiwari</strong><br/>
-  2nd Year Undergrad @ MNNIT Allahabad
-</p>
-
-<p align="center">
-  <a href="https://www.linkedin.com/in/ayush-tiwari-84a823281/">LinkedIn</a> •
-  <a href="https://github.com/Ayush5071">GitHub</a> •
-  <a href="https://ayush-delta.vercel.app">Portfolio</a>
+  <strong>Shreshtha Ojha</strong><br/>
 </p>
 
 ---

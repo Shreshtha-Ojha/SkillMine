@@ -63,13 +63,7 @@ export async function GET(request: NextRequest) {
     const user = await getUserFromRequest(request);
     const hasPurchased = user?.purchases?.premium?.purchased || false;
     
-    // Check if user can access this company
-    if (!isCompanyFree(companyName) && !hasPurchased) {
-      return NextResponse.json(
-        { error: "Please purchase Premium access to view this company's problems" },
-        { status: 403 }
-      );
-    }
+    // All companies are now free - no premium check needed
 
     // Fetch problems from GitHub (server-side only)
     let csvText = "";

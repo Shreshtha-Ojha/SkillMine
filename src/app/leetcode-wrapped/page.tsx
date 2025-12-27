@@ -633,7 +633,7 @@ export default function LeetCodeWrappedPage() {
               </div>
 
               <div className="text-center mt-3 text-[10px] text-gray-600">
-                lcwrapped.quantsprogrammer.com
+                lcwrapped.pro-gram.com
               </div>
             </motion.div>
 

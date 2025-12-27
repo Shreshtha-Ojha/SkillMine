@@ -75,7 +75,7 @@ export default function AboutPage() {
         {
           icon: Briefcase,
           title: "Company Problems",
-          description: "450+ company-specific DSA questions",
+          description: "Company-specific DSA questions from top tech firms",
           link: "/company-problems",
         },
       ],

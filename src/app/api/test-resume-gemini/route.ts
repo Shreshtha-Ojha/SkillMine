@@ -101,11 +101,11 @@ export async function GET(request: NextRequest) {
   // Simple test
   const prompt = `Extract candidate info from this sample resume text and return JSON:
 
-Ayush Tiwari
-+91-9919400789 | ayusht9919@gmail.com
-github.com/Ayush5071 | LinkedIn
+Shreshtha Ojha
++91-9999999999 | shreshtha.ojha@gmail.com
+github.com/shreshtha-ojha | LinkedIn
 
-Education: B.Tech in ECE from MNNIT Allahabad
+Education: B.Tech
 
 Return JSON with name, email, phone, and a score from 0-100.`;
 

@@ -114,8 +114,8 @@ const sections = [
     title: "Grievance Redressal",
     icon: Mail,
     content: [
-      "<strong>Grievance Officer</strong>: Ayush Tiwari",
-      "<strong>Email</strong>: ayusht5071@gmail.com",
+      "<strong>Grievance Officer</strong>: Shreshtha Ojha",
+      "<strong>Email</strong>: shreshtha.ojha@gmail.com",
       "Response time: 7–15 working days."
     ]
   },
@@ -263,8 +263,8 @@ export default function TermsAndConditions() {
           </p>
           <p className="text-slate-400 text-sm">
             If you have any questions, please contact us at{" "}
-            <a href="mailto:ayusht5071@gmail.com" className="text-blue-400 hover:underline">
-              ayusht5071@gmail.com
+            <a href="mailto:shreshtha.ojha@gmail.com" className="text-blue-400 hover:underline">
+              shreshtha.ojha@gmail.com
             </a>
           </p>
         </motion.div>

@@ -84,18 +84,9 @@ export const FloatingNav = ({
                 <Link
                   key={item.name}
                   href={item.link}
-                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'Premium' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : item.premium ? 'text-yellow-300 hover:text-white bg-yellow-400/5 border border-yellow-500/20' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
-                  aria-label={item.name === 'Premium' ? 'Upgrade to Premium' : undefined}
+                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'DSA Prep' ? 'bg-gradient-to-r from-green-400 to-green-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
                 >
-                  {item.name === 'Premium' ? (
-                    <span className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-white" />
-                      <span>{item.name}</span>
-                    </span>
-                  ) : (
-                    <span className={item.premium ? 'font-semibold' : ''}>{item.name}</span>
-                  )}
-
+                  <span>{item.name}</span>
                 </Link>
               ) : item.dropdown ? (
                 <div

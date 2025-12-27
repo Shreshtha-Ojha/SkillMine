@@ -20,7 +20,7 @@ export default function SkillTestRunner() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [started, setStarted] = useState(false);
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(true); // All features now free
   const [skillPrice, setSkillPrice] = useState<number | null>(null);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [leaveAction, setLeaveAction] = useState<'back' | 'refresh' | null>(null);
