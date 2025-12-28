@@ -43,7 +43,7 @@ export default function CTASection() {
                 onClick={() => router.push("/auth/signup")}
                 className="w-full sm:w-auto group flex items-center justify-center gap-2 px-8 py-4 bg-[#D4AF37] text-[#FAF9F6] font-semibold rounded-xl hover:bg-[#6a0f27] transition-all shadow-lg shadow-black/25"
               >
-                Get Started Free
+                Get Started
                 <ArrowRight className="w-5 h-5" />
               </button>
               <button
