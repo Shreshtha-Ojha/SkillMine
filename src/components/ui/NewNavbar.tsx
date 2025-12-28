@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useCheckedData } from "@/context/checkedDataContext";
 import Cookies from "js-cookie";
 import { Menu, X, ChevronDown, User, Shield, Star } from "lucide-react";
@@ -75,7 +76,7 @@ export const FloatingNav = ({
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-[#E1D4C1] font-semibold">SkillMine</span>
+            <Image src="/official_logo.png" alt="SkillMine" width={120} height={40} className="h-8 w-auto" />
           </Link>
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-2">
