@@ -20,7 +20,7 @@ export default function PrepareSection() {
   const router = useRouter();
 
   return (
-    <section className="w-full py-24 px-4 bg-[#0a0a0f]">
+    <section className="w-full py-24 px-4 ">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left: Content */}
@@ -29,7 +29,7 @@ export default function PrepareSection() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-block px-3 py-1 text-xs font-medium bg-[#E1D4C1]/10 text-[#D7A9A8] rounded-full mb-4"
+              className="inline-block px-3 py-1 text-xs font-medium bg-[#FAF9F6]/10 text-[#E5C76B] rounded-full mb-4"
             >
               Interview Prep
             </motion.span>
@@ -38,7 +38,7 @@ export default function PrepareSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl font-bold text-[#E1D4C1] mb-4"
+              className="text-3xl sm:text-4xl font-bold text-[#FAF9F6] mb-4"
             >
               Ace Your Next Interview
             </motion.h2>
@@ -47,7 +47,7 @@ export default function PrepareSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-[#E1D3CC] text-lg mb-8"
+              className="text-[#FFFFF0] text-lg mb-8"
             >
               Practice with AI-powered mock interviews. Get real-time feedback on your answers.
             </motion.p>
@@ -61,13 +61,13 @@ export default function PrepareSection() {
             >
               <button
                 onClick={() => router.push("/interview")}
-                className="px-6 py-3 bg-[#7E102C] text-[#E1D4C1] font-medium rounded-lg hover:bg-[#6a0f27] transition-all"
+                className="px-6 py-3 bg-[#D4AF37] text-[#FAF9F6] font-medium rounded-lg hover:bg-[#6a0f27] transition-all"
               >
                 Start Practice
               </button>
               <button
                 onClick={() => router.push("/top-interviews")}
-                className="px-6 py-3 bg-[#E1D4C1]/6 text-[#E1D4C1] font-medium rounded-lg border border-[#E1D4C1]/10 hover:bg-[#E1D4C1]/8 transition-all"
+                className="px-6 py-3 bg-[#FAF9F6]/6 text-[#FAF9F6] font-medium rounded-lg border border-[#FAF9F6]/10 hover:bg-[#FAF9F6]/8 transition-all"
               >
                 Coding Arena
               </button>
@@ -86,12 +86,12 @@ export default function PrepareSection() {
               <button
                 key={topic.label}
                 onClick={() => router.push(topic.path)}
-                className="group flex flex-col items-center gap-3 p-5 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-xl hover:border-[#D7A9A8]/30 transition-all"
+                className="group flex flex-col items-center gap-3 p-5 theme-card theme-card--vintage border border-[#D4AF37]/14 rounded-xl hover:border-[#E5C76B]/30 transition-all"
               >
-                <div className="p-3 bg-[#E1D4C1]/10 rounded-lg">
-                  <topic.icon className="w-6 h-6 text-[#E1D4C1]" />
+                <div className="p-3 bg-[#FAF9F6]/10 rounded-lg">
+                  <topic.icon className="w-6 h-6 text-[#FAF9F6]" />
                 </div>
-                <span className="text-[#E1D4C1] font-medium text-sm group-hover:text-[#D7A9A8] transition-colors">
+                <span className="text-[#FAF9F6] font-medium text-sm group-hover:text-[#50C878] transition-colors">
                   {topic.label}
                 </span>
               </button>

@@ -30,7 +30,7 @@ const platforms = [
 
 export default function GitHubWrappedPromo() {
   return (
-    <section className="relative py-20 px-4 overflow-hidden bg-[#0a0a0f]">
+    <section className="relative py-20 px-4 overflow-hidden ">
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(225,212,193,0.06),transparent_50%)]" />
@@ -51,18 +51,18 @@ export default function GitHubWrappedPromo() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#E1D4C1]/10 border border-[#E1D4C1]/20 rounded-full text-[#E1D4C1] text-sm mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#FAF9F6]/10 border border-[#FAF9F6]/20 rounded-full text-[#FAF9F6] text-sm mb-6"
           >
-            <Sparkles className="w-4 h-4 text-[#E1D4C1]" />
+            <Sparkles className="w-4 h-4 text-[#FAF9F6]" />
             <span>✨ New Feature</span>
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4">
-            <span className="text-[#E1D4C1]">
+            <span className="text-[#FAF9F6]">
               Wrapped 2025
             </span>
           </h2>
-          <p className="text-[#E1D3CC] text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-[#FFFFF0] text-lg md:text-xl max-w-2xl mx-auto">
             Discover your coding journey across platforms! Get AI-powered insights, 
             fun stats, and shareable cards.
           </p>
@@ -79,26 +79,26 @@ export default function GitHubWrappedPromo() {
               transition={{ delay: 0.2 + index * 0.1 }}
             >
               <Link href={platform.href}>
-                <div className={`relative overflow-hidden rounded-2xl theme-card theme-card--vintage border border-[#7E102C]/14 p-6 h-full transition-all hover:scale-105 hover:shadow-xl group cursor-pointer`}>
+                <div className={`relative overflow-hidden rounded-2xl theme-card theme-card--vintage border border-[#D4AF37]/14 p-6 h-full transition-all hover:scale-105 hover:shadow-xl group cursor-pointer`}>
                   {/* Glow effect */}
-                  <div className={`absolute inset-0 bg-[#E1D4C1]/6 opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                  <div className={`absolute inset-0 bg-[#FAF9F6]/6 opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                   
                   <div className="relative z-10">
                     {/* Icon */}
-                    <div className={`w-16 h-16 rounded-2xl bg-[#E1D4C1] flex items-center justify-center mb-6 shadow-lg`}>
-                      <platform.icon size={32} className="text-[#7E102C]" />
+                    <div className={`w-16 h-16 rounded-2xl bg-[#FAF9F6] flex items-center justify-center mb-6 shadow-lg`}>
+                      <platform.icon size={32} className="text-[#D4AF37]" />
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-2xl font-bold text-[#E1D4C1] mb-2">
-                      {platform.name} <span className="text-[#D7A9A8]">Wrapped</span>
+                    <h3 className="text-2xl font-bold text-[#FAF9F6] mb-2">
+                      {platform.name} <span className="text-[#E5C76B]">Wrapped</span>
                     </h3>
-                    <p className="text-[#E1D3CC] mb-6">
+                    <p className="text-[#FFFFF0] mb-6">
                       {platform.description}
                     </p>
 
                     {/* CTA */}
-                    <div className={`inline-flex items-center gap-2 text-[#7E102C] font-medium group-hover:gap-3 transition-all`}>
+                    <div className={`inline-flex items-center gap-2 text-[#D4AF37] font-medium group-hover:gap-3 transition-all`}>
                       <span>Generate Now</span>
                       <ArrowRight className="w-5 h-5" />
                     </div>

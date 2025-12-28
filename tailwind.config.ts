@@ -1,8 +1,5 @@
 import { Config } from "tailwindcss";
 
-// This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
-
-
 /** @type {Config} */
 const config: Config = {
   content: [
@@ -11,12 +8,26 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class", // Use class for dark mode
+  darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        'mine': {
+          'gold': '#D4AF37',
+          'gold-light': '#E5C76B',
+          'gold-dark': '#B8960C',
+          'offwhite': '#FAF9F6',
+          'charcoal': '#36454F',
+          'charcoal-light': '#4A5D6A',
+          'emerald': '#50C878',
+          'emerald-dark': '#3DA35D',
+          'ivory': '#FFFFF0',
+          'bg': '#0a0908',
+        },
+      },
       animation: {
-        "meteor-effect": "meteor 5s linear infinite", // Your meteor animation
-        shimmer: "shimmer 2s linear infinite", // Shimmer animation for loading effects
+        "meteor-effect": "meteor 5s linear infinite",
+        shimmer: "shimmer 2s linear infinite",
       },
       keyframes: {
         meteor: {
@@ -28,12 +39,8 @@ const config: Config = {
           },
         },
         shimmer: {
-          from: {
-            backgroundPosition: "0 0",
-          },
-          to: {
-            backgroundPosition: "-200% 0",
-          },
+          from: { backgroundPosition: "0 0" },
+          to: { backgroundPosition: "-200% 0" },
         },
       },
       fontFamily: {
@@ -47,8 +54,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-  ],
-
+  plugins: [],
 };
 export default config;

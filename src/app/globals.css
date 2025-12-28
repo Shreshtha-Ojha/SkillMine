@@ -124,7 +124,7 @@ html {
   height: 30px;
   width: 30px;
   border-radius: 50%;
-  background: rgb(139 92 246);
+  background: #D4AF37;
   animation: loading-bounce 0.5s ease-in-out infinite alternate;
 }
 
@@ -182,14 +182,14 @@ html {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #0f0d0a;
     --foreground: #ededed;
   }
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: #0a0908 url("/bg.png") no-repeat center top / cover;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -216,21 +216,21 @@ body {
   left: 0%;
   top: 0%;
   animation: rotate-one 1s linear infinite;
-  border-bottom: 3px solid rgb(168 85 247);
+  border-bottom: 3px solid #D4AF37;
 }
 
 .inner.two {
   right: 0%;
   top: 0%;
   animation: rotate-two 1s linear infinite;
-  border-right: 3px solid rgb(168 85 247);
+  border-right: 3px solid #D4AF37;
 }
 
 .inner.three {
   right: 0%;
   bottom: 0%;
   animation: rotate-three 1s linear infinite;
-  border-top: 3px solid rgb(168 85 247);
+  border-top: 3px solid #D4AF37;
 }
 
 @keyframes rotate-one {
@@ -310,11 +310,11 @@ body {
 @layer base {
   :root {
     /* Project palette variables */
-    --color-primary: #7E102C; /* deep maroon */
-    --color-foreground: #E1D4C1; /* light cream */
-    --color-accent: #D7A9A8; /* muted pink */
-    --color-muted: #E1D3CC; /* soft neutral */
-    --color-bg-dark: #58423F; /* warm dark */
+    --color-primary: #D4AF37; /* deep maroon */
+    --color-foreground: #e8dfd4; /* light cream */
+    --color-accent: #3db8ad; /* muted pink */
+    --color-muted: #8a7e6d; /* soft neutral */
+    --color-bg-dark: #0f0d0a; /* warm dark */
 
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -343,11 +343,11 @@ body {
     --radius: 0.5rem;
   }
   .dark {
-    --color-primary: #7E102C;
-    --color-foreground: #E1D4C1;
-    --color-accent: #D7A9A8;
-    --color-muted: #E1D3CC;
-    --color-bg-dark: #58423F;
+    --color-primary: #D4AF37;
+    --color-foreground: #e8dfd4;
+    --color-accent: #3db8ad;
+    --color-muted: #8a7e6d;
+    --color-bg-dark: #0f0d0a;
 
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -423,3 +423,34 @@ body {
 
 
 
+
+/* SkillMine scrolling background */
+.skillmine-bg {
+  background-color: #0a0908;
+  background-image: url('/bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  position: relative;
+}
+
+.skillmine-bg-disabled::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Simple full background */
+body.skillmine-bg {
+  background: #0a0908 url('/bg.png') no-repeat center top !important;
+  background-size: cover !important;
+}
+
+/* Subtle background animation */

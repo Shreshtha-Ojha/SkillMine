@@ -140,7 +140,7 @@ export default function Home() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="relative bg-[#0a0a0f] overflow-x-hidden min-h-screen" data-scroll-container>
+        <div className="relative overflow-x-hidden min-h-screen" data-scroll-container>
           {/* Navigation */}
           <FloatingNav navItems={navItems} />
 

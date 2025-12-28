@@ -72,7 +72,7 @@ export const FloatingNav = ({
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center justify-between px-4 py-3 theme-card theme-card--vintage bg-[#0a0a0f] border border-[#7E102C]/20 rounded-2xl"
+          className="flex items-center justify-between px-4 py-3 theme-card theme-card--vintage bg-[#36454F]/90 backdrop-blur-md border border-[#D4AF37]/20 rounded-2xl"
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export const FloatingNav = ({
                 <Link
                   key={item.name}
                   href={item.link}
-                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'DSA Prep' ? 'bg-gradient-to-r from-green-400 to-green-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
+                  className={`px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'DSA Prep' ? 'bg-gradient-to-r from-[#50C878] to-[#3DA35D] text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#FAF9F6] hover:text-white hover:bg-white/5'}`}
                 >
                   <span>{item.name}</span>
                 </Link>
@@ -107,7 +107,7 @@ export const FloatingNav = ({
                   }}
                 >
                   <button
-                    className={`flex items-center gap-1 px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'Premium' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#E1D4C1] hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-1 px-4 py-2 text-sm rounded-lg transition-all ${item.name === 'Premium' ? 'bg-gradient-to-r from-[#D4AF37] to-[#E5C76B] text-[#0a0a0f] font-semibold shadow-lg transform hover:scale-105' : 'text-[#FAF9F6] hover:text-white hover:bg-white/5'}`}
                     onClick={(e) => {
                       setOpenDropdown(openDropdown === item.name ? null : item.name);
                       setDropdownRect((e.currentTarget as HTMLElement).getBoundingClientRect());
@@ -140,12 +140,12 @@ export const FloatingNav = ({
                         }, 220);
                       }}
                     >
-                      <div className="w-48 bg-[#E1D4C1] text-[#7E102C] border border-[#7E102C]/20 rounded-xl p-2 shadow-lg">
+                      <div className="w-48 bg-[#36454F] text-[#FAF9F6] border border-[#D4AF37]/20 rounded-xl p-2 shadow-lg">
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem.link}
                             href={subItem.link}
-                            className="block px-4 py-2 text-sm text-[#7E102C] hover:bg-[#D7A9A8]/20 transition-all"
+                            className="block px-4 py-2 text-sm text-[#FAF9F6] hover:bg-[#D4AF37]/20 transition-all"
                           >
                             {subItem.name}
                           </Link>
@@ -163,7 +163,7 @@ export const FloatingNav = ({
             {isAdmin && (
               <Link
                 href="/admin/admin-panel"
-                className="hidden sm:flex items-center gap-1 px-3 py-2 text-sm text-yellow-400 hover:bg-yellow-400/10 rounded-lg transition-all"
+                className="hidden sm:flex items-center gap-1 px-3 py-2 text-sm text-[#D4AF37] hover:bg-[#D4AF37]/10 rounded-lg transition-all"
               >
                 <Shield className="w-4 h-4" />
                 <span className="hidden md:inline">Admin</span>
@@ -174,7 +174,7 @@ export const FloatingNav = ({
 
             <Link
               href={isLoggedIn ? "/profile" : "/auth/login"}
-              className="flex items-center gap-2 px-4 py-2 bg-[#7E102C] text-[#E1D4C1] text-sm font-medium rounded-lg hover:bg-[#58423F] transition-all border border-[#0a0a0f]"
+              className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-[#FAF9F6] text-sm font-medium rounded-lg hover:bg-[#E5C76B] transition-all border border-[#0a0a0f]"
             >
               <User className="w-4 h-4" />
               <span>{isLoggedIn ? "Profile" : "Login"}</span>
@@ -183,7 +183,7 @@ export const FloatingNav = ({
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden p-2 text-[#E1D4C1] bg-[#7E102C] hover:bg-[#6a0f27] rounded-lg transition-all"
+              className="lg:hidden p-2 text-[#FAF9F6] bg-[#D4AF37] hover:bg-[#4A5D6A] rounded-lg transition-all"
             >
               {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -199,7 +199,7 @@ export const FloatingNav = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden mt-2 p-4 bg-[#E1D4C1] text-[#7E102C] rounded-2xl shadow-lg border border-[#7E102C]/20 max-h-[60vh] overflow-y-auto"
+              className="lg:hidden mt-2 p-4 bg-[#36454F] text-[#FAF9F6] rounded-2xl shadow-lg border border-[#D4AF37]/20 max-h-[60vh] overflow-y-auto"
               style={{ color: "#7E102C", WebkitOverflowScrolling: "touch" }}
             >
               <div className="space-y-1">
@@ -209,7 +209,7 @@ export const FloatingNav = ({
                       key={item.name}
                       href={item.link}
                       onClick={() => setMenuOpen(false)}
-                      className={`block px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-300 bg-[#7E102C] font-semibold' : 'text-[#7E102C]'}`}
+                      className={`block px-4 py-3 hover:bg-[#D4AF37]/20 rounded-lg transition-all ${item.premium ? 'text-[#D4AF37] bg-[#D4AF37] font-semibold' : 'text-[#FAF9F6]'}`}
                     >
                       {item.name}
                     </Link>
@@ -217,7 +217,7 @@ export const FloatingNav = ({
                     <div key={item.name}>
                       <button
                         onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
-                        className={`w-full flex items-center justify-between px-4 py-3 hover:bg-[#D7A9A8]/20 rounded-lg transition-all ${item.premium ? 'text-yellow-600 font-semibold' : 'text-[#7E102C]'}`}
+                        className={`w-full flex items-center justify-between px-4 py-3 hover:bg-[#D4AF37]/20 rounded-lg transition-all ${item.premium ? 'text-[#D4AF37] font-semibold' : 'text-[#FAF9F6]'}`}
                       >
                         <div className="flex items-center gap-2">
                           <span>{item.name}</span>
@@ -230,14 +230,14 @@ export const FloatingNav = ({
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden ml-4 border-l border-white/10"
+                            className="overflow-hidden ml-4 border-l border-[#D4AF37]/30"
                           >
                             {item.dropdown.map((subItem) => (
                               <Link
                                 key={subItem.link}
                                 href={subItem.link}
                                 onClick={() => setMenuOpen(false)}
-                                className="block px-4 py-2 text-sm text-[#7E102C] hover:bg-[#D7A9A8]/20 transition-all"
+                                className="block px-4 py-2 text-sm text-[#FAF9F6] hover:bg-[#D4AF37]/20 transition-all"
                               >
                                 {subItem.name}
                               </Link>
@@ -252,7 +252,7 @@ export const FloatingNav = ({
                   <Link
                     href="/admin/admin-panel"
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-4 py-3 bg-[#7E102C] text-[#E1D4C1] rounded-lg border border-[#0a0a0f] hover:bg-[#58423F] transition-all"
+                    className="flex items-center gap-2 px-4 py-3 bg-[#D4AF37] text-[#FAF9F6] rounded-lg border border-[#0a0a0f] hover:bg-[#E5C76B] transition-all"
                   >
                     <Shield className="w-4 h-4" />
                     Admin Panel

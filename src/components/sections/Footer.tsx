@@ -32,18 +32,18 @@ export function Footer() {
   ];
 
   const prepareItems = [
-    { name: "Blogs", link: "/blogs", icon: <FaCode className="h-4 w-4" />, color: "text-blue-400" },
-    { name: "Roadmaps", link: "/explore", icon: <FaRocket className="h-4 w-4" />, color: "text-purple-400" },
-    { name: "Company Problems", link: "/company-problems", icon: <FaGlobe className="h-4 w-4" />, color: "text-cyan-400" },
+    { name: "Blogs", link: "/blogs", icon: <FaCode className="h-4 w-4" />, color: "text-[#50C878]" },
+    { name: "Roadmaps", link: "/explore", icon: <FaRocket className="h-4 w-4" />, color: "text-[#50C878]" },
+    { name: "Company Problems", link: "/company-problems", icon: <FaGlobe className="h-4 w-4" />, color: "text-[#50C878]" },
     { name: "Interview Experiences", link: "/interview-experiences", icon: <FaUsers className="h-4 w-4" />, color: "text-yellow-400" },
   ];
 
   const features = [
-    { name: "Resume Builder", link: "/resume-builder", icon: <FaCode className="h-4 w-4" />, color: "text-purple-400" },
-    { name: "ATS Checker (Testing)", link: "/ats-checker", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-cyan-400" },
+    { name: "Resume Builder", link: "/resume-builder", icon: <FaCode className="h-4 w-4" />, color: "text-[#50C878]" },
+    { name: "ATS Checker (Testing)", link: "/ats-checker", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-[#50C878]" },
     { name: "Coding Arena", link: "/top-interviews", icon: <FaShieldAlt className="h-4 w-4" />, color: "text-green-400" },
     { name: "GitHub Wrapped", link: "/github-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-gray-400" },
-    { name: "Codeforces Wrapped", link: "/codeforces-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-orange-400" },
+    { name: "Codeforces Wrapped", link: "/codeforces-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-[#D4AF37]" },
     { name: "LeetCode Wrapped", link: "/leetcode-wrapped", icon: <FaStar className="h-4 w-4" />, color: "text-yellow-400" },
   ];
 
@@ -82,8 +82,8 @@ export function Footer() {
     { icon: <FaHtml5 className="h-6 w-6" />, color: "text-orange-500", name: "HTML5", bgColor: "from-orange-500/20 to-orange-600/20" },
     { icon: <FaCss3Alt className="h-6 w-6" />, color: "text-blue-500", name: "CSS3", bgColor: "from-blue-500/20 to-blue-600/20" },
     { icon: <FaJs className="h-6 w-6" />, color: "text-yellow-400", name: "JavaScript", bgColor: "from-yellow-400/20 to-yellow-500/20" },
-    { icon: <FaReact className="h-6 w-6" />, color: "text-cyan-400", name: "React", bgColor: "from-cyan-400/20 to-cyan-500/20" },
-    { icon: <FaNodeJs className="h-6 w-6" />, color: "text-green-500", name: "Node.js", bgColor: "from-green-500/20 to-green-600/20" },
+    { icon: <FaReact className="h-6 w-6" />, color: "text-[#50C878]", name: "React", bgColor: "from-cyan-400/20 to-cyan-500/20" },
+    { icon: <FaNodeJs className="h-6 w-6" />, color: "text-[#50C878]", name: "Node.js", bgColor: "from-[#50C878]/20 to-green-600/20" },
   ];
 
 
@@ -91,7 +91,6 @@ export function Footer() {
   return (
     <footer className="w-full relative overflow-hidden pb-20" data-scroll-section>
       {/* Enhanced Background Effects - use project palette */}
-      <div className="absolute inset-0 bg-[#0a0a0f]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(225,212,193,0.06),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(215,169,168,0.06),transparent_50%)]" />
       
@@ -116,21 +115,21 @@ export function Footer() {
             className="relative mb-6 sm:mb-8"
           >
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold max-w-6xl mx-auto leading-[0.95] mb-4 sm:mb-6 px-4">
-              <span className="text-[#E1D4C1]">Master the art of</span>
+              <span className="text-[#FAF9F6]">Master the art of</span>
               <br />
-              <span className="text-[#D7A9A8]">DEVELOPMENT</span>
+              <span className="text-[#E5C76B]">DEVELOPMENT</span>
             </h1>
             
             {/* Floating Elements - subtle palette tints */}
             <motion.div 
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#E1D4C1]/20 backdrop-blur-xl rounded-full border border-[#7E102C]/10"
+              className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#FAF9F6]/20 backdrop-blur-xl rounded-full border border-[#D4AF37]/10"
             />
             <motion.div 
               animate={{ y: [10, -10, 10] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#D7A9A8]/20 backdrop-blur-xl rounded-full border border-[#7E102C]/10"
+              className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#E5C76B]/20 backdrop-blur-xl rounded-full border border-[#D4AF37]/10"
             />
           </motion.div>
 
@@ -155,7 +154,7 @@ export function Footer() {
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-[#7E102C] rounded-2xl font-semibold text-[#E1D4C1] shadow-2xl shadow-black/25 hover:bg-[#6a0f27] transition-all duration-300 text-sm sm:text-base"
+                className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-[#D4AF37] rounded-2xl font-semibold text-[#FAF9F6] shadow-2xl shadow-black/25 hover:bg-[#B8960C] transition-all duration-300 text-sm sm:text-base"
                 onClick={() => {
                   if (user) {
                     window.location.href = '/explore';
@@ -168,7 +167,7 @@ export function Footer() {
                   Start Your Journey
                   <FaArrowRight className="h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </span>
-                <div className="absolute inset-0 bg-[#7E102C]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-[#D4AF37]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.button>
               
               {/* Buy Me Coffee Button */}
@@ -178,12 +177,12 @@ export function Footer() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-[#D7A9A8] rounded-2xl font-semibold text-[#7E102C] shadow-2xl shadow-black/15 hover:bg-[#c89696] transition-all duration-300 text-sm sm:text-base"
+                className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-[#E5C76B] rounded-2xl font-semibold text-[#D4AF37] shadow-2xl shadow-black/15 hover:bg-[#c89696] transition-all duration-300 text-sm sm:text-base"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3">
                   ☕ Buy me coffee
                 </span>
-                <div className="absolute inset-0 bg-[#D7A9A8]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-[#E5C76B]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.a>
             </div>
           </motion.div>
@@ -205,13 +204,13 @@ export function Footer() {
                     whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
                     transition={{ duration: 0.6, delay: 1.1 + index * 0.1 }}
                     whileHover={{ scale: 1.2, y: -8, rotateY: 360 }}
-                    className={`relative p-2 sm:p-3 bg-[#E1D4C1]/8 border border-[#E1D4C1]/10 rounded-xl hover:border-[#E1D4C1]/20 transition-all duration-300 cursor-pointer group`}
+                    className={`relative p-2 sm:p-3 bg-[#FAF9F6]/8 border border-[#FAF9F6]/10 rounded-xl hover:border-[#FAF9F6]/20 transition-all duration-300 cursor-pointer group`}
                     title={tech.name}
                   >
-                    <div className={`text-[#7E102C] group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`text-[#D4AF37] group-hover:scale-110 transition-transform duration-300`}>
                       {tech.icon}
                     </div>
-                    <div className="absolute -inset-0.5 bg-[#D7A9A8]/20 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10" />
+                    <div className="absolute -inset-0.5 bg-[#E5C76B]/20 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10" />
                   </motion.div>
                 ))}
               </div>
@@ -226,11 +225,11 @@ export function Footer() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300 group"
+            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#D4AF37]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300 group"
           >
             <h3 className="text-lg md:text-xl font-bold text-white mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 bg-[#E1D4C1]/10 rounded-lg">
-                <FaRocket className="h-3 w-3 sm:h-4 sm:w-4 text-[#E1D4C1]" />
+              <div className="p-1.5 sm:p-2 bg-[#FAF9F6]/10 rounded-lg">
+                <FaRocket className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAF9F6]" />
               </div>
               Quick Links
             </h3>
@@ -245,9 +244,9 @@ export function Footer() {
                 >
                   <a
                     href={item.link}
-                    className="flex items-center gap-2 sm:gap-3 text-[#E1D3CC] hover:text-[#E1D4C1] transition-all duration-300 font-medium hover:bg-[#111118]/8 px-3 sm:px-4 py-2 sm:py-3 rounded-xl group/link text-sm sm:text-base"
+                    className="flex items-center gap-2 sm:gap-3 text-[#FFFFF0] hover:text-[#50C878] transition-all duration-300 font-medium hover:bg-[#111118]/8 px-3 sm:px-4 py-2 sm:py-3 rounded-xl group/link text-sm sm:text-base"
                   >
-                    <div className="text-[#D7A9A8] group-hover/link:text-[#7E102C] transition-colors duration-300">
+                    <div className="text-[#E5C76B] group-hover/link:text-[#50C878] transition-colors duration-300">
                       {item.icon}
                     </div>
                     {item.name}
@@ -263,11 +262,11 @@ export function Footer() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-          	className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300"
+          	className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#D4AF37]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300"
           >
-            <h3 className="text-lg md:text-xl font-bold text-[#E1D4C1] mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 bg-[#D7A9A8]/10 rounded-lg">
-                <FaStar className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400" />
+            <h3 className="text-lg md:text-xl font-bold text-[#FAF9F6] mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-[#E5C76B]/10 rounded-lg">
+                <FaStar className="h-3 w-3 sm:h-4 sm:w-4 text-[#50C878]" />
               </div>
               Features
             </h3>
@@ -285,12 +284,12 @@ export function Footer() {
                   <div className={`${feature.color} text-sm sm:text-base group-hover:scale-110 transition-transform duration-300`}>
                     {feature.icon}
                   </div>
-                  <span className="text-[#E1D4C1] font-medium text-sm group-hover:text-[#E1D4C1] transition-colors duration-300">{feature.name}</span>
+                  <span className="text-[#FAF9F6] font-medium text-sm group-hover:text-[#50C878] transition-colors duration-300">{feature.name}</span>
                   <FaArrowRight className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 ml-auto text-gray-400" />
                 </motion.a>
               ))}
             </div>
-            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-[#E1D4C1]/10 backdrop-blur-lg border border-green-500/20 rounded-2xl">
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-[#FAF9F6]/10 backdrop-blur-lg border border-[#50C878]/20 rounded-2xl">
               <div className="flex items-center gap-2 text-green-300 text-xs sm:text-sm">
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse"></div>
                 <span className="font-medium">All Systems Operational</span>
@@ -303,11 +302,11 @@ export function Footer() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300"
+            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#D4AF37]/14 rounded-2xl sm:rounded-3xl hover:bg-[#0f0f0f] transition-all duration-300"
           >
-            <h3 className="text-lg md:text-xl font-bold text-[#E1D4C1] mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 bg-[#D7A9A8]/10 rounded-lg">
-                <FaCode className="h-3 w-3 sm:h-4 sm:w-4 text-pink-400" />
+            <h3 className="text-lg md:text-xl font-bold text-[#FAF9F6] mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-[#E5C76B]/10 rounded-lg">
+                <FaCode className="h-3 w-3 sm:h-4 sm:w-4 text-[#D4AF37]" />
               </div>
               Dev Roadmap
             </h3>
@@ -320,7 +319,7 @@ export function Footer() {
                 <span>Secure & Private</span>
               </div>
               <div className="flex items-center gap-2 text-gray-400">
-                <FaGlobe className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-blue-400" />
+                <FaGlobe className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#50C878]" />
                 <span>Global Community</span>
               </div>
               <div className="flex items-center gap-2 text-gray-400">
@@ -335,11 +334,11 @@ export function Footer() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#E1D4C1]/12 rounded-2xl sm:rounded-3xl hover:bg-[#E1D4C1]/10 transition-all duration-300"
+            className="p-4 sm:p-6 md:p-8 theme-card theme-card--vintage border border-[#FAF9F6]/12 rounded-2xl sm:rounded-3xl hover:bg-[#FAF9F6]/10 transition-all duration-300"
           >
             <h3 className="text-lg md:text-xl font-bold text-white mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 bg-[#D7A9A8]/10 rounded-lg">
-                <FaUsers className="h-3 w-3 sm:h-4 sm:w-4 text-cyan-400" />
+              <div className="p-1.5 sm:p-2 bg-[#E5C76B]/10 rounded-lg">
+                <FaUsers className="h-3 w-3 sm:h-4 sm:w-4 text-[#50C878]" />
               </div>
               Connect
             </h3>
@@ -355,7 +354,7 @@ export function Footer() {
                   transition={{ duration: 0.5, delay: 0.9 + index * 0.1 }}
                   whileHover={{ scale: 1.05, x: 5 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-[#E1D4C1]/8 backdrop-blur-lg border border-[#E1D4C1]/12 rounded-xl text-[#7E102C] hover:border-[#E1D4C1]/20 transition-all duration-300 group text-sm sm:text-base`}
+                  className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-[#FAF9F6]/8 backdrop-blur-lg border border-[#FAF9F6]/12 rounded-xl text-[#D4AF37] hover:border-[#FAF9F6]/20 transition-all duration-300 group text-sm sm:text-base`}
                 >
                   <div className="group-hover:scale-110 transition-transform duration-300">
                     {social.icon}
@@ -386,11 +385,11 @@ export function Footer() {
               <div className="flex flex-col md:flex-row items-center gap-3 sm:gap-4 md:gap-6 text-gray-400 text-xs sm:text-sm">
                 <div className="text-center md:text-left">
                   &copy; {new Date().getFullYear()}{" "}
-                  <span className="text-blue-400 font-semibold">
+                  <span className="text-[#50C878] font-semibold">
                     Shreshtha Ojha
                   </span>
                   {" "}X{" "}
-                  <span className="text-purple-400 font-semibold">SkillMine</span>
+                  <span className="text-[#50C878] font-semibold">SkillMine</span>
                   . All Rights Reserved.
                 </div>
 
@@ -402,11 +401,11 @@ export function Footer() {
               
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="text-center md:text-right mt-2 md:mt-0">
-                  <span className="text-sm text-[#E1D3CC]">Crafted with <FaHeart className="inline text-red-400 ml-1 mr-1" /></span>
+                  <span className="text-sm text-[#FFFFF0]">Crafted with <FaHeart className="inline text-red-400 ml-1 mr-1" /></span>
                   <span className="text-yellow-300 font-semibold">for developers worldwide</span>
                 </div>
                 <div className="h-3 sm:h-4 w-px bg-gray-600"></div>
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full text-xs text-green-300 border border-green-500/30">
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-[#50C878]/20 to-emerald-500/20 rounded-full text-xs text-green-300 border border-[#50C878]/30">
                   <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-green-400 rounded-full animate-pulse"></div>
                   <span>Online</span>
                 </div>

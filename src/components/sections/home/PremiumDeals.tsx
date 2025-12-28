@@ -117,20 +117,20 @@ export default function PremiumDeals() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10 border border-[#E1D4C1]/20 mb-6"
+className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FAF9F6]/10 border border-[#FAF9F6]/20 mb-6"
             >
-            <Flame className="w-4 h-4 text-[#E1D4C1]" />
-            <span className="text-[#E1D4C1] text-sm font-medium">Limited Time Offers</span>
+            <Flame className="w-4 h-4 text-[#FAF9F6]" />
+            <span className="text-[#FAF9F6] text-sm font-medium">Limited Time Offers</span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            <span className="text-[#E1D4C1]">Premium </span>
-            <span className="text-[#D7A9A8]">
+            <span className="text-[#FAF9F6]">Premium </span>
+            <span className="text-[#E5C76B]">
               Deals
             </span>
           </h2>
           
-          <p className="text-[#E1D4C1]/80 text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-[#FAF9F6]/80 text-lg md:text-xl max-w-2xl mx-auto">
             Unlock your full potential with our premium features at unbeatable prices
           </p>
         </motion.div>
@@ -145,10 +145,10 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className={`relative group rounded-3xl theme-card theme-card--vintage border border-[#7E102C]/14 p-6 lg:p-8 overflow-hidden`}   
+              className={`relative group rounded-3xl theme-card theme-card--vintage border border-[#D4AF37]/14 p-6 lg:p-8 overflow-hidden`}   
             >
               {/* Glow Effect */}
-              <div className={`absolute inset-0 bg-[#E1D4C1]/6 opacity-0 group-hover:opacity-100 blur-3xl transition-opacity duration-500`} />
+              <div className={`absolute inset-0 bg-[#FAF9F6]/6 opacity-0 group-hover:opacity-100 blur-3xl transition-opacity duration-500`} />
               
               {/* Popular Badge */}
               {deal.popular && (
@@ -157,7 +157,7 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
                   animate={{ scale: 1 }}
                   className="absolute -top-1 -right-1 z-20"
                 >
-                  <div className="bg-[#E1D4C1] text-[#7E102C] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-black/20">
+                  <div className="bg-[#FAF9F6] text-[#D4AF37] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-black/20">
                     <Star className="w-3 h-3 fill-current" />
                     POPULAR
                   </div> 
@@ -167,13 +167,13 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
               {/* Content */}
               <div className="relative z-10">
                 {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-[#E1D4C1] p-3 mb-6 shadow-lg">
-                  <deal.icon className="w-full h-full text-[#7E102C]" />
+                <div className="w-14 h-14 rounded-2xl bg-[#FAF9F6] p-3 mb-6 shadow-lg">
+                  <deal.icon className="w-full h-full text-[#D4AF37]" />
                 </div> 
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-[#E1D4C1] mb-1">{deal.title}</h3>
-                <p className="text-[#E1D3CC] text-sm mb-6">{deal.subtitle}</p>
+                <h3 className="text-xl font-bold text-[#FAF9F6] mb-1">{deal.title}</h3>
+                <p className="text-[#FFFFF0] text-sm mb-6">{deal.subtitle}</p>
 
                 {/* Pricing */}
                 <div className="flex items-baseline gap-2 mb-6">
@@ -183,9 +183,9 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
                       const percent = computeDiscountPercent(deal.price, original);
                       return (
                         <>
-                          <span className="text-3xl font-bold text-[#E1D4C1]">₹{deal.price}</span>
-                          {original ? <span className="text-[#E1D3CC] line-through text-sm">₹{original}</span> : null}
-                          <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">
+                          <span className="text-3xl font-bold text-[#FAF9F6]">₹{deal.price}</span>
+                          {original ? <span className="text-[#FFFFF0] line-through text-sm">₹{original}</span> : null}
+                          <span className="text-[#E5C76B] text-xs font-medium bg-[#E5C76B]/10 px-2 py-1 rounded-full">
                             {percent != null ? `${percent}% OFF` : '—'}
                           </span>
                         </>
@@ -193,8 +193,8 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
                     })()
                   ) : (
                     <>
-                      <span className="text-3xl font-bold text-[#E1D4C1]">TBD</span>
-                      <span className="text-[#D7A9A8] text-xs font-medium bg-[#D7A9A8]/10 px-2 py-1 rounded-full">—</span>
+                      <span className="text-3xl font-bold text-[#FAF9F6]">TBD</span>
+                      <span className="text-[#E5C76B] text-xs font-medium bg-[#E5C76B]/10 px-2 py-1 rounded-full">—</span>
                     </>
                   )}
                 </div>
@@ -203,24 +203,24 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
                 <div className="space-y-3 mb-8">
                   {deal.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-[#7E102C] mt-0.5 flex-shrink-0" />
-                      <span className="text-[#E1D4C1] text-sm">{feature}</span>
+                      <CheckCircle className="w-4 h-4 text-[#D4AF37] mt-0.5 flex-shrink-0" />
+                      <span className="text-[#FAF9F6] text-sm">{feature}</span>
                     </div>
                   ))}
                 </div> 
 
                 {/* CTA Button */}
                 {deal.id === 'skill-tests' && deal.price == null ? (
-                  <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-[#E1D3CC] font-semibold" disabled>Price not set</button>
+                  <button className="w-full py-3 px-4 rounded-xl bg-white/5 text-[#FFFFF0] font-semibold" disabled>Price not set</button>
                 ) : deal.id === 'premium' && user?.purchases?.premium?.purchased ? (
-                  <a href={deal.link} className={`w-full py-3 px-4 rounded-xl bg-white/5 text-[#E1D3CC] font-semibold flex items-center justify-center gap-2`}>
+                  <a href={deal.link} className={`w-full py-3 px-4 rounded-xl bg-white/5 text-[#FFFFF0] font-semibold flex items-center justify-center gap-2`}>
                     You're Premium — Explore
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 ) : (
                   <a
                     href={deal.link}
-                    className={`w-full py-3 px-4 rounded-xl bg-[#7E102C] text-[#E1D4C1] font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`} 
+                    className={`w-full py-3 px-4 rounded-xl bg-[#D4AF37] text-[#FAF9F6] font-semibold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all duration-300 hover:opacity-90`} 
                   >
                     Get Started
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -251,11 +251,11 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 + index * 0.1 }}
-              className="text-center p-4 md:p-6 rounded-2xl theme-card theme-card--vintage border border-[#7E102C]/14"
+              className="text-center p-4 md:p-6 rounded-2xl theme-card theme-card--vintage border border-[#D4AF37]/14"
             >
-              <stat.icon className="w-6 h-6 text-[#E1D4C1] mx-auto mb-2" />
-              <div className="text-2xl md:text-3xl font-bold text-[#E1D4C1] mb-1">{stat.value}</div>
-              <div className="text-[#E1D3CC] text-sm">{stat.label}</div>
+              <stat.icon className="w-6 h-6 text-[#FAF9F6] mx-auto mb-2" />
+              <div className="text-2xl md:text-3xl font-bold text-[#FAF9F6] mb-1">{stat.value}</div>
+              <div className="text-[#FFFFF0] text-sm">{stat.label}</div>
             </motion.div> 
           ))}
         </motion.div>
@@ -268,20 +268,20 @@ className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E1D4C1]/10
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-12 flex flex-wrap items-center justify-center gap-6 md:gap-8"
         >
-          <div className="flex items-center gap-2 text-[#E1D3CC]">
-            <Zap className="w-5 h-5 text-[#D7A9A8]" />
+          <div className="flex items-center gap-2 text-[#FFFFF0]">
+            <Zap className="w-5 h-5 text-[#E5C76B]" />
             <span className="text-sm">Instant Access</span>
           </div>
-          <div className="flex items-center gap-2 text-[#E1D3CC]">
-            <Crown className="w-5 h-5 text-[#E1D4C1]" />
+          <div className="flex items-center gap-2 text-[#FFFFF0]">
+            <Crown className="w-5 h-5 text-[#FAF9F6]" />
             <span className="text-sm">Lifetime Updates</span>
           </div>
-          <div className="flex items-center gap-2 text-[#E1D3CC]">
-            <Sparkles className="w-5 h-5 text-[#E1D4C1]" />
+          <div className="flex items-center gap-2 text-[#FFFFF0]">
+            <Sparkles className="w-5 h-5 text-[#FAF9F6]" />
             <span className="text-sm">Premium Support</span>
           </div>
-          <div className="flex items-center gap-2 text-[#E1D3CC]">
-            <BadgeCheck className="w-5 h-5 text-[#7E102C]" />
+          <div className="flex items-center gap-2 text-[#FFFFF0]">
+            <BadgeCheck className="w-5 h-5 text-[#D4AF37]" />
             <span className="text-sm">Secure Payment</span>
           </div>
 
