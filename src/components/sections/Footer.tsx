@@ -402,8 +402,8 @@ export function Footer() {
               
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="text-center md:text-right mt-2 md:mt-0">
-                  <span className="text-sm text-[#E1D3CC]">Crafted with <FaHeart className="inline text-red-400 ml-1 mr-1" /> by </span>
-                  <a href="/navrion" className="text-yellow-300 font-semibold hover:underline">NAVRION</a>
+                  <span className="text-sm text-[#E1D3CC]">Crafted with <FaHeart className="inline text-red-400 ml-1 mr-1" /></span>
+                  <span className="text-yellow-300 font-semibold">for developers worldwide</span>
                 </div>
                 <div className="h-3 sm:h-4 w-px bg-gray-600"></div>
                 <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full text-xs text-green-300 border border-green-500/30">
