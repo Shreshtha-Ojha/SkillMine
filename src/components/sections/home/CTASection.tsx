@@ -35,7 +35,7 @@ export default function CTASection() {
               Ready to Level Up?
             </h2>
             <p className="text-[#E1D3CC] text-lg max-w-xl mx-auto mb-8">
-              Join thousands of developers who are already using PrepSutra to ace their interviews.
+              Join thousands of developers who are already using SkillMine to ace their interviews.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

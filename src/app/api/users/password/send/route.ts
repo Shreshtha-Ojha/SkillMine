@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         console.log("Updated user:", user);
 
         // Build the reset URL
-        const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.prepsutra.tech")?.replace(/\/$/, "");
+        const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
         const resetUrl = `${domain}/auth/resetpassword?token=${resetToken}`;
         console.log("Reset URL:", resetUrl);
 
@@ -61,14 +61,14 @@ export async function POST(request: NextRequest) {
         const mailOptions = {
             from: process.env.EMAIL_USER, 
             to: email, 
-            subject: "Reset Your Password - PrepSutra", // Updated subject line
+            subject: "Reset Your Password - SkillMine", // Updated subject line
             text: `You requested to reset your password. Click the link to reset it: ${resetUrl}`,
             html: `
                 <div style="background-color: #0f172a; color: #ffffff; padding: 20px; font-family: Arial, sans-serif; text-align: center;">
                     <div style="max-width: 600px; margin: auto; background-color: #1e293b; border-radius: 10px; overflow: hidden;">
                         <div style="padding: 20px;">
                             <h1 style="color: #22c55e; font-size: 28px; margin-bottom: 10px;">
-                                PrepSutra
+                                SkillMine
                             </h1>
                             <p style="color: #94a3b8; font-size: 16px; margin-bottom: 20px;">
                                 We're here to help you securely reset your password.
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
                                 Need help? Contact us at ayusht5071@gmail.com
                             </p>
                             <p style="color: #64748b; font-size: 12px;">
-                                Made with 💖 by the PrepSutra Team
+                                Made with 💖 by the SkillMine Team
                             </p>
                         </div>
                     </div>

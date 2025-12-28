@@ -75,7 +75,7 @@ export const FloatingNav = ({
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-[#E1D4C1] font-semibold">PrepSutra</span>
+            <span className="text-[#E1D4C1] font-semibold">SkillMine</span>
           </Link>
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-2">

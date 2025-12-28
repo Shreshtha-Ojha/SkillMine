@@ -100,17 +100,17 @@ export default function TopInterviewCertificate({
       {/* Top Gradient Bar */}
       <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500" />
 
-      {/* PrepSutra Logo/Header */}
+      {/* SkillMine Logo/Header */}
       <div className="relative z-10 flex flex-col items-center mt-6 mb-3">
         <div className="flex items-center gap-3 mb-2">
           <img 
             src="/official_logo.png" 
-            alt="PrepSutra Logo" 
+            alt="SkillMine Logo" 
             className="w-14 h-14 rounded-full object-contain shadow-lg border-2 border-slate-200"
           />
-          <span className="text-3xl font-bold tracking-wide text-slate-800">PrepSutra</span>
+          <span className="text-3xl font-bold tracking-wide text-slate-800">SkillMine</span>
         </div>
-        <p className="text-xs text-slate-500 tracking-[0.3em] uppercase">www.prepsutra.tech</p>
+        <p className="text-xs text-slate-500 tracking-[0.3em] uppercase">www.skillmine.tech</p>
       </div>
 
       {/* Trophy Icon */}
@@ -190,7 +190,7 @@ export default function TopInterviewCertificate({
           <SignaturePlaceholder />
           <div className="w-36 h-[1px] bg-slate-400 mt-1 mb-1" />
           <span className="text-sm text-slate-800 font-semibold">Authorized Signatory</span>
-          <span className="text-[10px] text-slate-500">PrepSutra</span>
+          <span className="text-[10px] text-slate-500">SkillMine</span>
         </div>
       </div>
 

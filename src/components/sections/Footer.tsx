@@ -390,7 +390,7 @@ export function Footer() {
                     Shreshtha Ojha
                   </span>
                   {" "}X{" "}
-                  <span className="text-purple-400 font-semibold">PrepSutra</span>
+                  <span className="text-purple-400 font-semibold">SkillMine</span>
                   . All Rights Reserved.
                 </div>
 

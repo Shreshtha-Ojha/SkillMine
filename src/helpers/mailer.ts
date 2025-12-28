@@ -32,18 +32,18 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
 
 // Get domain from environment variable with fallback
-const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.prepsutra.tech")?.replace(/\/$/, "");
+const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
 console.log("Email domain URL:", domain);
 
 const mailOptions = {
     from: process.env.EMAIL_USER, 
     to: email, 
-    subject: emailType === "VERIFY" ? "Verify Your Email with PrepSutra" : "Reset Your Password on PrepSutra", // Email subject
+    subject: emailType === "VERIFY" ? "Verify Your Email with SkillMine" : "Reset Your Password on SkillMine", // Email subject
     html: `
         <div style="background-color: #E1D4C1; color: #222; padding: 20px; font-family: Georgia, 'Times New Roman', serif;">
             <div style="max-width: 600px; margin: auto; background-color: #F6F0EB; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06);">
                 <div style="padding: 24px; text-align: center; background-color: #7E102C; color: #E1D4C1;">
-                    <h1 style="font-size: 28px; margin: 0;">PrepSutra</h1>
+                    <h1 style="font-size: 28px; margin: 0;">SkillMine</h1>
                     <p style="font-size: 14px; margin: 6px 0 0; opacity: 0.9;">Curated learning for thoughtful engineers.</p>
                 </div>
                 <div style="padding: 24px; text-align: left; color: #222;">
@@ -51,7 +51,7 @@ const mailOptions = {
                         ${emailType === "VERIFY" ? "Verify Your Email" : "Reset Your Password"}
                     </h2>
                     <p style="font-size: 15px; color: #333; margin-bottom: 18px; line-height: 1.6;">
-                        We're glad you're here. Click the button below to ${emailType === 'VERIFY' ? 'verify your email' : 'reset your password'} and continue exploring PrepSutra.
+                        We're glad you're here. Click the button below to ${emailType === 'VERIFY' ? 'verify your email' : 'reset your password'} and continue exploring SkillMine.
                     </p>
                     <div style="text-align: center; margin: 18px 0;">
                         <a href="${domain}/auth/${emailType === 'VERIFY' ? 'verifyemail' : 'resetpassword'}?token=${hashedToken}"
@@ -65,7 +65,7 @@ const mailOptions = {
                     </p>
                 </div>
                 <div style="padding: 18px; text-align: center; background-color: #EDE4DF; color: #58423F; font-size: 13px;">
-                    <p style="margin: 0;">Made with care by the PrepSutra Team</p>
+                    <p style="margin: 0;">Made with care by the SkillMine Team</p>
                     <p style="margin: 4px 0 0; color: #777;">Explore knowledge, shape the future.</p>
                 </div>
             </div>

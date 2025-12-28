@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Company-wise DSA Questions | PrepSutra - Top Companies LeetCode Problems",
+  title: "Company-wise DSA Questions | SkillMine - Top Companies LeetCode Problems",
   description:
     "Access company-wise DSA and LeetCode problems from top companies like Google, Amazon, Microsoft, Meta, Apple, Netflix, Adobe, Goldman Sachs, Uber, and more. Prepare for your coding interviews with frequently asked questions and acceptance rates.",
   keywords:
@@ -9,15 +9,15 @@ export const metadata: Metadata = {
   
   authors: [
     {
-      name: "PrepSutra",
-      url: "https://www.prepsutra.tech",
+      name: "SkillMine",
+      url: "https://www.skillmine.tech",
     },
   ],
 
   robots: "index, follow",
 
   openGraph: {
-    title: "Company-wise DSA Questions | PrepSutra",
+    title: "Company-wise DSA Questions | SkillMine",
     description:
       "450+ companies' LeetCode problems with frequency data. Prepare for Google, Amazon, Microsoft, Meta, Apple interviews and more. Get curated coding interview questions.",
     images: [
@@ -25,17 +25,17 @@ export const metadata: Metadata = {
         url: "/official_logo.png",
         width: 1200,
         height: 630,
-        alt: "PrepSutra - Company-wise DSA Questions",
+        alt: "SkillMine - Company-wise DSA Questions",
       },
     ],
-    url: "https://www.prepsutra.tech/company-problems",
+    url: "https://www.skillmine.tech/company-problems",
     type: "website",
-    siteName: "PrepSutra",
+    siteName: "SkillMine",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Company-wise DSA Questions | PrepSutra",
+    title: "Company-wise DSA Questions | SkillMine",
     description:
       "450+ companies' LeetCode problems. Prepare for FAANG and top tech company interviews.",
     images: ["/official_logo.png"],

@@ -34,7 +34,7 @@ async function sendWinnerEmail(
     },
   });
 
-  const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.prepsutra.tech")?.replace(/\/$/, "");
+  const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
   
   const rankEmojis: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
   const rankNames: Record<number, string> = { 1: '1st Place', 2: '2nd Place', 3: '3rd Place' };
@@ -42,15 +42,15 @@ async function sendWinnerEmail(
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: `🏆 Congratulations! You've Won ${rankNames[rank]} in "${interviewTitle}" - PrepSutra`,
+    subject: `🏆 Congratulations! You've Won ${rankNames[rank]} in "${interviewTitle}" - SkillMine`,
     html: `
       <div style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); color: #fff; padding: 40px 20px; font-family: 'Segoe UI', Arial, sans-serif;">
         <div style="max-width: 600px; margin: auto; background: rgba(17, 17, 24, 0.95); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
           
           <!-- Header -->
           <div style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 30px; text-align: center;">
-            <img src="${domain}/official_logo.png" alt="PrepSutra" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 15px;" />
-            <h1 style="font-size: 28px; color: #fff; margin: 0; font-weight: bold;">PrepSutra</h1>
+            <img src="${domain}/official_logo.png" alt="SkillMine" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 15px;" />
+            <h1 style="font-size: 28px; color: #fff; margin: 0; font-weight: bold;">SkillMine</h1>
             <p style="color: rgba(255,255,255,0.8); margin: 5px 0 0 0; font-size: 14px;">Master the Art of Development</p>
           </div>
           
@@ -100,9 +100,9 @@ async function sendWinnerEmail(
           
           <!-- Footer -->
           <div style="padding: 25px; background: rgba(0,0,0,0.3); text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
-            <p style="color: #6b7280; font-size: 13px; margin: 0 0 10px 0;">Thank you for participating in PrepSutra Coding Arena!</p>
+            <p style="color: #6b7280; font-size: 13px; margin: 0 0 10px 0;">Thank you for participating in SkillMine Coding Arena!</p>
             <p style="color: #4b5563; font-size: 12px; margin: 0;">
-              <a href="${domain}" style="color: #60a5fa; text-decoration: none;">www.prepsutra.tech</a>
+              <a href="${domain}" style="color: #60a5fa; text-decoration: none;">www.skillmine.tech</a>
             </p>
           </div>
           

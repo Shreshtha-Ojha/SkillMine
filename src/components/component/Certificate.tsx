@@ -81,17 +81,17 @@ export default function Certificate({
       {/* Top Header Bar */}
       <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-slate-800 via-blue-700 to-slate-800" />
 
-      {/* PrepSutra Logo/Header */}
+      {/* SkillMine Logo/Header */}
       <div className="relative z-10 flex flex-col items-center mt-4 mb-3">
         <div className="flex items-center gap-4 mb-2">
           <img 
             src="/official_logo.png" 
-            alt="PrepSutra Logo" 
+            alt="SkillMine Logo" 
             className="w-14 h-14 rounded-full object-contain shadow-lg border-2 border-slate-200"
           />
-          <span className="text-4xl font-bold tracking-wide text-slate-800">PrepSutra</span>
+          <span className="text-4xl font-bold tracking-wide text-slate-800">SkillMine</span>
         </div>
-        <p className="text-xs text-slate-500 tracking-[0.4em] uppercase font-medium">www.prepsutra.tech</p>
+        <p className="text-xs text-slate-500 tracking-[0.4em] uppercase font-medium">www.skillmine.tech</p>
       </div>
 
       {/* Certificate Title */}
@@ -150,7 +150,7 @@ export default function Certificate({
               <span className="text-[7px] text-white/90 font-bold mt-0.5 tracking-wider">VERIFIED</span>
             </div>
           </div>
-          <span className="text-[11px] text-blue-700 mt-2 font-bold tracking-[0.2em]">PREPSUTRA</span>
+          <span className="text-[11px] text-blue-700 mt-2 font-bold tracking-[0.2em]">SKILLMINE</span>
         </div>
 
         {/* Footer Text (center) */}
@@ -163,7 +163,7 @@ export default function Certificate({
           <SignaturePlaceholder />
           <div className="w-36 h-[1.5px] bg-gradient-to-r from-transparent via-slate-400 to-transparent mt-1 mb-2" />
           <span className="text-sm text-slate-800 font-bold">Authorized Signatory</span>
-          <span className="text-[11px] text-slate-500 font-medium">PrepSutra</span>
+          <span className="text-[11px] text-slate-500 font-medium">SkillMine</span>
         </div>
       </div>
 

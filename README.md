@@ -1,15 +1,15 @@
 <p align="center">
-  <img src="public/official_logo.png" alt="PrepSutra Logo" width="120" height="120" />
+  <img src="public/official_logo.png" alt="SkillMine Logo" width="120" height="120" />
 </p>
 
-<h1 align="center">🚀 PrepSutra</h1>
+<h1 align="center">🚀 SkillMine</h1>
 
 <p align="center">
   <strong>Your Ultimate Technical Interview Preparation Platform</strong>
 </p>
 
 <p align="center">
-  <a href="https://www.prepsutra.tech">Live Demo</a> •
+  <a href="https://www.skillmine.tech">Live Demo</a> •
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#api-reference">API Reference</a> •
@@ -31,7 +31,7 @@
 
 In today's competitive tech landscape, cracking interviews at top companies requires more than just coding skills—it demands structured preparation, real-world practice, and data-driven insights.
 
-**PrepSutra** was born from a simple observation: thousands of developers struggle to find a unified platform that combines:
+**SkillMine** was born from a simple observation: thousands of developers struggle to find a unified platform that combines:
 - 📊 **Company-specific question banks** with frequency data
 - 🎯 **AI-powered mock interviews** for realistic practice
 - 🗺️ **Curated learning roadmaps** for different tech domains
@@ -204,7 +204,7 @@ Vercel Analytics   → Performance monitoring
 ## 📁 Project Structure
 
 ```
-prepsutra/
+skillmine/
 ├── public/                    # Static assets
 │   ├── official_logo.png      # Brand logo
 │   └── assets/                # Images & media
@@ -364,7 +364,7 @@ This project is proprietary software. All rights reserved.
 </p>
 
 <p align="center">
-  <a href="https://www.prepsutra.tech">
-    <img src="https://img.shields.io/badge/Visit-PrepSutra-blue?style=for-the-badge" alt="Visit PrepSutra" />
+  <a href="https://www.skillmine.tech">
+    <img src="https://img.shields.io/badge/Visit-SkillMine-blue?style=for-the-badge" alt="Visit SkillMine" />
   </a>
 </p>

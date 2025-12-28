@@ -11,7 +11,7 @@ const sections = [
     title: "General Policy",
     icon: FileText,
     content: [
-      "All purchases made on PrepSutra are <strong>final and non-refundable</strong>.",
+      "All purchases made on SkillMine are <strong>final and non-refundable</strong>.",
       "By completing a purchase, you acknowledge and agree to this no-refund policy.",
       "We encourage users to review course details, previews, and descriptions before making a purchase.",
       "Once payment is processed, the transaction cannot be reversed."
@@ -127,7 +127,7 @@ export default function RefundPolicy() {
             <div>
               <h3 className="text-white font-semibold text-lg mb-2">Important Notice</h3>
               <p className="text-slate-300 leading-relaxed">
-                <strong className="text-white">PrepSutra</strong> follows a strict <strong className="text-red-400">NO REFUND</strong> policy 
+                <strong className="text-white">SkillMine</strong> follows a strict <strong className="text-red-400">NO REFUND</strong> policy 
                 for all digital products, courses, and subscriptions. All sales are final. Please ensure you understand what you are 
                 purchasing before completing your transaction.
               </p>

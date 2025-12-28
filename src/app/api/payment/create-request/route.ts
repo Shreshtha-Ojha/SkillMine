@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine redirect URL based on environment
-    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.prepsutra.tech")?.replace(/\/$/, "");
+    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.skillmine.tech")?.replace(/\/$/, "");
     const redirectUrl = `${baseUrl}/payment/verify?product=premium`;
     
     // Webhook only works with public URLs (not localhost)

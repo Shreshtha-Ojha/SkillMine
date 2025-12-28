@@ -8,11 +8,11 @@ import AuthProvider from "@/components/providers/AuthProvider";
 import React from 'react';
 import PremiumBanner from '@/components/ui/PremiumBanner';
 
-// Metadata for PrepSutra
+// Metadata for SkillMine
 export const metadata: Metadata = {
-  title: "PrepSutra - Technical Roadmaps and Blogs",
+  title: "SkillMine - Technical Roadmaps and Blogs",
   description:
-    "Learn programming and grow your skills with technical roadmaps and blogs on PrepSutra. Created by Shreshtha Ojha.",
+    "Learn programming and grow your skills with technical roadmaps and blogs on SkillMine. Created by Shreshtha Ojha.",
   keywords:
     "programming, roadmaps, blogs, web development, machine learning, data science, programming skills, learning resources",
 
@@ -27,20 +27,20 @@ export const metadata: Metadata = {
 
   // Open Graph Meta Tags
   openGraph: {
-    title: "PrepSutra - Technical Roadmaps and Blogs",
+    title: "SkillMine - Technical Roadmaps and Blogs",
     description:
-      "PrepSutra provides technical roadmaps and blogs to help you grow your skills in development, machine learning, data science, and more.",
+      "SkillMine provides technical roadmaps and blogs to help you grow your skills in development, machine learning, data science, and more.",
     images: [
       {
         url: "/official_logo.png", // Replace with your actual logo URL
         width: 1200,
         height: 630,
-        alt: "PrepSutra Logo",
+        alt: "SkillMine Logo",
       },
     ],
-    url: "https://www.prepsutra.tech",
+    url: "https://www.skillmine.tech",
     type: "website",
-    siteName: "PrepSutra",
+    siteName: "SkillMine",
   },
 
   icons: {

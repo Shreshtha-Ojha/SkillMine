@@ -5,11 +5,11 @@ export async function fetchLiveProjects() {
   const coverImage = "https://placehold.co/600x400/png"; // Example placeholder image
   return [
     {
-      name: "PrepSutra",
+      name: "SkillMine",
       desc: "A platform offering curated study materials and practice tests for coding interviews (Premium).",
       live: true,
-      link: "https://prepsutra.tech",
-      cover: "/navrion/prepsutra.png",
+      link: "https://skillmine.tech",
+      cover: "/navrion/skillmine.png",
     },
     {
       name: "HACK36",

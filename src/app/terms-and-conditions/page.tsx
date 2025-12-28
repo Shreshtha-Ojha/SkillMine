@@ -21,7 +21,7 @@ const sections = [
     title: "Definitions",
     icon: FileText,
     content: [
-      "<strong>Platform</strong>: The services provided by PrepSutra including the website www.prepsutra.tech, mobile app, content and tools.",
+      "<strong>Platform</strong>: The services provided by SkillMine including the website www.skillmine.tech, mobile app, content and tools.",
       "<strong>Courses/Content</strong>: Includes videos, notes, quizzes, assignments, tests, documents, and learning resources.",
       "<strong>User</strong>: Any individual accessing or using the Platform.",
       "<strong>Payment Instrument</strong>: UPI, cards, net banking, wallets, or any valid payment method."
@@ -61,7 +61,7 @@ const sections = [
     content: [
       "All payments must be made through legitimate sources.",
       "Fees once paid are <strong>non-refundable</strong>, except when: the course is cancelled by us, or technical issues prevent access and are verified by us.",
-      "Refund decisions are final and governed solely by PrepSutra.",
+      "Refund decisions are final and governed solely by SkillMine.",
       "Fraudulent transactions may lead to legal action."
     ]
   },
@@ -70,7 +70,7 @@ const sections = [
     title: "Intellectual Property Rights",
     icon: Lock,
     content: [
-      "All trademarks, content, videos, materials, and Platform design belong exclusively to PrepSutra.",
+      "All trademarks, content, videos, materials, and Platform design belong exclusively to SkillMine.",
       "You receive a limited, non-transferable license for personal learning.",
       "Unauthorized copying or distribution may result in legal action."
     ]
@@ -164,7 +164,7 @@ export default function TermsAndConditions() {
             </h1>
             
             <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-4">
-              Please read these terms carefully before using the PrepSutra platform.
+              Please read these terms carefully before using the SkillMine platform.
             </p>
             
             <p className="text-slate-500 text-sm">
@@ -183,7 +183,7 @@ export default function TermsAndConditions() {
           className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 rounded-2xl p-6 sm:p-8"
         >
           <p className="text-slate-300 leading-relaxed">
-            By accessing or using the <strong className="text-white">PrepSutra</strong> platform ("Platform", "Website", or "App"), 
+            By accessing or using the <strong className="text-white">SkillMine</strong> platform ("Platform", "Website", or "App"), 
             you ("User", "you", "your") agree to be bound by these Terms and Conditions ("Terms") and our Privacy Policy. 
             If you do not agree with these Terms, you must immediately stop using the Platform.
           </p>

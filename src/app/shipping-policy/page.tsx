@@ -11,7 +11,7 @@ const sections = [
     title: "Digital Product Delivery",
     icon: Zap,
     content: [
-      "PrepSutra is a <strong>100% digital platform</strong> offering online courses, tests, and learning resources.",
+      "SkillMine is a <strong>100% digital platform</strong> offering online courses, tests, and learning resources.",
       "All products are delivered <strong>electronically</strong> - no physical shipping is involved.",
       "Upon successful payment, access is granted <strong>instantly</strong> to your account.",
       "You can access your purchased content immediately after payment confirmation."
@@ -34,7 +34,7 @@ const sections = [
     title: "How to Access Your Purchase",
     icon: Monitor,
     content: [
-      "Log in to your PrepSutra account at <strong>www.prepsutra.tech</strong>.",
+      "Log in to your SkillMine account at <strong>www.skillmine.tech</strong>.",
       "Navigate to your Dashboard or Profile section.",
       "All purchased courses and content will be visible under 'My Courses' or 'My Learning'.",
       "Click on any course to start learning immediately.",
@@ -114,7 +114,7 @@ export default function ShippingPolicy() {
             </h1>
             
             <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-4">
-              Learn how your digital purchases are delivered on PrepSutra.
+              Learn how your digital purchases are delivered on SkillMine.
             </p>
             
             <p className="text-slate-500 text-sm">
@@ -137,7 +137,7 @@ export default function ShippingPolicy() {
             <div>
               <h3 className="text-white font-semibold text-lg mb-2">100% Digital Delivery</h3>
               <p className="text-slate-300 leading-relaxed">
-                <strong className="text-white">PrepSutra</strong> exclusively offers <strong className="text-green-400">digital products</strong>. 
+                <strong className="text-white">SkillMine</strong> exclusively offers <strong className="text-green-400">digital products</strong>. 
                 All courses, tests, and learning materials are delivered electronically through our platform. 
                 There is <strong>no physical shipping</strong> - enjoy instant access to your purchases!
               </p>
