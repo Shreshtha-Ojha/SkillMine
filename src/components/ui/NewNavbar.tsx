@@ -76,7 +76,7 @@ export const FloatingNav = ({
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/official_logo.png" alt="SkillMine" width={120} height={40} className="h-8 w-auto" />
+            <img src="/official_logo.png" alt="SkillMine" className="h-14 w-auto object-contain" />
           </Link>
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-2">
