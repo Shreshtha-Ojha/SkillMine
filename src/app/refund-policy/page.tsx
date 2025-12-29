@@ -59,7 +59,7 @@ const sections = [
     title: "How to Request Exception Review",
     icon: HelpCircle,
     content: [
-      "Email us at <strong>ayusht5071@gmail.com</strong> within 48 hours of purchase.",
+      "Email us at <strong>ojhashreshtha@gmail.com</strong> within 48 hours of purchase.",
       "Include your registered email, transaction ID, and reason for request.",
       "Provide any supporting documentation (screenshots, error messages).",
       "We will respond within 7-10 working days.",
@@ -211,11 +211,11 @@ export default function RefundPolicy() {
             If you have questions about our refund policy or need assistance, contact us:
           </p>
           <a 
-            href="mailto:ayusht5071@gmail.com" 
+            href="mailto:ojhashreshtha@gmail.com" 
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors"
           >
             <Mail className="w-4 h-4" />
-            ayusht5071@gmail.com
+            ojhashreshtha@gmail.com
           </a>
         </motion.div>
       </div>

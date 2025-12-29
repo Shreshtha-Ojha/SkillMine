@@ -42,7 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           body {
             background: url('/bg.png') no-repeat center top !important;
             background-size: cover !important;
-            background-color: #0a0908 !important;
+            background-color: #36454F !important;
           }
         `}} />
       </head>

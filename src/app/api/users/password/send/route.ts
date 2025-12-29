@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         console.log("Updated user:", user);
 
         // Build the reset URL
-        const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
+        const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
         const resetUrl = `${domain}/auth/resetpassword?token=${resetToken}`;
         console.log("Reset URL:", resetUrl);
 
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
                         </div>
                         <div style="background-color: #0f172a; padding: 15px; text-align: center;">
                             <p style="color: #64748b; font-size: 12px;">
-                                Need help? Contact us at ayusht5071@gmail.com
+                                Need help? Contact us at ojhashreshtha@gmail.com
                             </p>
                             <p style="color: #64748b; font-size: 12px;">
                                 Made with 💖 by the SkillMine Team

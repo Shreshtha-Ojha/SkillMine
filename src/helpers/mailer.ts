@@ -31,8 +31,8 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         console.log("token inside ->",hashedToken);
 
 
-// Get domain from environment variable with fallback
-const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
+// Get domain from environment variable with fallback (prefer NEXTAUTH_URL for consistency)
+const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
 console.log("Email domain URL:", domain);
 
 const mailOptions = {

@@ -225,11 +225,11 @@ export default function ShippingPolicy() {
             If you're experiencing any issues with accessing your purchased content, our support team is here to help.
           </p>
           <a 
-            href="mailto:ayusht5071@gmail.com" 
+            href="mailto:ojhashreshtha@gmail.com" 
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors"
           >
             <Mail className="w-4 h-4" />
-            ayusht5071@gmail.com
+            ojhashreshtha@gmail.com
           </a>
         </motion.div>
       </div>
