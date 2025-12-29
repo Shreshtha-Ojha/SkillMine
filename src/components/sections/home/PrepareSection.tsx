@@ -7,7 +7,7 @@ import { Code2, Code, Boxes, Cpu, Globe, Database, Lock, FileText, Users } from 
 const topics = [
   { icon: Code2, label: "Company Problems", path: "/company-problems" },
   { icon: Boxes, label: "System Design", path: "/explore/roadmap/6952c8fabd516ee01ba0fa6a" },
-  { icon: Cpu, label: "OS", path: "/prepare-interviews/operating-systems" },
+  { icon: Cpu, label: "OS", path: "/explore/roadmap/6952cf98bd516ee01ba0ff46" },
   { icon: Globe, label: "Web Dev", path: "/explore" },
   { icon: Database, label: "DBMS", path: "/prepare-interviews" },
   { icon: Lock, label: "Security", path: "/prepare-interviews" },
