@@ -188,7 +188,7 @@ export default function ManageTopInterviewsPage() {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading...</span>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function ManageTopInterviewsPage() {
             placeholder="Search interviews..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50"
+            className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50"
           />
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function ManageTopInterviewsPage() {
       {/* Interviews List */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filteredInterviews.length === 0 ? (
         <div className="text-center py-20">
@@ -258,8 +258,8 @@ export default function ManageTopInterviewsPage() {
                 className="w-full p-5 flex items-center justify-between hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-blue-400" />
+                  <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-[#D4AF37]" />
                   </div>
                   <div className="text-left">
                     <h3 className="text-white font-semibold">{interview.title}</h3>
@@ -290,7 +290,7 @@ export default function ManageTopInterviewsPage() {
                 <div className="border-t border-white/5 p-5">
                   {loadingDetails ? (
                     <div className="flex items-center justify-center py-10">
-                      <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                      <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
                     </div>
                   ) : interviewDetails ? (
                     <div className="space-y-6">
@@ -445,7 +445,7 @@ export default function ManageTopInterviewsPage() {
                                 
                                 <div className="flex items-center gap-4">
                                   <div className="text-right">
-                                    <p className="text-blue-400 font-bold">{attempt.score}/100</p>
+                                    <p className="text-[#D4AF37] font-bold">{attempt.score}/100</p>
                                     <p className="text-gray-500 text-xs">
                                       {new Date(attempt.createdAt).toLocaleDateString()}
                                     </p>

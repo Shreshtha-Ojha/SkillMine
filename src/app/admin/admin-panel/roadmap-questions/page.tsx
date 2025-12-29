@@ -146,13 +146,13 @@ export default function RoadmapQuestionsPage() {
             <option value="">Select Roadmap</option>
             {roadmaps.map(r => <option key={r._id} value={r._id}>{r.title}</option>)}
           </select>
-          <button onClick={handleAddRow} className="px-4 py-3 bg-blue-600 text-white rounded-xl">Add Question</button>
+          <button onClick={handleAddRow} className="px-4 py-3 bg-[#7E102C] text-white rounded-xl">Add Question</button>
           <div className="text-sm text-gray-400 px-3">Total questions: <span className="font-semibold text-white">{questions.length}</span></div>
           {questions.length < 60 && selected && (
             <div className="text-sm text-[#E1D4C1] px-3">Warning: Less than 60 questions configured. Users cannot take test until 60+ MCQs exist.</div>
           )}
           <label className="inline-flex items-center gap-2 text-sm text-gray-300 px-4">
-            <input type="checkbox" checked={appendMode} onChange={(e) => setAppendMode(e.target.checked)} className="accent-blue-500" />
+            <input type="checkbox" checked={appendMode} onChange={(e) => setAppendMode(e.target.checked)} className="accent-[#D4AF37]" />
             <span>Append (keep existing)</span>
           </label>
           <button onClick={handleSave} className="px-4 py-3 bg-green-600 text-white rounded-xl">Save Questions</button>

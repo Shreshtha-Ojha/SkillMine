@@ -22,12 +22,12 @@ const AdminNavbar = () => {
 
   return (
     <nav className="w-full bg-white/10 backdrop-blur-xl border-b border-white/20 py-4 px-6 flex items-center justify-between shadow-lg sticky top-0 z-50">
-      <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 tracking-wide cursor-pointer flex items-center gap-2" onClick={() => router.push("/admin/admin-panel")}> <FaUserShield className="text-blue-400" /> Admin Panel</div>
+      <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E1D4C1] to-[#7E102C] tracking-wide cursor-pointer flex items-center gap-2" onClick={() => router.push("/admin/admin-panel")}> <FaUserShield className="text-[#D4AF37]" /> Admin Panel</div>
       <div className="hidden md:flex gap-4">
         {adminLinks.map(link => (
           <button
             key={link.href}
-            className="flex items-center gap-2 text-white hover:text-blue-300 font-semibold text-lg px-4 py-2 rounded-xl transition-all bg-white/5 hover:bg-blue-900/40 border border-white/10 shadow"
+            className="flex items-center gap-2 text-white hover:text-[#D4AF37] font-semibold text-lg px-4 py-2 rounded-xl transition-all bg-white/5 hover:bg-[#7E102C]/40 border border-white/10 shadow"
             onClick={() => router.push(link.href)}
           >
             <span className="text-xl">{link.icon}</span> {link.label}
@@ -51,7 +51,7 @@ const AdminNavbar = () => {
             {adminLinks.map(link => (
               <button
                 key={link.href}
-                className="flex items-center gap-2 text-white hover:text-blue-300 font-semibold text-lg text-left px-3 py-2 rounded-xl bg-white/10 hover:bg-blue-900/60 border border-white/10"
+                className="flex items-center gap-2 text-white hover:text-[#D4AF37] font-semibold text-lg text-left px-3 py-2 rounded-xl bg-white/10 hover:bg-[#7E102C]/60 border border-white/10"
                 onClick={() => { setOpen(false); router.push(link.href); }}
               >
                 <span className="text-xl">{link.icon}</span> {link.label}

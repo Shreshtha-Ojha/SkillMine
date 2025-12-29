@@ -199,7 +199,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#7E102C] flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
@@ -225,8 +225,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive(item.href)
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  ? "bg-[#7E102C]/20 text-[#D4AF37] border border-[#D4AF37]/30"
+                  : "text-gray-400 hover:text-[#E1D4C1] hover:bg-white/5"
               }`}
             >
               {item.icon}

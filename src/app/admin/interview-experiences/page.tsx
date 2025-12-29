@@ -69,14 +69,14 @@ export default function InterviewExperienceAdmin() {
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Interview Experiences</h1>
           <p className="text-gray-400 text-sm">Review and approve user-submitted interview experiences.</p>
           <div className="mt-2 flex gap-2">
-            <button onClick={() => setViewAll(false)} className={`px-3 py-1 text-sm rounded ${!viewAll ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-300'}`}>Pending</button>
-            <button onClick={() => setViewAll(true)} className={`px-3 py-1 text-sm rounded ${viewAll ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-300'}`}>All ({all.length})</button>
+            <button onClick={() => setViewAll(false)} className={`px-3 py-1 text-sm rounded ${!viewAll ? 'bg-[#7E102C] text-white' : 'bg-white/5 text-gray-300'}`}>Pending</button>
+            <button onClick={() => setViewAll(true)} className={`px-3 py-1 text-sm rounded ${viewAll ? 'bg-[#7E102C] text-white' : 'bg-white/5 text-gray-300'}`}>All ({all.length})</button>
           </div>
       </div>
 
       {loading ? (
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="space-y-4">
@@ -96,7 +96,7 @@ export default function InterviewExperienceAdmin() {
             <div key={p._id} className="bg-[#111118] border border-white/10 rounded-xl p-4 sm:p-6">
               <div className="flex justify-between items-start gap-4">
                 <div className="flex gap-4 items-start">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-indigo-500 flex items-center justify-center text-white font-medium">{p.author?.charAt(0)?.toUpperCase() || "U"}</div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-[#7E102C] flex items-center justify-center text-white font-medium">{p.author?.charAt(0)?.toUpperCase() || "U"}</div>
                   <div>
                     <div className="text-white font-semibold">{p.title}</div>
                           <div className="text-gray-400 text-sm">by {p.author}</div>

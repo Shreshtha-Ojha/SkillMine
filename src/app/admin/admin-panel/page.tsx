@@ -44,7 +44,7 @@ const AdminPanel = () => {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading dashboard...</span>
           </div>
         </div>
@@ -181,10 +181,10 @@ const AdminPanel = () => {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string; text: string; border: string }> = {
-      blue: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30" },
-      green: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
-      purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30" },
-      orange: { bg: "bg-orange-500/20", text: "text-orange-400", border: "border-orange-500/30" },
+      blue: { bg: "bg-[#D4AF37]/20", text: "text-[#D4AF37]", border: "border-[#D4AF37]/30" },
+      green: { bg: "bg-[#50C878]/20", text: "text-[#50C878]", border: "border-[#50C878]/30" },
+      purple: { bg: "bg-[#7E102C]/20", text: "text-[#E1D4C1]", border: "border-[#7E102C]/30" },
+      orange: { bg: "bg-[#D4AF37]/20", text: "text-[#D4AF37]", border: "border-[#D4AF37]/30" },
     };
     return colors[color] || colors.blue;
   };
@@ -224,10 +224,10 @@ const AdminPanel = () => {
             <Link
               key={action.label}
               href={action.href}
-              className="group bg-[#111118] border border-white/10 rounded-xl p-4 hover:border-blue-500/50 hover:bg-[#151520] transition-all"
+              className="group bg-[#111118] border border-white/10 rounded-xl p-4 hover:border-[#D4AF37]/50 hover:bg-[#151520] transition-all"
             >
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-blue-500/30 transition-all">
-                <span className="text-blue-400">{action.icon}</span>
+              <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#D4AF37]/30 transition-all">
+                <span className="text-[#D4AF37]">{action.icon}</span>
               </div>
               <h3 className="text-white font-medium mb-1">{action.label}</h3>
               <p className="text-xs text-gray-500">{action.description}</p>
@@ -242,7 +242,7 @@ const AdminPanel = () => {
           <h2 className="text-lg font-semibold text-white">Recent Users</h2>
           <Link
             href="/admin/admin-panel/users"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-[#D4AF37] hover:text-[#E1D4C1] transition-colors"
           >
             View all →
           </Link>
@@ -262,7 +262,7 @@ const AdminPanel = () => {
                 <tr key={user._id} className="hover:bg-white/5 transition-colors">
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-medium">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#7E102C] flex items-center justify-center text-white text-sm font-medium">
                         {user.username?.charAt(0).toUpperCase() || "U"}
                       </div>
                       <div>
@@ -290,7 +290,7 @@ const AdminPanel = () => {
                       <div className="flex items-center gap-2">
                         <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                            className="h-full bg-gradient-to-r from-[#D4AF37] to-[#50C878] rounded-full"
                             style={{
                               width: `${Math.min(
                                 Object.values(user.courseProgress).reduce(

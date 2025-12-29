@@ -50,7 +50,7 @@ const RoadmapCreate = () => {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading...</span>
           </div>
         </div>
@@ -182,7 +182,7 @@ const RoadmapCreate = () => {
             <label className="block text-sm font-medium text-gray-300 mb-2">Roadmap Title</label>
             <input
               type="text"
-              className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+              className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]/50 transition-all"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -194,7 +194,7 @@ const RoadmapCreate = () => {
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
             <textarea
-              className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all resize-none"
+              className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]/50 transition-all resize-none"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description of the roadmap..."
@@ -210,7 +210,7 @@ const RoadmapCreate = () => {
             <div className="flex flex-col sm:flex-row gap-3 mb-4">
               <input
                 type="text"
-                className="flex-1 px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                className="flex-1 px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]/50 transition-all"
                 value={phaseTitle}
                 onChange={(e) => setPhaseTitle(e.target.value)}
                 placeholder="Enter phase title..."
@@ -218,7 +218,7 @@ const RoadmapCreate = () => {
               <button
                 type="button"
                 onClick={addPhase}
-                className="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+                className="px-5 py-3 bg-gradient-to-r from-[#D4AF37] to-[#7E102C] hover:from-[#E5C76B] hover:to-[#7E102C] text-white text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -239,7 +239,7 @@ const RoadmapCreate = () => {
                     {/* Phase Header */}
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center font-bold">
+                        <span className="w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-xs flex items-center justify-center font-bold">
                           {idx + 1}
                         </span>
                         {phase.title}
@@ -294,7 +294,7 @@ const RoadmapCreate = () => {
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className="text-sm text-white truncate">{task.title}</span>
                                   {task.link && (
-                                    <a href={task.link} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 flex-shrink-0">
+                                    <a href={task.link} target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-[#E1D4C1] flex-shrink-0">
                                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                       </svg>
@@ -328,7 +328,7 @@ const RoadmapCreate = () => {
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className="text-sm text-white truncate">{assignment.title}</span>
                                   {assignment.link && (
-                                    <a href={assignment.link} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 flex-shrink-0">
+                                    <a href={assignment.link} target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-[#E1D4C1] flex-shrink-0">
                                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                       </svg>
@@ -372,7 +372,7 @@ const RoadmapCreate = () => {
           <button
             type="submit"
             disabled={submitting || !title.trim()}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#7E102C] hover:from-[#E5C76B] hover:to-[#7E102C] disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
@@ -418,7 +418,7 @@ const RoadmapCreate = () => {
                 <input
                   name="title"
                   type="text"
-                  className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                  className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]/50 transition-all"
                   value={taskForm.title}
                   onChange={handleTaskFormChange}
                   placeholder="Enter title..."
@@ -429,7 +429,7 @@ const RoadmapCreate = () => {
                 <input
                   name="link"
                   type="url"
-                  className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                  className="w-full px-4 py-3 bg-[#0a0a0f] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]/50 transition-all"
                   value={taskForm.link}
                   onChange={handleTaskFormChange}
                   placeholder="https://..."
@@ -449,7 +449,7 @@ const RoadmapCreate = () => {
                 type="button"
                 onClick={addTaskOrAssignment}
                 disabled={!taskForm.title.trim() || !taskForm.link.trim()}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all"
+                className="px-5 py-2.5 bg-gradient-to-r from-[#D4AF37] to-[#7E102C] hover:from-[#E5C76B] hover:to-[#7E102C] disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all"
               >
                 Add
               </button>

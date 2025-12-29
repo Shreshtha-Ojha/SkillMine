@@ -48,7 +48,7 @@ export default function CreateSkillPage() {
 
         <div className="max-w-lg p-4 bg-[#0b0b10] border border-white/10 rounded-xl">
           <input placeholder="Skill name" value={newSkillTitle} onChange={(e)=>setNewSkillTitle(e.target.value)} className="w-full px-3 py-2 bg-[#07070a] border border-white/10 rounded-md text-white mb-3" />
-          <button disabled={creatingSkill} onClick={createSkill} className={`w-full px-3 py-2 rounded-md ${creatingSkill?'bg-white/10 text-gray-400':'bg-blue-600 text-white'}`}>{creatingSkill?'Creating...':'Create Skill'}</button>
+          <button disabled={creatingSkill} onClick={createSkill} className={`w-full px-3 py-2 rounded-md ${creatingSkill?'bg-white/10 text-gray-400':'bg-[#7E102C] text-white'}`}>{creatingSkill?'Creating...':'Create Skill'}</button>
         </div>
 
         <div className="mt-6 p-4 bg-[#0b0b10] border border-white/10 rounded-xl">

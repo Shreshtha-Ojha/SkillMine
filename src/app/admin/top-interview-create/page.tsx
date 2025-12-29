@@ -26,7 +26,7 @@ export default function CreateTopInterviewPage() {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading...</span>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function CreateTopInterviewPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 placeholder="Interview title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -123,7 +123,7 @@ export default function CreateTopInterviewPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">Company</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 placeholder="e.g. Google, Amazon"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
@@ -137,7 +137,7 @@ export default function CreateTopInterviewPage() {
             <label className="block text-sm font-medium text-gray-300 mb-2">Field</label>
             <input
               type="text"
-              className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+              className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
               placeholder="e.g. Frontend, Backend, Data Science"
               value={field}
               onChange={(e) => setField(e.target.value)}
@@ -151,7 +151,7 @@ export default function CreateTopInterviewPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">Topics</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 placeholder="React, Node.js, SQL (comma separated)"
                 value={topics}
                 onChange={(e) => setTopics(e.target.value)}
@@ -162,7 +162,7 @@ export default function CreateTopInterviewPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">Skills</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 placeholder="Problem solving, System design"
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
@@ -176,7 +176,7 @@ export default function CreateTopInterviewPage() {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Difficulty Level</label>
               <select
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 value={level}
                 onChange={(e) => setLevel(e.target.value)}
               >
@@ -193,7 +193,7 @@ export default function CreateTopInterviewPage() {
                 type="number"
                 min={1}
                 max={15}
-                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                 value={numQuestions}
                 onChange={(e) => setNumQuestions(Math.max(1, Math.min(15, Number(e.target.value))))}
                 required
@@ -205,7 +205,7 @@ export default function CreateTopInterviewPage() {
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
             <textarea
-              className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all resize-none"
+              className="w-full px-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all resize-none"
               placeholder="Brief description of the interview..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -218,7 +218,7 @@ export default function CreateTopInterviewPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#7E102C] hover:from-[#E5C76B] hover:to-[#7E102C] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

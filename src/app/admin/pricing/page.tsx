@@ -101,7 +101,7 @@ export default function PricingManagementPage() {
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <p className="text-red-400 font-medium">{error}</p>
-          <Link href="/" className="text-blue-400 hover:underline mt-4 inline-block">
+          <Link href="/" className="text-[#D4AF37] hover:underline mt-4 inline-block">
             Go Home
           </Link>
         </div>
@@ -121,7 +121,7 @@ export default function PricingManagementPage() {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string; text: string; border: string }> = {
-      blue: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30" },
+      blue: { bg: "bg-[#D4AF37]/20", text: "text-[#D4AF37]", border: "border-[#D4AF37]/30" },
       purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30" },
       green: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
       yellow: { bg: "bg-[#7E102C]/20", text: "text-[#E1D4C1]", border: "border-[#7E102C]/30" },
@@ -167,7 +167,7 @@ export default function PricingManagementPage() {
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-[#7E102C] hover:bg-[#7E102C] disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg text-sm font-medium"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -217,7 +217,7 @@ export default function PricingManagementPage() {
                     ...pricing,
                     premium: Math.max(9, parseInt(e.target.value) || 9)
                   })}
-                  className="w-32 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-2xl font-bold text-white text-center focus:outline-none focus:border-blue-500"
+                  className="w-32 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-2xl font-bold text-white text-center focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
             </div>

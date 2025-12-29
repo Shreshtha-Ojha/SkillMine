@@ -95,12 +95,12 @@ export default function SkillQuestionsPage() {
           <div className="md:col-span-1 p-4 bg-[#0b0b10] border border-white/10 rounded-xl">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-sm text-gray-300">Skills</h3>
-              <a href="/admin/admin-panel/skill-questions/create" className="text-sm px-3 py-1 bg-blue-600 text-white rounded">New Skill</a>
+              <a href="/admin/admin-panel/skill-questions/create" className="text-sm px-3 py-1 bg-[#7E102C] text-white rounded">New Skill</a>
             </div>
             <div>
               <div className="space-y-2 max-h-72 overflow-auto">
                 {skills.map(s => (
-                  <div key={s._id} className={`p-2 rounded flex items-center justify-between ${selected===s._id? 'bg-blue-500/10 border border-blue-500/20' : 'hover:bg-white/5'}`}>
+                  <div key={s._id} className={`p-2 rounded flex items-center justify-between ${selected===s._id? 'bg-[#D4AF37]/10 border border-[#D4AF37]/20' : 'hover:bg-white/5'}`}>
                     <div>
                       <div className="font-medium">{s.title}</div>
                       <div className="text-xs text-gray-400">{s.questionCount || 0} questions</div>
@@ -117,7 +117,7 @@ export default function SkillQuestionsPage() {
 
           <div className="md:col-span-3 p-4 bg-[#0b0b10] border border-white/10 rounded-xl">
             <div className="flex items-center gap-3 mb-4">
-              <button disabled={!selected || creatingSkill} onClick={()=>{ if (!selected) return toast.error('Select a skill first'); setQuestions([...questions, { question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }]) }} className={`px-4 py-2 ${(!selected||creatingSkill)? 'bg-white/10 text-gray-400' : 'bg-blue-600 text-white'} rounded`}>
+              <button disabled={!selected || creatingSkill} onClick={()=>{ if (!selected) return toast.error('Select a skill first'); setQuestions([...questions, { question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }]) }} className={`px-4 py-2 ${(!selected||creatingSkill)? 'bg-white/10 text-gray-400' : 'bg-[#7E102C] text-white'} rounded`}>
                 {creatingSkill ? 'Creating...' : 'Add Question'}
               </button>
               <div className="ml-2">
@@ -127,7 +127,7 @@ export default function SkillQuestionsPage() {
                 </select>
               </div>
               <label className="inline-flex items-center gap-2 text-sm text-gray-300">
-                <input type="checkbox" checked={appendMode} onChange={(e)=>setAppendMode(e.target.checked)} className="accent-blue-500" />
+                <input type="checkbox" checked={appendMode} onChange={(e)=>setAppendMode(e.target.checked)} className="accent-[#D4AF37]" />
                 <span>Append</span>
               </label>
               <button disabled={savingQuestions || !selected} onClick={handleSave} className={`ml-auto px-4 py-2 rounded ${savingQuestions || !selected ? 'bg-white/10 text-gray-400' : 'bg-green-600 text-white'}`}>

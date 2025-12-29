@@ -93,7 +93,7 @@ export default function OAPurchasesPage() {
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 mb-4">{error}</p>
-          <Link href="/admin/admin-panel" className="text-blue-400 hover:text-blue-300">
+          <Link href="/admin/admin-panel" className="text-[#D4AF37] hover:text-[#E1D4C1]">
             Go to Admin Panel
           </Link>
         </div>
@@ -139,7 +139,7 @@ export default function OAPurchasesPage() {
                   value={unlockEmail}
                   onChange={(e) => setUnlockEmail(e.target.value)}
                   placeholder="user@example.com"
-                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50"
                   required
                 />
               </div>
@@ -152,7 +152,7 @@ export default function OAPurchasesPage() {
                 value={unlockPaymentId}
                 onChange={(e) => setUnlockPaymentId(e.target.value)}
                 placeholder="Instamojo Payment ID"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50"
               />
             </div>
 
@@ -180,7 +180,7 @@ export default function OAPurchasesPage() {
         {/* Purchased Users List */}
         <div className="bg-[#111118] border border-white/10 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-blue-400" />
+            <Users className="w-5 h-5 text-[#D4AF37]" />
             Users with Premium Access ({purchasedUsers.length})
           </h2>
 

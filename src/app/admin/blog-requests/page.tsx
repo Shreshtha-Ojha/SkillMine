@@ -83,7 +83,7 @@ export default function BlogRequestsAdmin() {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading requests...</span>
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function BlogRequestsAdmin() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   {/* User Info */}
                   <div className="flex items-start sm:items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-medium text-lg flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#7E102C] flex items-center justify-center text-white font-medium text-lg flex-shrink-0">
                       {userInfo?.username?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <div>

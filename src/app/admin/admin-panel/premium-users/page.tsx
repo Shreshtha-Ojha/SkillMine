@@ -75,7 +75,7 @@ export default function PremiumUsersPage() {
                     <td className="px-4 py-3">{u.premiumPurchasedAt ? new Date(u.premiumPurchasedAt).toLocaleString() : '—'}</td>
                     <td className="px-4 py-3">{u.createdAt ? new Date(u.createdAt).toLocaleString() : '—'}</td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/admin-panel/users/${u.id}`} className="text-blue-400 hover:underline">View</Link>
+                      <Link href={`/admin/admin-panel/users/${u.id}`} className="text-[#D4AF37] hover:underline">View</Link>
                     </td>
                   </tr>
                 ))}

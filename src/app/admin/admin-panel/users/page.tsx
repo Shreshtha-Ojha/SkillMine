@@ -89,7 +89,7 @@ const UserManagement = () => {
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-400 text-sm">Loading users...</span>
           </div>
         </div>
@@ -138,7 +138,7 @@ const UserManagement = () => {
           <input
             type="text"
             placeholder="Search by username or email..."
-            className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -155,7 +155,7 @@ const UserManagement = () => {
             {/* User Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-medium text-lg">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#7E102C] flex items-center justify-center text-white font-medium text-lg">
                   {user.username?.charAt(0).toUpperCase() || "U"}
                 </div>
                 <div>
@@ -196,7 +196,7 @@ const UserManagement = () => {
               )}
               {user.courseProgress && Object.keys(user.courseProgress).length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   <span>{Object.keys(user.courseProgress).length} courses in progress</span>
@@ -235,7 +235,7 @@ const UserManagement = () => {
             {/* Modal Header */}
             <div className="flex items-center justify-between p-5 border-b border-white/10">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-xl font-medium">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#D4AF37] to-[#7E102C] rounded-full flex items-center justify-center text-white text-xl font-medium">
                   {selectedUser.username?.charAt(0).toUpperCase() || "U"}
                 </div>
                 <div>
@@ -316,11 +316,11 @@ const UserManagement = () => {
                       <div key={course} className="bg-white/5 rounded-lg p-3">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-sm text-white font-medium">{course}</span>
-                          <span className="text-xs text-blue-400 font-bold">{progress.progressPercentage.toFixed(1)}%</span>
+                          <span className="text-xs text-[#D4AF37] font-bold">{progress.progressPercentage.toFixed(1)}%</span>
                         </div>
                         <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                            className="h-full bg-gradient-to-r from-[#D4AF37] to-[#50C878] rounded-full"
                             style={{ width: `${progress.progressPercentage}%` }}
                           />
                         </div>

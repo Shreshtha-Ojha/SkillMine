@@ -150,8 +150,8 @@ export default function TestManagementPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="p-5 bg-[#111118] border border-white/5 rounded-xl">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-blue-500/10 rounded-lg">
-                <Award className="w-6 h-6 text-blue-400" />
+              <div className="p-3 bg-[#D4AF37]/10 rounded-lg">
+                <Award className="w-6 h-6 text-[#D4AF37]" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-white">{attempts.length}</div>
@@ -192,13 +192,13 @@ export default function TestManagementPage() {
               placeholder="Search by username, email, or name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:border-blue-500/50 focus:outline-none"
+              className="w-full pl-10 pr-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:border-[#D4AF37]/50 focus:outline-none"
             />
           </div>
           <select
             value={selectedRoadmap}
             onChange={(e) => handleRoadmapFilter(e.target.value)}
-            className="px-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white focus:border-blue-500/50 focus:outline-none"
+            className="px-4 py-3 bg-[#111118] border border-white/10 rounded-xl text-white focus:border-[#D4AF37]/50 focus:outline-none"
           >
             <option value="">All Roadmaps</option>
             {roadmaps.map((roadmap) => (
@@ -209,7 +209,7 @@ export default function TestManagementPage() {
           </select>
           <button
             onClick={() => fetchAttempts(selectedRoadmap || undefined)}
-            className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition-colors flex items-center gap-2"
+            className="px-4 py-3 bg-[#7E102C] text-white rounded-xl hover:bg-[#D4AF37] transition-colors flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -239,7 +239,7 @@ export default function TestManagementPage() {
                       {/* User Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-semibold">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#7E102C] flex items-center justify-center text-white font-semibold">
                             {attempt.user?.username?.[0]?.toUpperCase() || "?"}
                           </div>
                           <div>
@@ -250,7 +250,7 @@ export default function TestManagementPage() {
                           </div>
                         </div>
                         <div className="text-sm text-gray-500 mt-2">
-                          <span className="text-blue-400">{roadmap?.title || "Unknown Roadmap"}</span>
+                          <span className="text-[#D4AF37]">{roadmap?.title || "Unknown Roadmap"}</span>
                           <span className="mx-2">•</span>
                           {new Date(attempt.submittedAt).toLocaleDateString()}
                         </div>
@@ -316,7 +316,7 @@ export default function TestManagementPage() {
                           <div className="text-xs text-gray-500">Total Score (60)</div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg">
-                          <div className="text-lg font-semibold text-blue-400">{attempt.mcqScore}</div>
+                          <div className="text-lg font-semibold text-[#D4AF37]">{attempt.mcqScore}</div>
                           <div className="text-xs text-gray-500">MCQ Score (60)</div>
                         </div>
                         {/* Short answers removed for MCQ-only tests */}
