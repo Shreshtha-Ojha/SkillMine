@@ -15,15 +15,11 @@ export async function POST(request:NextRequest){
             }, { status: 400 });
         }
         
-        console.log(token,"--> Got the Token");
-        
         const user = await User.findOne({
             verifyToken: token,
             verifyTokenExpiry: {$gt: Date.now()}
         });
         
-        console.log("Found User ->", user);
-
         if(!user){
             return NextResponse.json({
                 error: "This verification link is invalid or has expired. Please use 'Resend Verification' to get a new link."
@@ -43,8 +39,6 @@ export async function POST(request:NextRequest){
         user.verifyTokenExpiry = undefined;
 
         await user.save();
-
-        console.log("new user",user)
 
         return NextResponse.json({
             message: "Email verified successfully! You can now login to your account.",

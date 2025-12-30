@@ -3,6 +3,7 @@ import { generateContent } from "@/lib/gemini";
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import jwt from "jsonwebtoken";
+import { allowRequest } from "@/lib/server/rateLimiter";
 
 // Increase timeout for Vercel/serverless functions
 export const maxDuration = 30; // 30 seconds max timeout
@@ -27,8 +28,19 @@ async function getUserIdFromRequest(request: NextRequest): Promise<string | null
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: 10 interview requests per user per minute
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ||
+             req.headers.get("x-real-ip") ||
+             "unknown";
+  if (!allowRequest(`interview:${ip}`, 10, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please slow down." },
+      { status: 429 }
+    );
+  }
+
   const userId = await getUserIdFromRequest(req);
-  
+
   // Check if user is authenticated
   if (!userId) {
     return NextResponse.json(
@@ -76,25 +88,21 @@ export async function POST(req: NextRequest) {
     Example: ["What is a closure in JavaScript?", "Explain event delegation."]
   `;
 
-  console.log("[Gemini Interview] Prompt:", prompt);
-
   let geminiText;
   try {
     geminiText = await generateContent(prompt);
-    console.log("[Gemini Interview] Response:", geminiText);
   } catch (err) {
-    console.error("[Gemini Interview] Gemini API Error:", err);
+    console.error("[Gemini Interview] API Error");
     return NextResponse.json({
       questions: ["Sorry, could not generate questions due to a server error. Please try again."]
     });
   }
-  
+
   let questions: string[] = [];
   try {
     // Ensure geminiText is a string
     const text = typeof geminiText === 'string' ? geminiText : JSON.stringify(geminiText);
-    console.log("[Gemini Interview] Extracted Text:", text);
-    
+
     // Use a more compatible regex for JSON array extraction
     const match = text?.match(/\[[\s\S]*\]/);
     if (match) {
@@ -103,7 +111,7 @@ export async function POST(req: NextRequest) {
       questions = ["Sorry, could not generate questions. Please try again."];
     }
   } catch (err) {
-    console.error("[Gemini Interview] Parse Error:", err);
+    console.error("[Gemini Interview] Parse Error");
     questions = ["Sorry, could not generate questions. Please try again."];
   }
 
@@ -117,6 +125,5 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  console.log("[Gemini Interview] Final Questions:", questions);
   return NextResponse.json({ questions });
 }

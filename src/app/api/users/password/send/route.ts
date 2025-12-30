@@ -3,13 +3,25 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { allowRequest } from "@/lib/server/rateLimiter";
 
 connect();
 
 export async function POST(request: NextRequest) {
     try {
+        // Rate limiting: 3 password reset requests per IP per minute
+        const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ||
+                   request.headers.get("x-real-ip") ||
+                   "unknown";
+        if (!allowRequest(`password-reset:${ip}`, 3, 60_000)) {
+            return NextResponse.json(
+                { error: "Too many password reset requests. Please try again later." },
+                { status: 429 }
+            );
+        }
+
         const { email } = await request.json();
-        
+
         // Input validation
         if (!email) {
             return NextResponse.json({ error: "Please provide an email address." }, { status: 400 });
@@ -21,30 +33,23 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 });
         }
 
-        console.log("email:", email);
-
         // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
             return NextResponse.json({ error: "No account found with this email address." }, { status: 404 });
         }
 
-        console.log("User found:", user);
-
         // Generate a reset token and set its expiry
         const resetToken = crypto.randomBytes(32).toString("hex");
-        console.log("Reset token:", resetToken);
 
         user.forgotPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
         user.forgotPasswordTokenExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes
 
         await user.save();
-        console.log("Updated user:", user);
 
         // Build the reset URL
         const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
         const resetUrl = `${domain}/auth/resetpassword?token=${resetToken}`;
-        console.log("Reset URL:", resetUrl);
 
         // Create a transporter for nodemailer
         const transporter = nodemailer.createTransport({
@@ -54,8 +59,6 @@ export async function POST(request: NextRequest) {
                 pass: process.env.EMAIL_PASS, // App-specific password
             },
         });
-
-        console.log("Nodemailer transporter created.");
 
         // Email content
         const mailOptions = {
@@ -103,15 +106,11 @@ export async function POST(request: NextRequest) {
                 </div>
             `,
         };
-        
-
-        console.log("Mail options prepared:", mailOptions);
 
         // Send the email
         try {
-            const mailResponse = await transporter.sendMail(mailOptions);
-            console.log("Mail response:", mailResponse);
-            
+            await transporter.sendMail(mailOptions);
+
             // Return success response
             return NextResponse.json({ message: "Password reset link has been sent to your email. Please check your inbox." }, { status: 200 });
         } catch (emailError: any) {

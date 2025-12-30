@@ -13,11 +13,8 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { checkedData } = reqBody;
 
-    console.log("Received checkedData:", checkedData);
-
     // Ensure checkedData exists and is an array
     if (!Array.isArray(checkedData)) {
-      console.error("CheckedData is missing or not an array in the request");
       return NextResponse.json({ error: "Missing or invalid checkedData" }, { status: 400 });
     }
 
@@ -25,16 +22,13 @@ export async function POST(request: NextRequest) {
     const userId = getDataFromToken(request);
 
     if (!userId) {
-      console.error("User ID not found in the token");
       return NextResponse.json({ error: "User not logged in" }, { status: 401 });
     }
 
-    console.log(`Fetching user data for userId: ${userId}`);
     const user = await User.findById(userId);
 
     // Check if the user is found
     if (!user) {
-      console.error(`User not found with ID: ${userId}`);
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -44,9 +38,7 @@ export async function POST(request: NextRequest) {
     // Save the updated user data
     await user.save();
 
-    console.log("User successfully updated:", user);
-
-    return NextResponse.json({ message: "Checked data updated successfully", success: true, user });
+    return NextResponse.json({ message: "Checked data updated successfully", success: true });
 
   } catch (error: any) {
     console.error("Error while updating user data:", error.message);

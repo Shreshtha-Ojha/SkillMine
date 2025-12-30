@@ -3,14 +3,26 @@ import { sendEmail } from "@/helpers/mailer";
 import User from "@/models/userModel";
 import bcryptjs from "bcryptjs"
 import {NextResponse,NextRequest} from 'next/server'
+import { allowRequest } from "@/lib/server/rateLimiter";
 
 connect();
 
 export async function POST(request:NextRequest){
     try {
+        // Rate limiting: 5 signups per IP per minute
+        const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ||
+                   request.headers.get("x-real-ip") ||
+                   "unknown";
+        if (!allowRequest(`signup:${ip}`, 5, 60_000)) {
+            return NextResponse.json(
+                { error: "Too many signup attempts. Please try again later." },
+                { status: 429 }
+            );
+        }
+
         const reqBody = await request.json();
         const {username,email,password} = reqBody;
-        
+
         // Input validation
         if(!email || !password || !username){
             return NextResponse.json({error: "Please provide all required fields (username, email, password)"},{status:400});
@@ -23,12 +35,23 @@ export async function POST(request:NextRequest){
         }
 
         // Password strength validation
-        if(password.length < 6){
-            return NextResponse.json({error: "Password must be at least 6 characters long"},{status:400});
+        if(password.length < 8){
+            return NextResponse.json({error: "Password must be at least 8 characters long"},{status:400});
+        }
+        // Check for password complexity
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        if(!hasUppercase || !hasLowercase || !hasNumber){
+            return NextResponse.json({error: "Password must contain at least one uppercase letter, one lowercase letter, and one number"},{status:400});
         }
 
-        console.log(reqBody);
-        
+        // Username validation - alphanumeric and underscore only, 3-30 chars
+        const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
+        if(!usernameRegex.test(username)){
+            return NextResponse.json({error: "Username must be 3-30 characters and contain only letters, numbers, and underscores"},{status:400});
+        }
+
         // Check if user already exists
         const existingUser = await User.findOne({email});
         if(existingUser){
@@ -55,7 +78,6 @@ export async function POST(request:NextRequest){
         })
 
         const savedUser = await newUser.save();
-        console.log(savedUser);
 
         try {
             await sendEmail({email,emailType: "VERIFY",userId: savedUser._id});

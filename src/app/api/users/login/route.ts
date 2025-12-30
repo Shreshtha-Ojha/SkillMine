@@ -3,11 +3,23 @@ import User from "@/models/userModel";
 import bcryptjs from "bcryptjs";
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { allowRequest } from "@/lib/server/rateLimiter";
 
 connect();
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 login attempts per IP per minute
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ||
+               request.headers.get("x-real-ip") ||
+               "unknown";
+    if (!allowRequest(`login:${ip}`, 10, 60_000)) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const reqBody = await request.json();
     const { email, password } = reqBody;
 
@@ -19,8 +31,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(reqBody);
-
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
@@ -29,8 +39,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
-    console.log(user, "---> user exists");
 
     // Check if the user is verified
     if (!user.isVerified) {
@@ -68,9 +76,9 @@ export async function POST(request: NextRequest) {
       token, // Add token to response body for client-side use
     });
 
-    // Set cookie with proper options for security and accessibility
+    // Set cookie with proper options for security
     response.cookies.set("token", token, {
-      httpOnly: false, // Temporarily disabled for debugging
+      httpOnly: true, // Prevent XSS attacks from accessing token
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 86400, // 1 day in seconds

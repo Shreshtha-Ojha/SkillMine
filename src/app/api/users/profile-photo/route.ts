@@ -17,16 +17,11 @@ cloudinary.config({
 export async function POST(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
-    console.log("[ProfilePhotoAPI] userId:", userId);
     if (!userId) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
     const { profilePhoto } = await request.json();
-    console.log("[ProfilePhotoAPI] profilePhoto type:", typeof profilePhoto, "length:", profilePhoto?.length);
-    if (profilePhoto) {
-      console.log("[ProfilePhotoAPI] profilePhoto (first 100 chars):", profilePhoto.slice(0, 100));
-    }
 
     if (!profilePhoto) {
       return NextResponse.json({ error: "Profile photo is required" }, { status: 400 });
