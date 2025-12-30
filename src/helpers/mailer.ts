@@ -2,7 +2,13 @@ import User from '@/models/userModel';
 import nodemailer from 'nodemailer';
 import bcryptjs from "bcryptjs";
 
-export const sendEmail = async ({ email, emailType, userId }: any) => {
+interface SendEmailParams {
+    email: string;
+    emailType: "VERIFY" | "RESET";
+    userId: string;
+}
+
+export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) => {
     try {
         // Hash the userId as a token
         const hashedToken = (await bcryptjs.hash(userId.toString(), 10)).replace(/[^a-zA-Z0-9]/g, '');
@@ -15,25 +21,18 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             });
         }
 
-        console.log("details getting at user -->", email, " ", emailType, " ",userId);
-
         // Create a transport instance for sending emails
-        console.log("email and pass ->",process.env.EMAIL_USER,process.env.EMAIL_PASS);
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: process.env.EMAIL_USER, // Your Gmail address
-                pass: process.env.EMAIL_PASS, // App-specific password
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
         });
-
-        console.log("transporter--->",transporter);
-        console.log("token inside ->",hashedToken);
 
 
 // Get domain from environment variable with fallback (prefer NEXTAUTH_URL for consistency)
 const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
-console.log("Email domain URL:", domain);
 
 const mailOptions = {
     from: process.env.EMAIL_USER, 
@@ -75,9 +74,7 @@ const mailOptions = {
 
 
         // Send the email
-        console.log("now sending makil response");
         const mailResponse = await transporter.sendMail(mailOptions);
-        console.log("it is mail response",mailResponse);
         return mailResponse;
     } catch (error: any) {
         console.error("❌ Email sending failed:", error);

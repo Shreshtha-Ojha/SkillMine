@@ -232,51 +232,42 @@ export default function ProfilePage() {
     setLoadingRoadmaps(true);
     try {
       const data = await cachedFetch("/api/roadmap/fetchall");
-      console.log("Fetched roadmaps:", data.roadmaps);
       setRoadmaps(data.roadmaps || []);
-      
+
       // Fetch progress for each roadmap WITHOUT caching to get fresh data
       const progressObj: Record<string, { completedTasks: string[]; completedAssignments: string[] }> = {};
       const testAttemptsObj: Record<string, any> = {};
-      
-      // Get token from localStorage for Authorization header (same as roadmap page)
+
+      // Get token from localStorage for Authorization header
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      
+
       for (const roadmap of data.roadmaps) {
         try {
-          // Use fetch with Authorization header (same method as roadmap page)
-          console.log(`Fetching progress for roadmap: ${roadmap._id} (${roadmap.title})`);
           const progressRes = await fetch(`/api/roadmap/progress?roadmapId=${roadmap._id}`, {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           });
           const progressData = await progressRes.json();
-          console.log(`Progress data for ${roadmap.title}:`, progressData);
-          
+
           if (progressData.progress) {
             progressObj[roadmap._id] = progressData.progress;
           } else {
-            console.log(`No progress found for ${roadmap.title}, using empty`);
             progressObj[roadmap._id] = { completedTasks: [], completedAssignments: [] };
           }
-          
+
           // Fetch test eligibility for each roadmap
           const testRes = await fetch(`/api/roadmap-test?roadmapId=${roadmap._id}`, {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           });
           const testData = await testRes.json();
-          console.log(`Test eligibility for ${roadmap.title}:`, testData);
           testAttemptsObj[roadmap._id] = testData;
-        } catch (err: any) {
-          console.error(`Error fetching progress for ${roadmap.title}:`, err.message);
+        } catch {
           progressObj[roadmap._id] = { completedTasks: [], completedAssignments: [] };
         }
       }
-      console.log("Final progressMap:", progressObj);
-      console.log("Final testAttempts:", testAttemptsObj);
       setProgressMap(progressObj);
       setTestAttempts(testAttemptsObj);
     } catch (error) {
-      console.error("Error fetching roadmaps or progress", error);
+      console.error("Error fetching roadmaps", error);
     }
     setLoadingRoadmaps(false);
   }, []);
@@ -370,10 +361,6 @@ export default function ProfilePage() {
 
   // Calculate progress for each roadmap from DB data
   const progressData = useMemo(() => {
-    console.log("=== CALCULATING PROGRESS DATA ===");
-    console.log("Roadmaps:", roadmaps);
-    console.log("Progress Map:", progressMap);
-    
     return roadmaps.map((roadmap) => {
       const totalTasks = roadmap.phases?.reduce((acc: number, phase: any) => acc + (phase.tasks?.length || 0), 0) || 0;
       const totalAssignments = roadmap.phases?.reduce((acc: number, phase: any) => acc + (phase.assignments?.length || 0), 0) || 0;
@@ -381,16 +368,11 @@ export default function ProfilePage() {
       const completedTasks = progress.completedTasks?.length || 0;
       const completedAssignments = progress.completedAssignments?.length || 0;
       const percent = totalTasks + totalAssignments === 0 ? 0 : Math.round(((completedTasks + completedAssignments) / (totalTasks + totalAssignments)) * 100);
-      
-      console.log(`Roadmap: ${roadmap.title}`);
-      console.log(`  - Total Tasks: ${totalTasks}, Total Assignments: ${totalAssignments}`);
-      console.log(`  - Completed Tasks: ${completedTasks}, Completed Assignments: ${completedAssignments}`);
-      console.log(`  - Percent: ${percent}%`);
-      
+
       return {
         label: roadmap.title,
         percent,
-        color: "from-blue-500 to-purple-700", // You can customize per roadmap if needed
+        color: "from-blue-500 to-purple-700",
       };
     });
   },

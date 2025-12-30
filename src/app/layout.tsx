@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/components/providers/AuthProvider";
 import React from 'react';
 import PremiumBanner from '@/components/ui/PremiumBanner';
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
   title: "SkillMine - Technical Roadmaps and Blogs",
@@ -54,7 +55,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <React.Suspense fallback={null}>
                 <PremiumBanner />
               </React.Suspense>
-              {children}
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
             </CheckedDataProvider>
           </DataCacheProvider>
         </AuthProvider>

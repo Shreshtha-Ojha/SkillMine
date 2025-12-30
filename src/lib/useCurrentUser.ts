@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function useCurrentUser(): any {
-  const [user, setUser] = useState<any>(undefined); // undefined = loading, null/false = not logged in
-  
+export interface CurrentUser {
+  _id: string;
+  username: string;
+  email: string;
+  fullName?: string;
+  isAdmin?: boolean;
+  isVerified?: boolean;
+  profilePhoto?: { url?: string; publicId?: string };
+}
+
+// Returns: undefined (loading), null (not logged in), or CurrentUser object
+export default function useCurrentUser(): CurrentUser | null | undefined {
+  const [user, setUser] = useState<CurrentUser | null | undefined>(undefined);
+
   useEffect(() => {
     let isMounted = true;
 

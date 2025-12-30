@@ -2,21 +2,34 @@ import React, { useRef } from "react";
 import html2canvas from "html2canvas";
 import { X, Download, Award } from "lucide-react";
 
+interface UserData {
+  _id?: string;
+  username?: string;
+  fullName?: string;
+  email?: string;
+  profilePhoto?: { url?: string };
+}
+
+interface RoadmapData {
+  _id?: string;
+  title?: string;
+}
+
+interface CertificationData {
+  roadmapTitle: string;
+  certificateId: string;
+  score: number;
+  percentage: number;
+  mcqScore?: number;
+  issuedAt: string;
+  userName: string;
+}
+
 interface CertificateProps {
-  user: any;
-  roadmap?: any;
+  user?: UserData | null;
+  roadmap?: RoadmapData | null;
   percent?: number;
-  // New props for certification data
-  certification?: {
-    roadmapTitle: string;
-    certificateId: string;
-    score: number;
-    percentage: number;
-    mcqScore?: number;
-    // shortAnswerScore removed for MCQ-only certifications
-    issuedAt: string;
-    userName: string;
-  };
+  certification?: CertificationData;
   isModal?: boolean;
   onClose?: () => void;
 }
