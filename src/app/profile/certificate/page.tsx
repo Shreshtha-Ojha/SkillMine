@@ -39,7 +39,7 @@ export default function CertificatePage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-200">
         <h1 className="text-3xl font-bold mb-4">Certificate Not Found</h1>
-        <button onClick={() => router.back()} className="px-6 py-3 bg-blue-700 text-white rounded-xl mt-4">Back</button>
+        <button onClick={() => router.push('/profile')} className="px-6 py-3 bg-[#7E102C] text-white rounded-xl mt-4 hover:bg-[#D4AF37] transition-colors">Back to Profile</button>
       </div>
     );
   }
@@ -47,12 +47,12 @@ export default function CertificatePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 py-12 px-2">
       <button
-        onClick={() => router.back()}
-        className="fixed top-6 left-4 flex items-center gap-2 text-blue-400 hover:text-blue-300 hover:underline text-xl md:text-2xl px-6 py-3 rounded-2xl bg-zinc-900 shadow-lg border-2 border-blue-700 transition-all z-50"
+        onClick={() => router.push('/profile')}
+        className="fixed top-6 left-4 flex items-center gap-2 text-[#D4AF37] hover:text-[#E5C76B] text-xl md:text-2xl px-6 py-3 rounded-2xl bg-zinc-900 shadow-lg border-2 border-[#7E102C] transition-all z-50"
         style={{ position: 'fixed', top: '1.5rem', left: '1rem', zIndex: 50 }}
       >
         <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-        <span className="hidden sm:inline">Back</span>
+        <span className="hidden sm:inline">Profile</span>
       </button>
       <Certificate user={user} roadmap={roadmap} percent={100} />
     </div>
