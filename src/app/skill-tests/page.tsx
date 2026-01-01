@@ -33,23 +33,11 @@ export default function SkillTestsPage() {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  /* FETCH SKILLS */
+  /* FETCH SKILLS - Premium checks removed, all features free */
   const fetchPricing = async () => {
     try {
-      const res = await fetch('/api/payment/skill-test');
-      let purchased = false;
-      if (res.ok) {
-        const j = await res.json(); purchased = !!j.purchased; setIsPremiumPurchased(purchased);
-      }
-      const pricingRes = await fetch('/api/admin/pricing');
-      if (pricingRes.ok) {
-        const p = await pricingRes.json(); setSkillPrice(p.pricing?.premium ?? null);
-        // Ensure fresh pricing if admin updated recently (bust cache on critical flows).
-      }
       const ac = await fetch('/api/skill-test/attempts-count');
       if (ac.ok) { const ajson = await ac.json(); setAttemptsCount(ajson.attempts || 0); }
-      const shown = sessionStorage.getItem('skillTestModalShown');
-      if (!shown && !purchased) { setShowPremiumModal(true); sessionStorage.setItem('skillTestModalShown', 'true'); }
     } catch (e) { /* ignore */ }
   };
 

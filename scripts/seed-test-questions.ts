@@ -516,7 +516,12 @@ const sampleQuestions: Record<string, Array<{
 };
 
 // Generate generic programming questions
-const genericQuestions = [
+const genericQuestions: Array<{
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
+}> = [
   {
     question: "What is version control?",
     options: ["A way to manage code versions and history", "A debugging tool", "A testing framework", "A deployment system"],
