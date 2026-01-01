@@ -32,7 +32,8 @@ export default function SkillPractice({ params }: any) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDrawer, setShowDrawer] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
-  const [premiumRequired, setPremiumRequired] = useState(false);
+  // Premium paywall removed - all features free
+  const [premiumRequired, setPremiumRequired] = useState(false); // Will never be true now
   // Truncation state (when Skill Test Premium gating limits questions)
   const [truncated, setTruncated] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState<number | null>(null);

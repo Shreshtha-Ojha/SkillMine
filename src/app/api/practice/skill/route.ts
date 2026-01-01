@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Skill from '@/models/skillModel';
-import getUserFromRequest from '@/lib/getUserFromRequest';
-import { getPricing } from '@/helpers/getPricing';
 
 connect();
 
@@ -15,36 +13,12 @@ export async function GET(request: NextRequest) {
     const skill = await Skill.findById(skillId).lean() as any;
     if (!skill) return NextResponse.json({ error: 'Skill not found' }, { status: 404 });
 
-    // Check if skill is free (html/css)
-    const title = (skill.title || '').toLowerCase();
-    const free = ['html','css'].some(f => title.includes(f));
-
-    // Fetch user (may be null for unauthenticated requests)
-    const user = await getUserFromRequest(request as any);
-
-    if (!free) {
-      // require user to have site-wide Premium
-      const canAccess = !!(user && user.purchases?.premium?.purchased);
-      if (!canAccess) {
-        return NextResponse.json({ error: 'Premium required', premium: true }, { status: 403 });
-      }
-    }
-
+    // All skills are now free - paywall removed
     const allQuestions = (skill.mcqQuestions || []).map((q:any) => ({ _id: q._id, question: q.question, options: q.options, correctAnswer: q.correctAnswer, explanation: q.explanation || null }));
 
-    // If not free, only users with Skill Test Premium get ALL questions. Others get a limited sample (e.g., 20)
-    const hasPremium = !!user?.purchases?.premium?.purchased;
-    let questions = allQuestions;
-    let truncated = false;
+    const questions = allQuestions;
+    const truncated = false;
     const totalQuestions = allQuestions.length;
-
-    if (!free && !hasPremium) {
-      const limit = 20;
-      if (allQuestions.length > limit) {
-        questions = allQuestions.slice(0, limit);
-        truncated = true;
-      }
-    }
 
     return NextResponse.json({ success: true, skill: { _id: skill._id, title: skill.title }, questions, truncated, totalQuestions });
   } catch (err:any) {

@@ -23,8 +23,9 @@ export default function SkillTestsPage() {
   const [perQuestionTimerEnabled, setPerQuestionTimerEnabled] = useState(false);
   const [perQuestionTimeMinutes, setPerQuestionTimeMinutes] = useState(1);
   const [oneTimeVisit, setOneTimeVisit] = useState(false);
+  // Premium paywall removed - all features free
   const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [isPremiumPurchased, setIsPremiumPurchased] = useState(false);
+  const isPremiumPurchased = true; // Always treat as premium
   const [attemptsCount, setAttemptsCount] = useState(0);
   const [skillPrice, setSkillPrice] = useState<number | null>(null);
   const user = useCurrentUser();
