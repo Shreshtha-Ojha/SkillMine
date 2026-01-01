@@ -2,12 +2,14 @@
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
+import { useHydrated } from "@/hooks/useHydrated";
 
 export default function LoginPage() {
   const router = useRouter();
+  const hydrated = useHydrated();
   const [user, setUser] = useState({ email: "", password: "" });
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -30,15 +32,19 @@ export default function LoginPage() {
         }
         toast.success("Login successful!");
         router.push("/");
-      } catch (error: any) {
-        if (error.code === 'ERR_NETWORK' || !error.response) {
-          toast.error("Network error. Check your connection.");
-        } else if (error.response?.status === 401) {
-          toast.error(error.response?.data?.error || "Invalid credentials.");
-        } else if (error.response?.status === 403) {
-          toast.error(error.response?.data?.error || "Please verify your email first.");
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.code === 'ERR_NETWORK' || !error.response) {
+            toast.error("Network error. Check your connection.");
+          } else if (error.response?.status === 401) {
+            toast.error(error.response?.data?.error || "Invalid credentials.");
+          } else if (error.response?.status === 403) {
+            toast.error(error.response?.data?.error || "Please verify your email first.");
+          } else {
+            toast.error(error.response?.data?.error || "Login failed.");
+          }
         } else {
-          toast.error(error.response?.data?.error || "Login failed.");
+          toast.error("An unexpected error occurred");
         }
       } finally {
         setLoading(false);
@@ -50,6 +56,15 @@ export default function LoginPage() {
   useEffect(() => {
     setButtonDisabled(!(user.email.trim() && user.password.trim()));
   }, [user]);
+
+  // Prevent hydration mismatch by showing loading state until client-side hydration is complete
+  if (!hydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">

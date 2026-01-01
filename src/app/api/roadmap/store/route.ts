@@ -16,8 +16,9 @@ export async function POST(request: NextRequest) {
     const roadmap = new Roadmap({ title, description, createdBy, phases });
     await roadmap.save();
     return NextResponse.json({ message: "Roadmap created", roadmap });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -26,7 +27,8 @@ export async function GET() {
   try {
     const roadmaps = await Roadmap.find({});
     return NextResponse.json({ roadmaps });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

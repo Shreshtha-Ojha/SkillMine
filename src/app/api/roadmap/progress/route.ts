@@ -55,9 +55,10 @@ export async function GET(request: NextRequest) {
     console.log(`Progress API GET - User: ${userId}, Roadmap: ${roadmapId}, Progress:`, JSON.stringify(progress));
     
     return NextResponse.json({ progress });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in progress GET:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -100,8 +101,9 @@ export async function POST(request: NextRequest) {
     
     console.log(`Progress POST - Saved successfully for user ${userId}`);
     return NextResponse.json({ message: "Progress updated", success: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in progress POST:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

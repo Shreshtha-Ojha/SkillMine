@@ -33,9 +33,10 @@ export async function GET(request: NextRequest) {
             { message: "User Found", user: { ...user, isAdmin } },
             { status: 200 }
         );
-    } catch (error: any) {
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Authentication required";
         return NextResponse.json(
-            { error: error.message || "Authentication required", success: false },
+            { error: message, success: false },
             { status: 401 }
         );
     }

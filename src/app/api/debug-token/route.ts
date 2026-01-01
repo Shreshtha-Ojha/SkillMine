@@ -37,11 +37,12 @@ export async function GET(request: NextRequest) {
       },
       message: payload.isAdmin ? "Token has admin access" : "Token does NOT have admin access - please log out and log back in"
     });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json({
       hasToken: true,
       error: "Failed to decode token",
-      message: error.message
+      message: message
     });
   }
 }

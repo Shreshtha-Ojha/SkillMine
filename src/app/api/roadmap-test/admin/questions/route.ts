@@ -25,9 +25,10 @@ export async function GET(request: NextRequest) {
 
     const test = await RoadmapTest.findOne({ roadmapId });
     return NextResponse.json({ questions: (test?.mcqQuestions || []), roadmapTitle: roadmap.title });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -124,9 +125,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, message: "Questions saved", testId: test._id });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

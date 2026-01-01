@@ -47,8 +47,9 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, message: "Progress saved" });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error saving attempt progress:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

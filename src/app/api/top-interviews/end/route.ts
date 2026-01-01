@@ -217,9 +217,10 @@ export async function POST(req: NextRequest) {
       }))
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error ending interview:", error);
-    return NextResponse.json({ error: error.message || "Failed to end interview" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to end interview";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -244,7 +245,8 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(interview);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

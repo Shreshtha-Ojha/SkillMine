@@ -146,7 +146,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ problems, company: companyName });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Company problems error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }

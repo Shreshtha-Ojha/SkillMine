@@ -223,10 +223,11 @@ export async function POST(request: NextRequest) {
         ? "Congratulations! You passed the test and earned your certificate!"
         : "Unfortunately, you did not pass. You need at least 60% to earn the certificate.",
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error submitting test:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -279,10 +280,11 @@ export async function GET(request: NextRequest) {
       attempt: attemptObj,
       certification,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error getting attempt:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }

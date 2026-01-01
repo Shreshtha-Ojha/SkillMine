@@ -123,7 +123,7 @@ export default function TestManagementPage() {
     ? Math.round(attempts.reduce((sum, a) => sum + a.percentage, 0) / attempts.length) 
     : 0;
 
-  if (!user || (!user?.isAdmin && user?.role !== "admin")) {
+  if (!user || !user?.isAdmin) {
     return (
       <AdminLayout>
         <div className="min-h-[60vh] flex items-center justify-center">

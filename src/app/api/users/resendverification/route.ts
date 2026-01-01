@@ -48,24 +48,25 @@ export async function POST(request: NextRequest) {
         message: "Verification email sent successfully! Please check your inbox.",
         success: true,
       });
-    } catch (emailError: any) {
+    } catch (emailError) {
       console.error("❌ Failed to resend verification email:", emailError);
-      return NextResponse.json({ 
-        error: "Failed to send verification email. Please try again later or contact support." 
+      return NextResponse.json({
+        error: "Failed to send verification email. Please try again later or contact support."
       }, { status: 500 });
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Resend verification error:", error);
-    
+
     // Handle network/connection errors
-    if (error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError') {
-      return NextResponse.json({ 
-        error: "Database connection failed. Please check your internet connection and try again." 
+    const errorName = error instanceof Error ? error.name : "";
+    if (errorName === 'MongoNetworkError' || errorName === 'MongoTimeoutError') {
+      return NextResponse.json({
+        error: "Database connection failed. Please check your internet connection and try again."
       }, { status: 503 });
     }
-    
-    return NextResponse.json({ 
-      error: "An unexpected error occurred. Please try again later." 
+
+    return NextResponse.json({
+      error: "An unexpected error occurred. Please try again later."
     }, { status: 500 });
   }
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import useCurrentUser from "@/lib/useCurrentUser";
 import { useState as useReactState } from "react";
 import { useRouter } from "next/navigation";
+import { useHydrated } from "@/hooks/useHydrated";
 
 // Responsive Navbar (replace Navbar import and usage)
 function ResponsiveNavbar({ onNavigate }: { onNavigate: (path: string) => void }) {
@@ -97,6 +98,7 @@ const topics = [
 ];
 
 export default function InterviewDashboard() {
+  const hydrated = useHydrated();
   const [step, setStep] = useState(0);
   const [topic, setTopic] = useState("");
   const [question, setQuestion] = useState("");
@@ -513,6 +515,15 @@ export default function InterviewDashboard() {
     setShowWarningModal(false);
     setPendingNavigation(null);
   };
+
+  // Prevent hydration mismatch by showing loading state until client-side hydration is complete
+  if (!hydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center px-4 sm:px-6 md:px-8 pt-6 md:pt-12 relative bg-[#0a0a0f]">

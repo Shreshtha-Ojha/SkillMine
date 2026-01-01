@@ -142,9 +142,10 @@ export async function GET(request: NextRequest) {
       passingMarks: 6,
       duration: 5 // 5 minutes for sample test
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in sample test GET:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -230,9 +231,10 @@ export async function POST(request: NextRequest) {
     try {
       await user.save();
       console.log("Sample test POST: User saved successfully");
-    } catch (saveError: any) {
+    } catch (saveError) {
       console.error("Sample test POST: Save error:", saveError);
-      return NextResponse.json({ error: "Failed to save test results: " + saveError.message }, { status: 500 });
+      const saveMessage = saveError instanceof Error ? saveError.message : "Unknown error";
+      return NextResponse.json({ error: "Failed to save test results: " + saveMessage }, { status: 500 });
     }
     
     return NextResponse.json({
@@ -247,8 +249,9 @@ export async function POST(request: NextRequest) {
         ? `Congratulations! You passed with ${percentage}%!` 
         : `You scored ${percentage}%. You need 60% to pass.`
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in sample test POST:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -24,20 +24,22 @@ export async function GET(request: NextRequest) {
         model: "gemini-2.5-flash-preview-09-2025",
         geminiResponse: response
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Gemini API error:", error);
-      return NextResponse.json({ 
-        success: false, 
+      const message = error instanceof Error ? error.message : "An error occurred";
+      return NextResponse.json({
+        success: false,
         error: "Gemini API call failed",
-        details: error.message
+        details: message
       }, { status: 500 });
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Test Gemini Error:", error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message 
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({
+      success: false,
+      error: message
     }, { status: 500 });
   }
 }

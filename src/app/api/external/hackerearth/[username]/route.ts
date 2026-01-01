@@ -34,8 +34,9 @@ export async function GET(request: NextRequest, { params }: { params: { username
       setCache(cacheKey, result, 5 * 60 * 1000);
       return NextResponse.json(result);
     }
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'failed' }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'failed';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

@@ -143,10 +143,11 @@ export async function POST(request: NextRequest) {
       cached: !isExpired, // Indicate if test was from cache
       expiresAt: test.expiresAt,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in test generation:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -237,10 +238,11 @@ export async function GET(request: NextRequest) {
       missingDetails: !hasFullDetails ? "Please update your profile (full name, age, gender)" : null,
       canRetry: existingAttempt?.canRetry || false,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error checking test eligibility:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }

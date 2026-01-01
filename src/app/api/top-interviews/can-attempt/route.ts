@@ -70,8 +70,9 @@ export async function GET(req: NextRequest) {
       message: "You have already attempted this interview. Only one attempt is allowed."
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error checking attempt eligibility:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

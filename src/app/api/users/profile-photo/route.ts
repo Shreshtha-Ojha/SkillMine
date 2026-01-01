@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       url,
       publicId,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("[ProfilePhotoAPI] Error updating profile photo:", error);
     return NextResponse.json({ error: "Failed to update photo" }, { status: 500 });
   }
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
       success: true, 
       message: "Profile photo removed" 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error removing profile photo:", error);
     return NextResponse.json({ error: "Failed to remove photo" }, { status: 500 });
   }

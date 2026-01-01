@@ -48,9 +48,10 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true, message: "Request sent to admins" });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error requesting ATS retry:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

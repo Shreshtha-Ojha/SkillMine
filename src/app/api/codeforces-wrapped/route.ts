@@ -266,11 +266,12 @@ export async function POST(request: NextRequest) {
       funFacts: creative.funFacts,
       coderTitle: creative.coderTitle,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("CF Wrapped error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      { error: error.message || "Failed to generate Codeforces Wrapped" },
-      { status: error.message?.includes("not found") ? 404 : 500 }
+      { error: message || "Failed to generate Codeforces Wrapped" },
+      { status: message?.includes("not found") ? 404 : 500 }
     );
   }
 }

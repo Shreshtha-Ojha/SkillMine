@@ -45,16 +45,17 @@ export async function POST(request:NextRequest){
             success: true
         }, { status: 200 });
         
-    } catch (error: any) {
-        console.error("❌ Email verification error:", error);
-        
+    } catch (error) {
+        console.error("Email verification error:", error);
+
         // Handle network/connection errors
-        if (error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError') {
+        const errorName = error instanceof Error ? error.name : "";
+        if (errorName === 'MongoNetworkError' || errorName === 'MongoTimeoutError') {
             return NextResponse.json({
                 error: "Database connection failed. Please check your internet connection and try again."
             }, { status: 503 });
         }
-        
+
         return NextResponse.json({
             error: "An unexpected error occurred during email verification. Please try again."
         }, { status: 500 });

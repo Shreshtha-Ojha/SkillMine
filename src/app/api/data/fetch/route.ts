@@ -30,9 +30,10 @@ export async function GET(request: NextRequest) {
     console.log("Found user. Returning checkedData: ", user.checkedData);
     return NextResponse.json({ checkedData: user.checkedData || [], source: "mongoDB" });
 
-  } catch (error: any) {
+  } catch (error) {
     // Handle any server error
-    console.error("Error while fetching user data: ", error.message);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal server error";
+    console.error("Error while fetching user data: ", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

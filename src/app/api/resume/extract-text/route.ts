@@ -52,8 +52,9 @@ export async function POST(request: NextRequest) {
           pageCount = ocrRes.pages || pageCount;
           ocrUsed = true;
         }
-      } catch (e:any) {
-        console.error('OCR extraction failed:', e?.message || e);
+      } catch (e) {
+        const message = e instanceof Error ? e.message : String(e);
+        console.error('OCR extraction failed:', message);
         ocrUnavailable = true;
       }
     }
@@ -69,11 +70,12 @@ export async function POST(request: NextRequest) {
       ocrUnavailable,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("PDF extraction error:", error);
+    const message = error instanceof Error ? error.message : "Failed to extract text from PDF";
     return NextResponse.json({
       success: false,
-      error: error.message || "Failed to extract text from PDF",
+      error: message,
     }, { status: 500 });
   }
 }

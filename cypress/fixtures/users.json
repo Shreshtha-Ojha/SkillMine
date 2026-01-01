@@ -1,0 +1,22 @@
+{
+  "validUser": {
+    "email": "cypress-test@skillmine.tech",
+    "password": "TestPass123!",
+    "username": "cypresstest"
+  },
+  "newUser": {
+    "email": "cypress-new@skillmine.tech",
+    "password": "NewPass123!",
+    "username": "cypressnew"
+  },
+  "invalidUser": {
+    "email": "invalid@test.com",
+    "password": "wrongpassword",
+    "username": "invaliduser"
+  },
+  "weakPassword": {
+    "email": "weak@test.com",
+    "password": "weak",
+    "username": "weakuser"
+  }
+}

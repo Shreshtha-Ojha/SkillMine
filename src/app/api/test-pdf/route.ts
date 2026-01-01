@@ -49,12 +49,14 @@ export async function GET(request: NextRequest) {
       },
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("PDF Test Error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
+    const stack = error instanceof Error ? error.stack?.substring(0, 1000) : undefined;
     return NextResponse.json({
       success: false,
-      error: error.message,
-      stack: error.stack?.substring(0, 1000),
+      error: message,
+      stack: stack,
     }, { status: 500 });
   }
 }

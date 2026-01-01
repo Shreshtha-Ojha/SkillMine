@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     const all = await PricingSettings.find({}).lean();
     return NextResponse.json({ success: true, count: all.length, data: all }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Debug pricing endpoint error:', error);
     return NextResponse.json({ error: 'Failed to retrieve pricing docs' }, { status: 500 });
   }

@@ -18,8 +18,9 @@ export async function POST(request: NextRequest) {
     }
     const cert = await Certification.create({ userId, roadmapId });
     return NextResponse.json({ certification: cert, message: "Certificate issued" });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -33,7 +34,8 @@ export async function GET(request: NextRequest) {
     }
     const certs = await Certification.find({ userId });
     return NextResponse.json({ certifications: certs });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

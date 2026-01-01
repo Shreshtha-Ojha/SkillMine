@@ -9,6 +9,20 @@ export interface CurrentUser {
   isAdmin?: boolean;
   isVerified?: boolean;
   profilePhoto?: { url?: string; publicId?: string };
+  solvedProblems?: string[];
+  reviewProblems?: string[];
+  purchases?: {
+    premium?: { purchased?: boolean; purchasedAt?: Date; paymentId?: string; amount?: number };
+    oaQuestions?: { purchased?: boolean; purchasedAt?: Date; paymentId?: string; amount?: number };
+    mockInterviews?: { purchased?: boolean; purchasedAt?: Date; paymentId?: string; amount?: number };
+    resumeScreening?: { purchased?: boolean; purchasedAt?: Date; paymentId?: string; amount?: number };
+    skillTest?: { purchased?: boolean; purchasedAt?: Date; paymentId?: string; amount?: number };
+  };
+  atsChecker?: {
+    used?: number;
+    allowedByAdmin?: boolean;
+    requested?: boolean;
+  };
 }
 
 // Returns: undefined (loading), null (not logged in), or CurrentUser object

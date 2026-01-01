@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     }));
 
     return NextResponse.json({ success: true, count: payload.length, users: payload }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching premium users:', error);
     return NextResponse.json({ error: 'Failed to fetch premium users' }, { status: 500 });
   }

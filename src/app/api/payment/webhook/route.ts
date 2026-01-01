@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     console.error("Unknown payment purpose:", purpose);
     return NextResponse.json({ error: "Unknown purpose" }, { status: 400 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Webhook error:", error);
     return NextResponse.json(
       { error: "Webhook processing failed" },

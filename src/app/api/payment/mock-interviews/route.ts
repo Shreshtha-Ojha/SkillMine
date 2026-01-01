@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
       remainingFreeInterviews,
       subscribedAt: user.purchases?.premium?.purchasedAt || null,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error checking mock interview status:", error);
     return NextResponse.json(
       { error: "Failed to check subscription status" },
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
       message: "Premium access granted successfully",
       subscribed: true,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error recording subscription:", error);
     return NextResponse.json(
       { error: "Failed to record subscription" },

@@ -22,10 +22,11 @@ async function fetchWithTimeoutAndRetry(
       const res = await fetch(url, { ...opts, signal: controller.signal });
       clearTimeout(timer);
       return res;
-    } catch (err: any) {
+    } catch (err) {
       clearTimeout(timer);
       const isLast = attempt === retries;
-      console.warn(`Instamojo request attempt ${attempt + 1} failed`, err?.message || err);
+      const errMessage = err instanceof Error ? err.message : String(err);
+      console.warn(`Instamojo request attempt ${attempt + 1} failed`, errMessage);
       if (isLast) throw err;
       await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
     }
@@ -125,9 +126,11 @@ export async function POST(request: NextRequest) {
         },
         body: new URLSearchParams(bodyParams),
       });
-    } catch (err: any) {
-      console.error("Instamojo create request failed:", err?.message || err);
-      const isAbort = String(err?.name || '').toLowerCase().includes('abort') || String(err?.message || '').toLowerCase().includes('timed out');
+    } catch (err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      const errName = err instanceof Error ? err.name : '';
+      console.error("Instamojo create request failed:", errMessage);
+      const isAbort = errName.toLowerCase().includes('abort') || errMessage.toLowerCase().includes('timed out');
       return NextResponse.json({ error: isAbort ? 'Payment provider timed out. Please try again.' : 'Failed to contact payment provider. Please try again.' }, { status: isAbort ? 504 : 502 });
     }
 
@@ -153,7 +156,7 @@ export async function POST(request: NextRequest) {
       paymentRequestId: data.payment_request.id,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating payment request:", error);
     return NextResponse.json(
       { error: "Failed to create payment request" },

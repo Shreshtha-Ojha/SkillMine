@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
       message: "Invalid payment verification request",
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Payment verification error:", error);
     return NextResponse.json(
       { error: "Payment verification failed" },

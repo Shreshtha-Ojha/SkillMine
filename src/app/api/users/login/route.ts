@@ -86,25 +86,26 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Login error:", error);
-    
+
     // Handle network/connection errors
-    if(error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError'){
+    const errorName = error instanceof Error ? error.name : "";
+    if(errorName === 'MongoNetworkError' || errorName === 'MongoTimeoutError'){
       return NextResponse.json(
         { error: "Database connection failed. Please check your internet connection and try again." },
         { status: 503 }
       );
     }
-    
+
     // Handle JWT errors
-    if(error.name === 'JsonWebTokenError'){
+    if(errorName === 'JsonWebTokenError'){
       return NextResponse.json(
         { error: "Authentication token error. Please try logging in again." },
         { status: 500 }
       );
     }
-    
+
     return NextResponse.json(
       { error: "An unexpected error occurred during login. Please try again later." },
       { status: 500 }

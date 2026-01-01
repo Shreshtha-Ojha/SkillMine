@@ -266,11 +266,12 @@ export async function POST(request: NextRequest) {
       funFacts: creative.funFacts,
       coderTitle: creative.coderTitle,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("LeetCode Wrapped error:", error);
+    const message = error instanceof Error ? error.message : "Failed to generate LeetCode Wrapped";
     return NextResponse.json(
-      { error: error.message || "Failed to generate LeetCode Wrapped" },
-      { status: error.message?.includes("not found") ? 404 : 500 }
+      { error: message },
+      { status: message.includes("not found") ? 404 : 500 }
     );
   }
 }

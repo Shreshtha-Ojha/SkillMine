@@ -1,3 +1,5 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images:{
@@ -52,4 +54,25 @@ const nextConfig = {
     }
 };
 
-export default nextConfig;
+// Sentry configuration options
+const sentryWebpackPluginOptions = {
+    // Suppresses source map uploading logs during build
+    silent: true,
+
+    // Upload source maps only in production
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+
+    // Auth token for uploading source maps (set in environment)
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Disables the Sentry webpack plugin in development
+    disableServerWebpackPlugin: process.env.NODE_ENV !== "production",
+    disableClientWebpackPlugin: process.env.NODE_ENV !== "production",
+};
+
+// Wrap config with Sentry (only affects production builds)
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);

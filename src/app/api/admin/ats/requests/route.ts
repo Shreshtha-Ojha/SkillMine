@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
 
     const users = await User.find({ 'atsChecker.requested': true }).select('email fullName atsChecker');
     return NextResponse.json({ success: true, requests: users });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch ATS requests', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

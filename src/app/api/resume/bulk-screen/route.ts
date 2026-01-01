@@ -128,8 +128,9 @@ Return exactly this JSON structure:
     if (!result.candidateInfo) result.candidateInfo = { name: "Unknown", email: "Not Found", phone: "Not Found" };
     if (!result.traits) result.traits = { leadership: 0, communication: 0, collaboration: 0, stability: 0, innovation: 0, ownership: 0 };
     return result;
-  } catch (error: any) {
-    console.error(`Error screening resume ${fileName}:`, error.message || error);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`Error screening resume ${fileName}:`, errorMessage);
     // Return default values on error - but mark as processed, not disqualified
     return {
       candidateInfo: { name: "Processing Error", email: "Not Found", phone: "Not Found" },
@@ -146,7 +147,7 @@ Return exactly this JSON structure:
         innovation: 5,
         ownership: 5,
       },
-      evidence: [`Unable to analyze: ${error.message || "AI processing error"}. Please try again or check the PDF content.`],
+      evidence: [`Unable to analyze: ${errorMessage}. Please try again or check the PDF content.`],
     };
   }
 }
@@ -267,7 +268,7 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(response);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Bulk screening error:", error);
     return NextResponse.json(
       { error: "Failed to screen resumes" },

@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
       },
       { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching pricing:", error);
     const origin = request.headers.get("origin") || "*";
     return NextResponse.json(
@@ -100,7 +100,7 @@ export async function PUT(request: NextRequest) {
         id: updatedDoc?._id
       },
     }, { headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Credentials": "true", "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Expires": "0" } });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error updating pricing:", error);
     const origin = request.headers.get("origin") || "*";
     return NextResponse.json(

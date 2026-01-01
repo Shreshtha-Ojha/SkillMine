@@ -55,6 +55,11 @@ We're building the platform we wished existed during our own interview preparati
 | **Technical Blogs** | Community-driven blogs with likes & comments |
 | **Certifications** | Earn verifiable certificates on roadmap completion |
 | **Placement Data** | Real compensation data from top tech companies |
+| **LeetCode Wrapped** | Year-in-review analytics for your LeetCode journey |
+| **GitHub Wrapped** | Visualize your GitHub contributions and stats |
+| **Codeforces Wrapped** | Competitive programming stats visualization |
+| **ATS Resume Screening** | AI-powered resume analysis with ATS scoring |
+| **Skill Tests** | MCQ-based skill assessments with certificates |
 
 ### 🔐 Authentication & Security
 - Google OAuth 2.0 integration
@@ -96,6 +101,12 @@ Google OAuth       → Social login
 Instamojo          → Payment processing
 Cloudinary         → Image uploads
 Vercel Analytics   → Performance monitoring
+Sentry             → Error monitoring & tracking
+```
+
+### Testing
+```
+Cypress            → E2E testing (46 test cases)
 ```
 
 ---
@@ -226,6 +237,15 @@ skillmine/
 │   ├── lib/                   # Utilities & hooks
 │   ├── helpers/               # Helper functions
 │   └── context/               # React contexts
+├── cypress/                   # E2E tests
+│   ├── e2e/                   # Test specs
+│   ├── fixtures/              # Test data
+│   └── support/               # Test utilities
+├── scripts/                   # Utility scripts
+│   └── sample-roadmap-questions.json
+├── sentry.client.config.ts    # Client-side error tracking
+├── sentry.server.config.ts    # Server-side error tracking
+├── cypress.config.ts          # Cypress configuration
 ├── package.json
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -288,6 +308,10 @@ INSTAMOJO_SALT=xxx
 
 # Domain
 DOMAIN=http://localhost:3000
+
+# Error Monitoring (Sentry)
+SENTRY_DSN=your-sentry-dsn
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
 ```
 
 4. **Run development server**
@@ -299,6 +323,33 @@ npm run dev
 ```
 http://localhost:3000
 ```
+
+---
+
+## 🧪 Testing
+
+### Run E2E Tests
+```bash
+# Open Cypress Test Runner (interactive)
+npm run cy:open
+
+# Run all tests headlessly
+npm run cy:run
+
+# Run tests with dev server
+npm run cy:run:dev
+```
+
+### Test Coverage
+- **46 E2E test cases** covering:
+  - Authentication flows (login, signup, logout)
+  - Navigation and routing
+  - Blog system
+  - Roadmap exploration
+  - Interview features
+  - User profile
+  - Company problems
+  - Payment flows
 
 ---
 
@@ -330,6 +381,16 @@ vercel --prod
 | `TopInterview` | Curated interview challenges |
 | `TopInterviewAttempt` | User attempt records |
 | `Certification` | User certificates |
+| `SkillTest` | Skill-based MCQ assessments |
+| `Resume` | User resume data for ATS screening |
+| `PricingConfig` | Dynamic pricing configuration |
+
+---
+
+## 📋 Legal
+
+- [Privacy Policy](/privacy-policy) - How we collect and use your data
+- [Terms of Service](/terms-of-service) - Terms and conditions for using SkillMine
 
 ---
 

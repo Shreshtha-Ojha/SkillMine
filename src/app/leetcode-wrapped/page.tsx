@@ -197,7 +197,7 @@ export default function LeetCodeWrappedPage() {
           scale: 2,
         });
         const link = document.createElement("a");
-        link.download = `leetcode-wrapped-${stats?.username}-2024.png`;
+        link.download = `leetcode-wrapped-${stats?.username}-2025.png`;
         link.href = canvas.toDataURL();
         link.click();
         toast.success("Card downloaded!");
@@ -266,7 +266,7 @@ export default function LeetCodeWrappedPage() {
                 Hey <span style={{ color: LEETCODE_ORANGE }} className="font-semibold">{stats.username}</span>!
               </p>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-                Your LeetCode <span style={{ color: LEETCODE_ORANGE }}>2024</span>
+                Your LeetCode <span style={{ color: LEETCODE_ORANGE }}>2025</span>
               </h1>
               <p className="text-gray-500 max-w-md mx-auto text-sm">
                 {stats.creativeTaglines.welcome}
@@ -741,7 +741,7 @@ export default function LeetCodeWrappedPage() {
                 LeetCode <span style={{ color: LEETCODE_ORANGE }}>Wrapped</span>
               </h1>
               <p className="text-gray-500">
-                Your 2024 problem-solving journey
+                Your 2025 problem-solving journey
               </p>
             </div>
 

@@ -40,8 +40,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "Checked data updated successfully", success: true });
 
-  } catch (error: any) {
-    console.error("Error while updating user data:", error.message);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Internal server error";
+    console.error("Error while updating user data:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

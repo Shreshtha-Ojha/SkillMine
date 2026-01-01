@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
     await connect();
     const roadmaps = await Roadmap.find({});
     return NextResponse.json({ roadmaps });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -97,19 +97,19 @@ export async function POST(request:NextRequest){
             });
         }
 
-    } catch (error:any) {
+    } catch (error) {
         console.error("❌ Signup error:", error);
-        
+
         // Handle specific MongoDB errors
-        if(error.code === 11000){
+        if (error instanceof Error && 'code' in error && (error as { code: number }).code === 11000) {
             return NextResponse.json({error: "An account with this email or username already exists"},{status: 400});
         }
-        
+
         // Handle network/connection errors
-        if(error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError'){
+        if (error instanceof Error && (error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError')) {
             return NextResponse.json({error: "Database connection failed. Please try again later."},{status: 503});
         }
-        
-        return NextResponse.json({error: "An unexpected error occurred during registration. Please try again."},{status: 500})        
+
+        return NextResponse.json({error: "An unexpected error occurred during registration. Please try again."},{status: 500})
     }
 }

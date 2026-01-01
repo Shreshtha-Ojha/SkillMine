@@ -71,7 +71,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
 
     setCache(cacheKey, profile, 5 * 60 * 1000);
     return NextResponse.json({ success: true, profile });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching public profile:', error);
     return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 });
   }

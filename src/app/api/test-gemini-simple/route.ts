@@ -31,12 +31,13 @@ export async function GET(request: NextRequest) {
       response: response.text,
     });
 
-  } catch (error: any) {
-    console.error("[TestGemini] Error:", error.message);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("[TestGemini] Error:", message);
 
     return NextResponse.json({
       success: false,
-      error: error.message || "Unknown error",
+      error: message,
     }, { status: 500 });
   }
 }

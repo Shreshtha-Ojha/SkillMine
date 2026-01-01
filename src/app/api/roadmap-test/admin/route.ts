@@ -58,10 +58,11 @@ export async function POST(request: NextRequest) {
       updatedAttemptId: updatedAttempt._id,
       attempts: recentAttempts,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error allowing retry:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -117,10 +118,11 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.json({ attempts: attemptsWithUsers });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error getting attempts:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: message },
       { status: 500 }
     );
   }

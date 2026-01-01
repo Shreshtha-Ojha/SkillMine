@@ -94,11 +94,12 @@ export async function GET(request: Request) {
       timestamp: now
     });
 
-  } catch (error: any) {
-    console.error("Error fetching community stats:", error.message);
-    return NextResponse.json({ 
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    console.error("Error fetching community stats:", message);
+    return NextResponse.json({
       error: "Failed to fetch community statistics",
-      details: error.message 
+      details: message
     }, { status: 500 });
   }
 }
@@ -118,7 +119,7 @@ export async function POST(request: Request) {
     // Trigger immediate fetch by invoking GET internally
     const res = await GET(request as any);
     return res;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to refresh community stats cache', error);
     return NextResponse.json({ error: 'Failed to refresh' }, { status: 500 });
   }

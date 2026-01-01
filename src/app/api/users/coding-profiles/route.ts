@@ -245,7 +245,7 @@ export async function GET(request: NextRequest) {
       success: true, 
       codingProfiles: user.codingProfiles || {} 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching coding profiles:", error);
     return NextResponse.json({ error: "Failed to fetch profiles" }, { status: 500 });
   }
@@ -321,7 +321,7 @@ export async function POST(request: NextRequest) {
       message: `${platform} profile connected successfully!`,
       profile: user.codingProfiles[platform],
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error connecting coding profile:", error);
     return NextResponse.json({ error: "Failed to connect profile" }, { status: 500 });
   }
@@ -355,7 +355,7 @@ export async function DELETE(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, message: "Profile disconnected" });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error disconnecting profile:", error);
     return NextResponse.json({ error: "Failed to disconnect" }, { status: 500 });
   }
@@ -417,7 +417,7 @@ export async function PUT(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, stats });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error refreshing stats:", error);
     return NextResponse.json({ error: "Failed to refresh" }, { status: 500 });
   }

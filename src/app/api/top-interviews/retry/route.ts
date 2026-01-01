@@ -91,9 +91,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error managing retry:", error);
-    return NextResponse.json({ error: error.message || "Failed to manage retry" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to manage retry";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -156,7 +157,8 @@ export async function GET(req: NextRequest) {
       }))
     });
 
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

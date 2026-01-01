@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
     await user.save();
 
     return NextResponse.json({ success: true, message: 'User allowed a retry', user: { email: user.email, fullName: user.fullName, atsChecker: user.atsChecker } });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to approve ATS request', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

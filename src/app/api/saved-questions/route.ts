@@ -25,8 +25,9 @@ export async function POST(request: NextRequest) {
       await user.save();
     }
     return NextResponse.json({ message: 'Question saved', success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Server error', success: false }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message, success: false }, { status: 500 });
   }
 }
 
@@ -47,7 +48,8 @@ export async function DELETE(request: NextRequest) {
     user.savedQuestions = (user.savedQuestions || []).filter((id: string) => id !== questionId);
     await user.save();
     return NextResponse.json({ message: 'Question unsaved', success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Server error', success: false }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "An error occurred";
+    return NextResponse.json({ error: message, success: false }, { status: 500 });
   }
 }

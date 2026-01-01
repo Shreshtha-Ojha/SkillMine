@@ -79,12 +79,14 @@ Return ONLY a valid JSON object in this format:
       textLength: response.text.length,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("[TestResume] Error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
+    const details = error && typeof error === 'object' && 'errorDetails' in error ? (error as any).errorDetails : undefined;
     return NextResponse.json({
       success: false,
-      error: error.message,
-      details: error.errorDetails,
+      error: message,
+      details: details,
     }, { status: 500 });
   }
 }
@@ -125,11 +127,12 @@ Return JSON with name, email, phone, and a score from 0-100.`;
       text: response.text,
       candidates: response.candidates,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("[TestResume GET] Error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json({
       success: false,
-      error: error.message,
+      error: message,
     }, { status: 500 });
   }
 }

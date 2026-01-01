@@ -1,0 +1,316 @@
+{
+  "description": "Sample MCQ questions for roadmap certifications. Use the admin panel at /admin/admin-panel/roadmap-questions to add these to your roadmaps.",
+  "usage": "1. Go to Admin Panel > Roadmap Questions\n2. Select a roadmap\n3. Copy questions from the appropriate category below\n4. Paste into the question editor",
+  "questions": {
+    "Web Development": [
+      {
+        "question": "What does HTML stand for?",
+        "options": ["Hyper Text Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlink Text Management Language"],
+        "correctAnswer": 0,
+        "explanation": "HTML stands for Hyper Text Markup Language, the standard markup language for creating web pages."
+      },
+      {
+        "question": "Which CSS property is used to change the text color of an element?",
+        "options": ["text-color", "font-color", "color", "text-style"],
+        "correctAnswer": 2,
+        "explanation": "The 'color' property in CSS is used to set the text color of an element."
+      },
+      {
+        "question": "What is the correct way to declare a JavaScript variable?",
+        "options": ["variable x = 5;", "v x = 5;", "let x = 5;", "int x = 5;"],
+        "correctAnswer": 2,
+        "explanation": "In JavaScript, variables can be declared using let, const, or var keywords."
+      },
+      {
+        "question": "Which HTTP method is typically used to submit form data?",
+        "options": ["GET", "POST", "PUT", "DELETE"],
+        "correctAnswer": 1,
+        "explanation": "POST is commonly used to submit form data as it sends data in the request body, not the URL."
+      },
+      {
+        "question": "What is the purpose of the 'box-sizing: border-box' CSS property?",
+        "options": ["Adds a border to all elements", "Includes padding and border in element's total width/height", "Creates a box shadow", "Removes all borders"],
+        "correctAnswer": 1,
+        "explanation": "border-box makes width/height calculations include padding and border, making layouts more predictable."
+      },
+      {
+        "question": "Which tag is used to create a hyperlink in HTML?",
+        "options": ["<link>", "<href>", "<a>", "<hyperlink>"],
+        "correctAnswer": 2,
+        "explanation": "The <a> (anchor) tag is used to create hyperlinks in HTML."
+      },
+      {
+        "question": "What does CSS stand for?",
+        "options": ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style System", "Colorful Style Sheets"],
+        "correctAnswer": 1,
+        "explanation": "CSS stands for Cascading Style Sheets, used to style HTML documents."
+      },
+      {
+        "question": "Which JavaScript method is used to select an element by its ID?",
+        "options": ["getElement()", "querySelector()", "getElementById()", "findElement()"],
+        "correctAnswer": 2,
+        "explanation": "document.getElementById() is used to select a single element by its ID attribute."
+      },
+      {
+        "question": "What is the default display value for a <div> element?",
+        "options": ["inline", "block", "inline-block", "flex"],
+        "correctAnswer": 1,
+        "explanation": "By default, <div> elements have display: block, meaning they take up the full width available."
+      },
+      {
+        "question": "Which attribute is required for the <img> tag to be valid HTML?",
+        "options": ["src", "alt", "title", "width"],
+        "correctAnswer": 0,
+        "explanation": "The src attribute specifying the image source is required, though alt is strongly recommended for accessibility."
+      }
+    ],
+    "Data Structures & Algorithms": [
+      {
+        "question": "What is the time complexity of binary search?",
+        "options": ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+        "correctAnswer": 1,
+        "explanation": "Binary search divides the search space in half each iteration, giving O(log n) complexity."
+      },
+      {
+        "question": "Which data structure uses LIFO (Last In First Out) principle?",
+        "options": ["Queue", "Stack", "Array", "Linked List"],
+        "correctAnswer": 1,
+        "explanation": "A Stack follows LIFO - the last element added is the first one to be removed."
+      },
+      {
+        "question": "What is the worst-case time complexity of QuickSort?",
+        "options": ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+        "correctAnswer": 2,
+        "explanation": "QuickSort's worst case is O(n²) when the pivot selection is poor (e.g., already sorted array)."
+      },
+      {
+        "question": "Which data structure is best for implementing a priority queue?",
+        "options": ["Array", "Linked List", "Heap", "Stack"],
+        "correctAnswer": 2,
+        "explanation": "Heaps provide O(log n) insertion and O(1) access to the highest priority element."
+      },
+      {
+        "question": "What is the space complexity of merge sort?",
+        "options": ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+        "correctAnswer": 2,
+        "explanation": "Merge sort requires O(n) additional space for the temporary arrays during merging."
+      },
+      {
+        "question": "Which traversal visits nodes in the order: Left, Root, Right?",
+        "options": ["Preorder", "Inorder", "Postorder", "Level order"],
+        "correctAnswer": 1,
+        "explanation": "Inorder traversal visits left subtree, then root, then right subtree (L-R-R)."
+      },
+      {
+        "question": "What is a hash collision?",
+        "options": ["When a hash table is full", "When two keys hash to the same index", "When the hash function fails", "When deleting from hash table"],
+        "correctAnswer": 1,
+        "explanation": "A collision occurs when two different keys produce the same hash value/index."
+      },
+      {
+        "question": "What is the time complexity of accessing an element in an array by index?",
+        "options": ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+        "correctAnswer": 0,
+        "explanation": "Arrays provide O(1) constant time access by index due to contiguous memory storage."
+      },
+      {
+        "question": "Which algorithm is used to find the shortest path in a weighted graph?",
+        "options": ["DFS", "BFS", "Dijkstra's", "Binary Search"],
+        "correctAnswer": 2,
+        "explanation": "Dijkstra's algorithm finds the shortest path from a source to all vertices in a weighted graph."
+      },
+      {
+        "question": "What is the main advantage of a doubly linked list over a singly linked list?",
+        "options": ["Less memory usage", "Faster insertion", "Bidirectional traversal", "Better cache performance"],
+        "correctAnswer": 2,
+        "explanation": "Doubly linked lists allow traversal in both directions, useful for operations like deletion."
+      }
+    ],
+    "React": [
+      {
+        "question": "What is the virtual DOM in React?",
+        "options": ["The actual browser DOM", "A lightweight copy of the real DOM", "A database for storing state", "A CSS framework"],
+        "correctAnswer": 1,
+        "explanation": "The virtual DOM is a lightweight JavaScript representation of the real DOM that React uses for efficient updates."
+      },
+      {
+        "question": "Which hook is used to manage state in functional components?",
+        "options": ["useEffect", "useState", "useContext", "useReducer"],
+        "correctAnswer": 1,
+        "explanation": "useState is the primary hook for adding state to functional components."
+      },
+      {
+        "question": "What is the purpose of useEffect hook?",
+        "options": ["Manage component state", "Handle side effects", "Create context", "Optimize performance"],
+        "correctAnswer": 1,
+        "explanation": "useEffect handles side effects like data fetching, subscriptions, and DOM manipulation."
+      },
+      {
+        "question": "What is JSX?",
+        "options": ["A database query language", "JavaScript XML syntax extension", "A CSS preprocessor", "A testing framework"],
+        "correctAnswer": 1,
+        "explanation": "JSX is a syntax extension that allows writing HTML-like code in JavaScript files."
+      },
+      {
+        "question": "Which method is called when a component is first rendered?",
+        "options": ["componentDidUpdate", "componentWillUnmount", "componentDidMount", "shouldComponentUpdate"],
+        "correctAnswer": 2,
+        "explanation": "componentDidMount is called once after the component is first rendered to the DOM."
+      },
+      {
+        "question": "What is the correct way to pass data from parent to child component?",
+        "options": ["Using state", "Using props", "Using context", "Using refs"],
+        "correctAnswer": 1,
+        "explanation": "Props (properties) are the standard way to pass data from parent to child components."
+      },
+      {
+        "question": "What is the purpose of React.memo?",
+        "options": ["Store data in memory", "Prevent unnecessary re-renders", "Create memos in UI", "Debug components"],
+        "correctAnswer": 1,
+        "explanation": "React.memo is a higher-order component that memoizes components to prevent unnecessary re-renders."
+      },
+      {
+        "question": "What is the key prop used for in React lists?",
+        "options": ["Styling list items", "Sorting the list", "Helping React identify which items changed", "Adding click handlers"],
+        "correctAnswer": 2,
+        "explanation": "Keys help React identify which items have changed, been added, or removed for efficient updates."
+      },
+      {
+        "question": "Which hook would you use for complex state logic?",
+        "options": ["useState", "useEffect", "useReducer", "useMemo"],
+        "correctAnswer": 2,
+        "explanation": "useReducer is preferred for complex state logic involving multiple sub-values or next state dependencies."
+      },
+      {
+        "question": "What is the purpose of useCallback hook?",
+        "options": ["Call APIs", "Memoize functions", "Handle form callbacks", "Create callbacks for events"],
+        "correctAnswer": 1,
+        "explanation": "useCallback memoizes functions to prevent unnecessary re-creation on every render."
+      }
+    ],
+    "Python": [
+      {
+        "question": "What is the output of print(type([]))?",
+        "options": ["<class 'array'>", "<class 'list'>", "<class 'tuple'>", "<class 'dict'>"],
+        "correctAnswer": 1,
+        "explanation": "[] creates an empty list in Python, so type([]) returns <class 'list'>."
+      },
+      {
+        "question": "Which keyword is used to create a function in Python?",
+        "options": ["function", "func", "def", "create"],
+        "correctAnswer": 2,
+        "explanation": "The 'def' keyword is used to define functions in Python."
+      },
+      {
+        "question": "What is a Python decorator?",
+        "options": ["A way to format strings", "A function that modifies another function", "A type of loop", "A data structure"],
+        "correctAnswer": 1,
+        "explanation": "Decorators are functions that modify the behavior of other functions without changing their code."
+      },
+      {
+        "question": "What is the difference between a list and a tuple?",
+        "options": ["Lists are faster", "Tuples are mutable", "Lists are mutable, tuples are immutable", "No difference"],
+        "correctAnswer": 2,
+        "explanation": "Lists are mutable (can be changed), while tuples are immutable (cannot be changed after creation)."
+      },
+      {
+        "question": "What does the 'self' parameter represent in a class method?",
+        "options": ["The class itself", "The current instance", "A global variable", "Nothing specific"],
+        "correctAnswer": 1,
+        "explanation": "'self' refers to the current instance of the class, allowing access to instance attributes and methods."
+      },
+      {
+        "question": "What is list comprehension in Python?",
+        "options": ["Understanding lists", "A way to create lists concisely", "A type of sorting", "Memory management"],
+        "correctAnswer": 1,
+        "explanation": "List comprehension provides a concise way to create lists: [x for x in iterable]."
+      },
+      {
+        "question": "What is the purpose of __init__ method?",
+        "options": ["Initialize the Python interpreter", "Initialize class instances", "Import modules", "Define main function"],
+        "correctAnswer": 1,
+        "explanation": "__init__ is the constructor method called when creating a new instance of a class."
+      },
+      {
+        "question": "Which module is used for regular expressions in Python?",
+        "options": ["regex", "re", "regexp", "pattern"],
+        "correctAnswer": 1,
+        "explanation": "The 're' module provides regular expression matching operations in Python."
+      },
+      {
+        "question": "What is the output of 3 // 2 in Python?",
+        "options": ["1.5", "1", "2", "1.0"],
+        "correctAnswer": 1,
+        "explanation": "// is floor division, which returns the largest integer less than or equal to the result."
+      },
+      {
+        "question": "What is a Python generator?",
+        "options": ["A type of list", "A function that returns an iterator", "A random number generator", "A file creator"],
+        "correctAnswer": 1,
+        "explanation": "Generators are functions that yield values one at a time, creating iterators efficiently."
+      }
+    ],
+    "Machine Learning": [
+      {
+        "question": "What is overfitting in machine learning?",
+        "options": ["Model is too simple", "Model performs well on training but poorly on test data", "Model trains too fast", "Model uses too much memory"],
+        "correctAnswer": 1,
+        "explanation": "Overfitting occurs when a model learns training data too well, including noise, and fails to generalize."
+      },
+      {
+        "question": "What is the purpose of the activation function in neural networks?",
+        "options": ["Reduce training time", "Introduce non-linearity", "Store weights", "Initialize biases"],
+        "correctAnswer": 1,
+        "explanation": "Activation functions introduce non-linearity, allowing networks to learn complex patterns."
+      },
+      {
+        "question": "What is the difference between supervised and unsupervised learning?",
+        "options": ["Speed of training", "Supervised uses labeled data, unsupervised doesn't", "Number of features", "Model complexity"],
+        "correctAnswer": 1,
+        "explanation": "Supervised learning uses labeled data with known outputs, while unsupervised learning finds patterns without labels."
+      },
+      {
+        "question": "What does the learning rate control in gradient descent?",
+        "options": ["Model accuracy", "Step size in parameter updates", "Number of epochs", "Batch size"],
+        "correctAnswer": 1,
+        "explanation": "Learning rate determines how much to adjust parameters in each optimization step."
+      },
+      {
+        "question": "What is cross-validation?",
+        "options": ["A type of neural network", "Technique to evaluate model performance", "A regularization method", "Data augmentation"],
+        "correctAnswer": 1,
+        "explanation": "Cross-validation splits data into multiple folds to evaluate model performance more reliably."
+      },
+      {
+        "question": "What is the vanishing gradient problem?",
+        "options": ["Gradients become too large", "Gradients become too small for learning", "Model overfits", "Loss increases"],
+        "correctAnswer": 1,
+        "explanation": "Vanishing gradients occur when gradients become very small, making it hard for early layers to learn."
+      },
+      {
+        "question": "Which algorithm is commonly used for classification problems?",
+        "options": ["Linear Regression", "Logistic Regression", "K-Means", "PCA"],
+        "correctAnswer": 1,
+        "explanation": "Logistic Regression is a classification algorithm despite its name, predicting class probabilities."
+      },
+      {
+        "question": "What is the purpose of dropout in neural networks?",
+        "options": ["Speed up training", "Prevent overfitting", "Increase accuracy", "Reduce model size"],
+        "correctAnswer": 1,
+        "explanation": "Dropout randomly deactivates neurons during training to prevent overfitting."
+      },
+      {
+        "question": "What is feature scaling?",
+        "options": ["Adding more features", "Normalizing feature values to a similar range", "Removing features", "Selecting best features"],
+        "correctAnswer": 1,
+        "explanation": "Feature scaling normalizes values so all features contribute equally to the model."
+      },
+      {
+        "question": "What is the bias-variance tradeoff?",
+        "options": ["Balancing speed and accuracy", "Balancing model simplicity and complexity", "Balancing training and test data", "Balancing features and samples"],
+        "correctAnswer": 1,
+        "explanation": "It's the tradeoff between underfitting (high bias) and overfitting (high variance)."
+      }
+    ]
+  }
+}

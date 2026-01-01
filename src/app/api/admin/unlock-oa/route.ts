@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         purchased: true,
       }
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error unlocking OA questions:", error);
     return NextResponse.json(
       { error: "Failed to unlock OA questions" },
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
         paymentId: u.purchases?.premium?.paymentId,
       }))
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching purchases:", error);
     return NextResponse.json(
       { error: "Failed to fetch purchases" },

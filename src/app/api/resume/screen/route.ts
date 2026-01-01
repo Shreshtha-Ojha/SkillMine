@@ -143,10 +143,11 @@ export async function POST(request: NextRequest) {
     const result = await screenResumeWithGemini(jobDescription, resumeText);
 
     return NextResponse.json({ result }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Resume screening error:", error);
+    const message = error instanceof Error ? error.message : "Failed to screen resume";
     return NextResponse.json(
-      { error: error.message || "Failed to screen resume" },
+      { error: message },
       { status: 500 }
     );
   }

@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
       paymentRequestId: data.payment_request.id,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating payment request:", error);
     return NextResponse.json(
       { error: "Failed to create payment request" },

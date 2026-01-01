@@ -113,24 +113,25 @@ export async function POST(request: NextRequest) {
 
             // Return success response
             return NextResponse.json({ message: "Password reset link has been sent to your email. Please check your inbox." }, { status: 200 });
-        } catch (emailError: any) {
+        } catch (emailError) {
             console.error("Email sending failed:", emailError);
-            return NextResponse.json({ 
-                error: "Failed to send password reset email. Please try again later or contact support." 
+            return NextResponse.json({
+                error: "Failed to send password reset email. Please try again later or contact support."
             }, { status: 500 });
         }
-    } catch (error: any) {
+    } catch (error) {
         console.error("❌ Password reset error:", error);
-        
+
         // Handle network/connection errors
-        if (error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError') {
-            return NextResponse.json({ 
-                error: "Database connection failed. Please check your internet connection and try again." 
+        const errorName = error instanceof Error ? error.name : "";
+        if (errorName === 'MongoNetworkError' || errorName === 'MongoTimeoutError') {
+            return NextResponse.json({
+                error: "Database connection failed. Please check your internet connection and try again."
             }, { status: 503 });
         }
-        
-        return NextResponse.json({ 
-            error: "An unexpected error occurred. Please try again later." 
+
+        return NextResponse.json({
+            error: "An unexpected error occurred. Please try again later."
         }, { status: 500 });
     }
 }

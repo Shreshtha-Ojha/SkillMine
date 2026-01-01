@@ -49,7 +49,7 @@ function ResetPasswordForm() {
                 } else {
                     setMessage(data.error || "Failed to reset password. Please try again.");
                 }
-            } catch (error: any) {
+            } catch (error) {
                 console.error("Reset password error:", error);
                 setMessage("Network error. Please check your internet connection and try again.");
             }

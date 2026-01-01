@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       purchased,
       purchasedAt: user.purchases?.premium?.purchasedAt || null,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error checking purchase status:", error);
     return NextResponse.json(
       { error: "Failed to check purchase status" },
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       message: "Premium access granted successfully",
       purchased: true,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error recording purchase:", error);
     return NextResponse.json(
       { error: "Failed to record purchase" },

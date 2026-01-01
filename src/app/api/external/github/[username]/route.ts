@@ -17,8 +17,9 @@ export async function GET(request: NextRequest, { params }: { params: { username
     const data = await fetchGitHubUserAndRepos(username);
     setCache(cacheKey, data, 5 * 60 * 1000);
     return NextResponse.json(data);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'failed' }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'failed';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,10 +17,14 @@ export default function VerifyEmailPage() {
       await axios.post("/api/users/verifyemail", { token });
       setVerified(true);
       setLoading(false);
-    } catch (error: any) {
+    } catch (error) {
       setError(true);
       setLoading(false);
-      console.error(error.response?.data || "Error occurred while verifying email.");
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data || "Error occurred while verifying email.");
+      } else {
+        console.error("An unexpected error occurred while verifying email.");
+      }
     }
   };
 

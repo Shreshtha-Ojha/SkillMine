@@ -47,11 +47,12 @@ export async function GET(request: NextRequest) {
       source: "mongoDB",
     });
 
-  } catch (error: any) {
+  } catch (error) {
     // Handle any server-side errors
-    console.error("Error while fetching roadmap data: ", error.message);
+    const message = error instanceof Error ? error.message : "An error occurred";
+    console.error("Error while fetching roadmap data: ", message);
     return NextResponse.json({
-      error: error.message || "Internal server error"
+      error: message
     }, { status: 500 });
   }
 }

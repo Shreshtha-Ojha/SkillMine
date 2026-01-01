@@ -3,7 +3,7 @@ import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';
 import { CheckedDataProvider } from "@/context/checkedDataContext";
 import { DataCacheProvider } from "@/context/DataCacheContext";
-import { Toaster } from "react-hot-toast";
+import ClientToaster from "@/components/providers/ClientToaster";
 import AuthProvider from "@/components/providers/AuthProvider";
 import React from 'react';
 import PremiumBanner from '@/components/ui/PremiumBanner';
@@ -36,7 +36,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
         <style dangerouslySetInnerHTML={{ __html: `
@@ -47,11 +47,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }
         `}} />
       </head>
-      <body className="antialiased notallow">
+      <body className="antialiased notallow" suppressHydrationWarning>
         <AuthProvider>
           <DataCacheProvider>
             <CheckedDataProvider>
-              <Toaster position="top-right" reverseOrder={false} containerStyle={{ zIndex: 999999 }} />
+              <ClientToaster />
               <React.Suspense fallback={null}>
                 <PremiumBanner />
               </React.Suspense>

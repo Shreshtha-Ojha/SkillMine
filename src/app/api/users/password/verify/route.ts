@@ -49,18 +49,19 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ 
             message: "Your password has been reset successfully! You can now login with your new password." 
         }, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         console.error("❌ Password reset verification error:", error);
-        
+
         // Handle network/connection errors
-        if (error.name === 'MongoNetworkError' || error.name === 'MongoTimeoutError') {
-            return NextResponse.json({ 
-                error: "Database connection failed. Please check your internet connection and try again." 
+        const errorName = error instanceof Error ? error.name : "";
+        if (errorName === 'MongoNetworkError' || errorName === 'MongoTimeoutError') {
+            return NextResponse.json({
+                error: "Database connection failed. Please check your internet connection and try again."
             }, { status: 503 });
         }
-        
-        return NextResponse.json({ 
-            error: "An unexpected error occurred while resetting your password. Please try again." 
+
+        return NextResponse.json({
+            error: "An unexpected error occurred while resetting your password. Please try again."
         }, { status: 500 });
     }
 }

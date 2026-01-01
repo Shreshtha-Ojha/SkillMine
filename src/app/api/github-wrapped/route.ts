@@ -502,11 +502,12 @@ export async function POST(request: NextRequest) {
       creativeTaglines: creative.creativeTaglines,
       funFacts: creative.funFacts,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("GitHub Wrapped error:", error);
+    const message = error instanceof Error ? error.message : "Failed to generate GitHub Wrapped";
     return NextResponse.json(
-      { error: error.message || "Failed to generate GitHub Wrapped" },
-      { status: error.message?.includes("not found") ? 404 : 500 }
+      { error: message },
+      { status: message.includes("not found") ? 404 : 500 }
     );
   }
 }

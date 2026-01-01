@@ -34,7 +34,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     await user.save();
 
     return NextResponse.json({ success: true, message: 'Premium revoked' }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error revoking premium:', error);
     return NextResponse.json({ error: 'Failed to revoke premium' }, { status: 500 });
   }
