@@ -26,12 +26,15 @@ export default function LoginPage() {
         setLoading(true);
         toast.dismiss();
         const response = await axios.post("/api/users/login", user);
-        // Store token in localStorage for client-side auth
+        // Store token in localStorage and cookie for client-side auth
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
+          // Also set client-side cookie for middleware to detect immediately
+          document.cookie = `token=${response.data.token}; path=/; max-age=86400; SameSite=Lax`;
         }
         toast.success("Login successful!");
-        router.push("/");
+        // Use full page navigation to ensure cookies are sent with the request
+        window.location.href = "/";
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.code === 'ERR_NETWORK' || !error.response) {
@@ -50,7 +53,7 @@ export default function LoginPage() {
         setLoading(false);
       }
     },
-    [user, router]
+    [user]
   );
 
   useEffect(() => {
