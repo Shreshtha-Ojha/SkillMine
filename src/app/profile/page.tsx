@@ -398,30 +398,49 @@ export default function ProfilePage() {
 
   const logout = async () => {
     try {
-      // Clear custom JWT cookie
-      await axios.get("/api/users/logout", { withCredentials: true });
-
-      // Clear client-side token and user data to ensure a clean logout
+      // Clear client-side storage first
       try { localStorage.removeItem('token'); } catch (e) {}
       try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
       try { sessionStorage.removeItem('homeOaModalShown'); } catch (e) {}
       try { sessionStorage.removeItem('oaModalShown'); } catch (e) {}
       try { sessionStorage.removeItem('skillTestModalShown'); } catch (e) {}
 
-      // Broadcast logout to other tabs so they can clear user state
+      // Clear ALL cookies (including NextAuth cookies)
+      const cookiesToClear = [
+        'token',
+        'next-auth.session-token',
+        '__Secure-next-auth.session-token',
+        'next-auth.csrf-token',
+        '__Secure-next-auth.csrf-token',
+        'next-auth.callback-url',
+        '__Secure-next-auth.callback-url',
+      ];
+      cookiesToClear.forEach(name => {
+        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${window.location.hostname}`;
+      });
+
+      // Sign out from NextAuth (for Google OAuth sessions)
+      await signOut({ redirect: false });
+
+      // Clear custom JWT cookie via API (httpOnly cookie)
+      await axios.get("/api/users/logout", { withCredentials: true });
+
+      // Broadcast logout to other tabs
       try { localStorage.setItem('user_logged_out_at', String(Date.now())); } catch (e) {}
 
       setUserData(null);
       toast.success("Logout successful");
 
-      // Sign out from NextAuth (for Google OAuth sessions)
-      await signOut({ redirect: false });
-
-      // Ensure the whole app reloads so server-side cookies are no longer sent
-      window.location.href = "/auth/login";
+      // Small delay to ensure all cookies are cleared before redirect
+      setTimeout(() => {
+        window.location.href = "/auth/login";
+      }, 100);
     } catch (error: any) {
       console.error(error.message);
       toast.error(error.message);
+      // Even on error, try to redirect to login
+      window.location.href = "/auth/login";
     }
   };
 
