@@ -1457,7 +1457,7 @@ export default function ProfilePage() {
                             {(percent === 100 || testInfo?.canTakeTest) ? (
                               // Show 'Take Certification' when user is eligible (either 100% complete or explicitly allowed)
                               !testInfo?.hasAttempted ? (
-                                <button onClick={()=>router.push(`/roadmap/${roadmap._id}/certify`)} className="px-3 py-1 bg-yellow-500 rounded text-black text-sm">Take Certification</button>
+                                <button onClick={()=>router.push(`/roadmap-test?roadmapId=${roadmap._id}`)} className="px-3 py-1 bg-yellow-500 rounded text-black text-sm">Take Certification</button>
                               ) : (
                                 // If admin allowed retry, show Retry button; otherwise just mark as Attempted
                                 testInfo?.canRetry ? (
