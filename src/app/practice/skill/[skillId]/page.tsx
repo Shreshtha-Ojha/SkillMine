@@ -411,17 +411,25 @@ export default function SkillPractice({ params }: any) {
           >
             Prev
           </button>
-          <button
-            disabled={currentIndex === visibleQuestions.length - 1}
-            onClick={() =>
-              setCurrentIndex((i) =>
-                Math.min(visibleQuestions.length - 1, i + 1)
-              )
-            }
-            className="flex-1 px-4 py-2 rounded-lg bg-[#7E102C] text-white disabled:opacity-40"
-          >
-            Next
-          </button>
+          {currentIndex === visibleQuestions.length - 1 ? (
+            <button
+              onClick={() => setShowSummary(true)}
+              className="flex-1 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold"
+            >
+              Finish Practice
+            </button>
+          ) : (
+            <button
+              onClick={() =>
+                setCurrentIndex((i) =>
+                  Math.min(visibleQuestions.length - 1, i + 1)
+                )
+              }
+              className="flex-1 px-4 py-2 rounded-lg bg-[#7E102C] text-white"
+            >
+              Next
+            </button>
+          )}
         </div>
       </div>
 

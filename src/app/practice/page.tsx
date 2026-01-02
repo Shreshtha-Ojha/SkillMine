@@ -6,7 +6,6 @@ import {
   Search,
   BookOpen,
   ArrowLeft,
-  Lock,
   Sparkles,
 } from "lucide-react";
 
@@ -50,10 +49,7 @@ export default function PracticePage() {
     );
   }, [query, skills]);
 
-  const isFreeSkill = (title: string) => {
-    const free = ["html", "css"];
-    return free.some((f) => title.toLowerCase().includes(f));
-  };
+  // All skills are now free - paywall removed
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -99,52 +95,42 @@ export default function PracticePage() {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-            {filteredSkills.map((sk) => {
-              const free = isFreeSkill(sk.title);
-              return (
-                <div
-                  key={sk._id}
-                  className="group p-5 bg-[#111118] border border-white/5 rounded-2xl flex flex-col hover:border-[#7E102C]/40 transition"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="font-medium text-[#E1D4C1]">
-                        {sk.title}
-                      </h3>
-                      <p className="text-xs text-[#E1D3CC] mt-1">
-                        {sk.questionCount} practice questions
-                      </p>
-                    </div>
-
-                    {free ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-green-500/15 text-green-400">
-                        Free
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-yellow-500/15 text-yellow-400">
-                        <Lock className="w-3 h-3" />
-                        Premium
-                      </span>
-                    )}
+            {filteredSkills.map((sk) => (
+              <div
+                key={sk._id}
+                className="group p-5 bg-[#111118] border border-white/5 rounded-2xl flex flex-col hover:border-[#7E102C]/40 transition"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="font-medium text-[#E1D4C1]">
+                      {sk.title}
+                    </h3>
+                    <p className="text-xs text-[#E1D3CC] mt-1">
+                      {sk.questionCount} practice questions
+                    </p>
                   </div>
 
-                  <div className="mt-auto flex items-center gap-3">
-                    <Link
-                      href={`/practice/skill/${sk._id}`}
-                      className="px-4 py-2 bg-[#7E102C] text-[#E1D4C1] rounded-lg text-sm font-medium hover:opacity-90"
-                    >
-                      Start Practice
-                    </Link>
-                    <Link
-                      href={`/skill-tests?skill=${sk.key}`}
-                      className="text-sm text-[#E1D3CC] hover:text-[#E1D4C1]"
-                    >
-                      Create Test
-                    </Link>
-                  </div>
+                  <span className="text-xs px-2 py-1 rounded-full bg-green-500/15 text-green-400">
+                    Free
+                  </span>
                 </div>
-              );
-            })}
+
+                <div className="mt-auto flex items-center gap-3">
+                  <Link
+                    href={`/practice/skill/${sk._id}`}
+                    className="px-4 py-2 bg-[#7E102C] text-[#E1D4C1] rounded-lg text-sm font-medium hover:opacity-90"
+                  >
+                    Start Practice
+                  </Link>
+                  <Link
+                    href={`/skill-tests?skill=${sk.key}`}
+                    className="text-sm text-[#E1D3CC] hover:text-[#E1D4C1]"
+                  >
+                    Create Test
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -171,9 +157,8 @@ export default function PracticePage() {
                     </p>
                   </div>
 
-                  <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-yellow-500/15 text-yellow-400">
-                    <Lock className="w-3 h-3" />
-                    Premium
+                  <span className="text-xs px-2 py-1 rounded-full bg-green-500/15 text-green-400">
+                    Free
                   </span>
                 </div>
 
