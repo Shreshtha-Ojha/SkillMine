@@ -51,7 +51,24 @@ const userSchema = new Schema({
         passed: { type: Boolean },
         certificateId: { type: String },
         completedAt: { type: Date },
-        answers: [{ 
+        answers: [{
+            questionId: String,
+            question: String,
+            userAnswer: Number,
+            correctAnswer: Number,
+            isCorrect: Boolean,
+            marks: Number
+        }]
+    },
+    frontendCertAttempt: {
+        completed: { type: Boolean, default: false },
+        score: { type: Number },
+        totalMarks: { type: Number },
+        percentage: { type: Number },
+        passed: { type: Boolean },
+        certificateId: { type: String },
+        completedAt: { type: Date },
+        answers: [{
             questionId: String,
             question: String,
             userAnswer: Number,

@@ -7,6 +7,7 @@ import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { signOut } from "next-auth/react";
 import InterviewHistory from "./InterviewHistory";
 import Certificate from "@/components/component/Certificate";
 import { ProfilePhotoModal, CodingProfilesModal } from "@/components/component/CodingProfileModals";
@@ -397,6 +398,7 @@ export default function ProfilePage() {
 
   const logout = async () => {
     try {
+      // Clear custom JWT cookie
       await axios.get("/api/users/logout", { withCredentials: true });
 
       // Clear client-side token and user data to ensure a clean logout
@@ -411,6 +413,9 @@ export default function ProfilePage() {
 
       setUserData(null);
       toast.success("Logout successful");
+
+      // Sign out from NextAuth (for Google OAuth sessions)
+      await signOut({ redirect: false });
 
       // Ensure the whole app reloads so server-side cookies are no longer sent
       window.location.href = "/auth/login";
@@ -1552,6 +1557,60 @@ export default function ProfilePage() {
               </div>
             </div>
 
+            {/* Frontend Certification Test Card */}
+            <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
+              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                Frontend Development Certification
+              </h3>
+              <div className="p-5 rounded-xl bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border border-cyan-500/20">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                      <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">Frontend Development</h4>
+                      <p className="text-sm text-gray-400 mt-1">20 MCQ Questions • 20 Marks • 15 Minutes</p>
+                      <p className="text-xs text-gray-500 mt-1">HTML, CSS, JavaScript & React</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {(userData as any)?.frontendCertAttempt?.completed ? (
+                      (userData as any).frontendCertAttempt.passed ? (
+                        <button
+                          onClick={() => setActiveTab('certificates')}
+                          className="px-4 py-2 text-sm text-green-400 bg-green-500/10 rounded-lg hover:bg-green-500/20 transition-colors flex items-center gap-2"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          Passed ({(userData as any).frontendCertAttempt.percentage}%) - View Certificate
+                        </button>
+                      ) : (
+                        <span className="px-4 py-2 text-sm text-red-400 bg-red-500/10 rounded-lg flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4" />
+                          Failed ({(userData as any).frontendCertAttempt.percentage}%)
+                        </span>
+                      )
+                    ) : (
+                      <button
+                        onClick={() => router.push('/frontend-certification')}
+                        className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg hover:from-blue-500 hover:to-cyan-500 transition-all flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                        Take Certification Test
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Test Info Card */}
             <div className="theme-card theme-card--vintage border border-[#7E102C]/14 rounded-2xl hover:border-[#7E102C]/20 transition-all duration-300 p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -1746,6 +1805,65 @@ export default function ProfilePage() {
                       </div>
                       <button
                         className="flex items-center gap-1 px-3 py-1.5 bg-purple-500/20 text-purple-400 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                        View
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Frontend Certification Certificate */}
+                {(userData as any)?.frontendCertAttempt?.passed && (userData as any).frontendCertAttempt && (
+                  <div
+                    className="group p-6 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border border-cyan-500/20 rounded-xl hover:border-cyan-500/40 transition-all cursor-pointer"
+                    onClick={() => {
+                      const attempt = (userData as any).frontendCertAttempt!;
+                      setSelectedCertificate({
+                        roadmapTitle: "Frontend Development",
+                        certificateId: attempt.certificateId,
+                        score: attempt.score,
+                        percentage: attempt.percentage,
+                        mcqScore: attempt.score,
+                        issuedAt: attempt.completedAt,
+                        totalMarks: attempt.totalMarks
+                      });
+                    }}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-cyan-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                          <Award className="w-6 h-6 text-cyan-400" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white">Frontend Development Certificate</h4>
+                          <p className="text-xs text-gray-500">
+                            Issued: {new Date((userData as any).frontendCertAttempt.completedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="px-3 py-1 rounded-full text-sm font-medium bg-cyan-500/20 text-cyan-400">
+                        {(userData as any).frontendCertAttempt.percentage}%
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 mb-4">
+                      <div className="p-3 bg-white/5 rounded-lg text-center">
+                        <div className="text-lg font-bold text-white">{(userData as any).frontendCertAttempt.score}/{(userData as any).frontendCertAttempt.totalMarks}</div>
+                        <div className="text-[10px] text-gray-500">Score</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg text-center">
+                        <div className="text-lg font-bold text-green-400">PASS</div>
+                        <div className="text-[10px] text-gray-500">Result</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                      <div className="text-xs text-gray-500">
+                        ID: <span className="font-mono text-cyan-400">{(userData as any).frontendCertAttempt.certificateId}</span>
+                      </div>
+                      <button
+                        className="flex items-center gap-1 px-3 py-1.5 bg-cyan-500/20 text-cyan-400 rounded-lg text-sm font-medium hover:bg-cyan-500/30 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
                         View
