@@ -397,62 +397,25 @@ export default function ProfilePage() {
   };
 
   const logout = async () => {
+    // Clear everything synchronously first
+    try { localStorage.removeItem('token'); } catch (e) {}
+    try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+
+    // Clear all possible auth cookies
+    const cookies = document.cookie.split(';');
+    cookies.forEach(cookie => {
+      const name = cookie.split('=')[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    });
+
     try {
-      // Clear custom JWT cookie via API FIRST (httpOnly cookie)
+      // Clear server-side httpOnly cookie
       await axios.get("/api/users/logout", { withCredentials: true });
+    } catch (e) {}
 
-      // Sign out from NextAuth (for Google OAuth sessions)
-      await signOut({ redirect: false });
-
-      // Clear client-side storage
-      try { localStorage.removeItem('token'); } catch (e) {}
-      try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
-      try { sessionStorage.removeItem('homeOaModalShown'); } catch (e) {}
-      try { sessionStorage.removeItem('oaModalShown'); } catch (e) {}
-      try { sessionStorage.removeItem('skillTestModalShown'); } catch (e) {}
-
-      // Nuclear cookie clear - clear ALL variations of auth cookies
-      const cookiesToClear = [
-        'token',
-        'next-auth.session-token',
-        '__Secure-next-auth.session-token',
-        'next-auth.csrf-token',
-        '__Secure-next-auth.csrf-token',
-        'next-auth.callback-url',
-        '__Secure-next-auth.callback-url',
-        '__Host-next-auth.csrf-token',
-      ];
-
-      // Clear with multiple path/domain combinations
-      cookiesToClear.forEach(name => {
-        // Basic clear
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
-        // With domain
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}; SameSite=Lax`;
-        // With Secure flag (for HTTPS)
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; Secure`;
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; Secure; SameSite=Lax`;
-      });
-
-      // Broadcast logout to other tabs
-      try { localStorage.setItem('user_logged_out_at', String(Date.now())); } catch (e) {}
-
-      setUserData(null);
-      toast.success("Logout successful");
-
-      // Delay then force reload to clear all state
-      setTimeout(() => {
-        window.location.replace("/auth/login");
-      }, 200);
-    } catch (error: any) {
-      console.error("Logout error:", error.message);
-      // Force logout even on error - clear what we can and redirect
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      try { localStorage.removeItem('token'); } catch (e) {}
-      window.location.replace("/auth/login");
-    }
+    // Use NextAuth signOut with redirect to ensure clean logout
+    await signOut({ callbackUrl: "/auth/login" });
   };
 
   // --- All hooks and logic above ---

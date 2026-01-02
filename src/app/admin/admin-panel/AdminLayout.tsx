@@ -159,27 +159,21 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   const logout = async () => {
+    // Clear storage
+    try { localStorage.removeItem('token'); } catch (e) {}
+    try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+
+    // Clear all cookies
+    document.cookie.split(';').forEach(c => {
+      document.cookie = `${c.split('=')[0].trim()}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    });
+
     try {
       await axios.get("/api/users/logout", { withCredentials: true });
-      await signOut({ redirect: false });
+    } catch (e) {}
 
-      // Clear storage
-      try { localStorage.removeItem('token'); } catch (e) {}
-      try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
-
-      // Clear all auth cookies
-      const cookiesToClear = ['token', 'next-auth.session-token', '__Secure-next-auth.session-token', 'next-auth.csrf-token', '__Secure-next-auth.csrf-token'];
-      cookiesToClear.forEach(name => {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
-      });
-
-      toast.success("Logged out");
-      setTimeout(() => window.location.replace("/auth/login"), 200);
-    } catch (error) {
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      window.location.replace("/auth/login");
-    }
+    await signOut({ callbackUrl: "/auth/login" });
   };
 
   return (
