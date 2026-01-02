@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -155,6 +158,30 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     return pathname.startsWith(href);
   };
 
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout", { withCredentials: true });
+      await signOut({ redirect: false });
+
+      // Clear storage
+      try { localStorage.removeItem('token'); } catch (e) {}
+      try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+
+      // Clear all auth cookies
+      const cookiesToClear = ['token', 'next-auth.session-token', '__Secure-next-auth.session-token', 'next-auth.csrf-token', '__Secure-next-auth.csrf-token'];
+      cookiesToClear.forEach(name => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+      });
+
+      toast.success("Logged out");
+      setTimeout(() => window.location.replace("/auth/login"), 200);
+    } catch (error) {
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      window.location.replace("/auth/login");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       {/* Mobile Header */}
@@ -236,7 +263,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10 space-y-1">
           <button
             onClick={() => router.push("/")}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
@@ -245,6 +272,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Back to Site
+          </button>
+          <button
+            onClick={logout}
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Logout
           </button>
         </div>
       </aside>
