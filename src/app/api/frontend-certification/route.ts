@@ -83,12 +83,15 @@ export async function GET(request: NextRequest) {
     const selectedQuestions = shuffled.slice(0, 20);
 
     // Return questions without correct answers for test-taking
-    const questionsForUser = selectedQuestions.map((q: { _id: { toString: () => string }; question: string; options: string[] }, idx: number) => ({
-      id: q._id?.toString() || `fq${idx}`,
-      question: q.question,
-      options: q.options,
-      marks: 1
-    }));
+    const questionsForUser = selectedQuestions.map((q, idx: number) => {
+      const question = q as { _id?: { toString: () => string }; question: string; options: string[] };
+      return {
+        id: question._id?.toString() || `fq${idx}`,
+        question: question.question,
+        options: question.options,
+        marks: 1
+      };
+    });
 
     return NextResponse.json({
       canTakeTest: true,
