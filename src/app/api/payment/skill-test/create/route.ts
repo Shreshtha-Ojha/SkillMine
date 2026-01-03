@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     // If already purchased premium, return
     if (user.purchases?.premium?.purchased) { console.warn(`User ${user._id} attempted to create premium payment but already purchased`); return NextResp.json({ error: 'Already purchased', code: 'ALREADY_PURCHASED' }, { status: 400 }); }
 
-    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.skillmine.tech")?.replace(/\/$/, "");
+    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://skillminelearn.vercel.app")?.replace(/\/$/, "");
     const redirectUrl = `${baseUrl}/payment/verify?product=premium`;
     const isLocalhost = baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1');
     const webhookUrl = isLocalhost ? undefined : `${baseUrl}/api/payment/webhook`;

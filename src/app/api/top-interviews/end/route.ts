@@ -34,7 +34,7 @@ async function sendWinnerEmail(
     },
   });
 
-  const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
+  const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://skillminelearn.vercel.app")?.replace(/\/$/, "");
   
   const rankEmojis: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
   const rankNames: Record<number, string> = { 1: '1st Place', 2: '2nd Place', 3: '3rd Place' };
@@ -102,7 +102,7 @@ async function sendWinnerEmail(
           <div style="padding: 25px; background: rgba(0,0,0,0.3); text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
             <p style="color: #6b7280; font-size: 13px; margin: 0 0 10px 0;">Thank you for participating in SkillMine Coding Arena!</p>
             <p style="color: #4b5563; font-size: 12px; margin: 0;">
-              <a href="${domain}" style="color: #60a5fa; text-decoration: none;">www.skillmine.tech</a>
+              <a href="${domain}" style="color: #60a5fa; text-decoration: none;">skillminelearn.vercel.app</a>
             </p>
           </div>
           

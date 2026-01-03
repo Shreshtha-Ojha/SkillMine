@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "SkillMine - Technical Roadmaps and Blogs",
     description: "SkillMine provides technical roadmaps and blogs to help you grow your skills in development, machine learning, data science, and more.",
     images: [{ url: "/official_logo.png", width: 1200, height: 630, alt: "SkillMine Logo" }],
-    url: "https://www.skillmine.tech",
+    url: "https://skillminelearn.vercel.app",
     type: "website",
     siteName: "SkillMine",
   },

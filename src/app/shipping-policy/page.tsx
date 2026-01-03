@@ -34,7 +34,7 @@ const sections = [
     title: "How to Access Your Purchase",
     icon: Monitor,
     content: [
-      "Log in to your SkillMine account at <strong>www.skillmine.tech</strong>.",
+      "Log in to your SkillMine account at <strong>skillminelearn.vercel.app</strong>.",
       "Navigate to your Dashboard or Profile section.",
       "All purchased courses and content will be visible under 'My Courses' or 'My Learning'.",
       "Click on any course to start learning immediately.",

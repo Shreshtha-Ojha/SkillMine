@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
             <p>
               Welcome to SkillMine (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your
               personal information and your right to privacy. This Privacy Policy explains how we collect,
-              use, disclose, and safeguard your information when you visit our website skillmine.tech
+              use, disclose, and safeguard your information when you visit our website skillminelearn.vercel.app
               and use our services.
             </p>
           </section>
@@ -151,8 +151,8 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="mt-2">
               <strong className="text-white">Website:</strong>{" "}
-              <a href="https://www.skillmine.tech" className="text-[#D4AF37] hover:underline">
-                www.skillmine.tech
+              <a href="https://skillminelearn.vercel.app" className="text-[#D4AF37] hover:underline">
+                skillminelearn.vercel.app
               </a>
             </p>
           </section>

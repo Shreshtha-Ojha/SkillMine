@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
     const amount = pricing.premium;
 
-    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://www.skillmine.tech")?.replace(/\/$/, "");
+    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || process.env.DOMAIN || "https://skillminelearn.vercel.app")?.replace(/\/$/, "");
     const redirectUrl = `${baseUrl}/payment/verify?product=premium`;
     const isLocalhost = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
     const webhookUrl = isLocalhost ? undefined : `${baseUrl}/api/payment/webhook`;

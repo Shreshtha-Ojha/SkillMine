@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "SkillMine",
-      url: "https://www.skillmine.tech",
+      url: "https://skillminelearn.vercel.app",
     },
   ],
 
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         alt: "SkillMine - Company-wise DSA Questions",
       },
     ],
-    url: "https://www.skillmine.tech/company-problems",
+    url: "https://skillminelearn.vercel.app/company-problems",
     type: "website",
     siteName: "SkillMine",
   },

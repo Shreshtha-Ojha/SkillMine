@@ -185,8 +185,8 @@ export default function TermsOfServicePage() {
             </p>
             <p className="mt-2">
               <strong className="text-white">Website:</strong>{" "}
-              <a href="https://www.skillmine.tech" className="text-[#D4AF37] hover:underline">
-                www.skillmine.tech
+              <a href="https://skillminelearn.vercel.app" className="text-[#D4AF37] hover:underline">
+                skillminelearn.vercel.app
               </a>
             </p>
           </section>

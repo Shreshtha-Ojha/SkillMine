@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech").replace(/\/$/, "");
+    const domain = (process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://skillminelearn.vercel.app").replace(/\/$/, "");
     const adminLink = `${domain}/admin/admin-panel/tests`;
 
     const mailOptions = {

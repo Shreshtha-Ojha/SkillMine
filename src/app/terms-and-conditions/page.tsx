@@ -21,7 +21,7 @@ const sections = [
     title: "Definitions",
     icon: FileText,
     content: [
-      "<strong>Platform</strong>: The services provided by SkillMine including the website www.skillmine.tech, mobile app, content and tools.",
+      "<strong>Platform</strong>: The services provided by SkillMine including the website skillminelearn.vercel.app, mobile app, content and tools.",
       "<strong>Courses/Content</strong>: Includes videos, notes, quizzes, assignments, tests, documents, and learning resources.",
       "<strong>User</strong>: Any individual accessing or using the Platform.",
       "<strong>Payment Instrument</strong>: UPI, cards, net banking, wallets, or any valid payment method."

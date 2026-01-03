@@ -111,7 +111,7 @@ export default function Certificate({
           />
           <span className="text-4xl font-bold tracking-wide text-slate-800">SkillMine</span>
         </div>
-        <p className="text-xs text-slate-500 tracking-[0.4em] uppercase font-medium">www.skillmine.tech</p>
+        <p className="text-xs text-slate-500 tracking-[0.4em] uppercase font-medium">skillminelearn.vercel.app</p>
       </div>
 
       {/* Certificate Title */}

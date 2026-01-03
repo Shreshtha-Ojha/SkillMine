@@ -8,7 +8,7 @@ export async function fetchLiveProjects() {
       name: "SkillMine",
       desc: "A platform offering curated study materials and practice tests for coding interviews (Premium).",
       live: true,
-      link: "https://skillmine.tech",
+      link: "https://skillminelearn.vercel.app",
       cover: "/navrion/skillmine.png",
     },
     {

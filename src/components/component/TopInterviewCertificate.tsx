@@ -110,7 +110,7 @@ export default function TopInterviewCertificate({
           />
           <span className="text-3xl font-bold tracking-wide text-slate-800">SkillMine</span>
         </div>
-        <p className="text-xs text-slate-500 tracking-[0.3em] uppercase">www.skillmine.tech</p>
+        <p className="text-xs text-slate-500 tracking-[0.3em] uppercase">skillminelearn.vercel.app</p>
       </div>
 
       {/* Trophy Icon */}

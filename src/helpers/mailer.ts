@@ -32,7 +32,7 @@ export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) =
 
 
 // Get domain from environment variable with fallback (prefer NEXTAUTH_URL for consistency)
-const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://www.skillmine.tech")?.replace(/\/$/, "");
+const domain = (process.env.NEXTAUTH_URL || process.env.DOMAIN || process.env.NEXT_PUBLIC_BASE_URL || "https://skillminelearn.vercel.app")?.replace(/\/$/, "");
 
 const mailOptions = {
     from: process.env.EMAIL_USER, 
