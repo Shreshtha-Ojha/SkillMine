@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.skillmine.tech">Live Demo</a> •
+  <a href="https://www.skillminelearn.vercel.app">Live Demo</a> •
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#api-reference">API Reference</a> •
