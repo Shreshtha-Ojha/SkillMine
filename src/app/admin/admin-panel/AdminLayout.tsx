@@ -159,21 +159,25 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   const logout = async () => {
-    // Clear storage
-    try { localStorage.removeItem('token'); } catch (e) {}
-    try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+    // Clear all storage
+    try { localStorage.clear(); } catch (e) {}
     try { sessionStorage.clear(); } catch (e) {}
 
-    // Clear all cookies
+    // Clear ALL cookies aggressively
+    document.cookie.split(';').forEach(c => {
+      const name = c.split('=')[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+    });
+
+    try { await axios.get("/api/users/logout", { withCredentials: true }); } catch (e) {}
+    try { await signOut({ redirect: false }); } catch (e) {}
+
+    // Clear cookies again and force redirect
     document.cookie.split(';').forEach(c => {
       document.cookie = `${c.split('=')[0].trim()}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
     });
-
-    try {
-      await axios.get("/api/users/logout", { withCredentials: true });
-    } catch (e) {}
-
-    await signOut({ callbackUrl: "/auth/login" });
+    window.location.replace("/auth/login");
   };
 
   return (

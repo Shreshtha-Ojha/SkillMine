@@ -397,25 +397,38 @@ export default function ProfilePage() {
   };
 
   const logout = async () => {
-    // Clear everything synchronously first
-    try { localStorage.removeItem('token'); } catch (e) {}
-    try { localStorage.removeItem('pricing_updated_at'); } catch (e) {}
+    // Clear localStorage and sessionStorage
+    try { localStorage.clear(); } catch (e) {}
     try { sessionStorage.clear(); } catch (e) {}
 
-    // Clear all possible auth cookies
+    // Clear ALL cookies aggressively
     const cookies = document.cookie.split(';');
-    cookies.forEach(cookie => {
+    for (const cookie of cookies) {
       const name = cookie.split('=')[0].trim();
+      // Clear with multiple variations
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-    });
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.${window.location.hostname}`;
+    }
 
+    // Clear server-side httpOnly cookie
     try {
-      // Clear server-side httpOnly cookie
       await axios.get("/api/users/logout", { withCredentials: true });
     } catch (e) {}
 
-    // Use NextAuth signOut with redirect to ensure clean logout
-    await signOut({ callbackUrl: "/auth/login" });
+    // Sign out from NextAuth without redirect
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {}
+
+    // Clear cookies again after signOut
+    document.cookie.split(';').forEach(c => {
+      const name = c.split('=')[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    });
+
+    // Force hard navigation to login page
+    window.location.replace("/auth/login");
   };
 
   // --- All hooks and logic above ---
