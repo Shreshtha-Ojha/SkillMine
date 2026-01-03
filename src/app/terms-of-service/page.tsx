@@ -179,8 +179,8 @@ export default function TermsOfServicePage() {
             </p>
             <p className="mt-4">
               <strong className="text-white">Email:</strong>{" "}
-              <a href="mailto:support@skillmine.tech" className="text-[#D4AF37] hover:underline">
-                support@skillmine.tech
+              <a href="mailto:ojhashreshtha@gmail.com" className="text-[#D4AF37] hover:underline">
+                ojhashreshtha@gmail.com
               </a>
             </p>
             <p className="mt-2">
