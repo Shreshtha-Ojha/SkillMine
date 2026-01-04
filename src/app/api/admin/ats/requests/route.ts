@@ -3,6 +3,8 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import getUserFromRequest from "@/lib/getUserFromRequest";
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 export async function GET(request: NextRequest) {

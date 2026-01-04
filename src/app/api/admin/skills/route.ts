@@ -3,6 +3,8 @@ import { connect } from '@/dbConfig/dbConfig';
 import Skill from '@/models/skillModel';
 import getUserFromRequest from '@/lib/getUserFromRequest';
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 export async function POST(request: NextRequest) {

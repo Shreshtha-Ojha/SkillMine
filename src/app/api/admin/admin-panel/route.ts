@@ -2,6 +2,9 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import { NextResponse, NextRequest } from "next/server";
 
+// Force dynamic rendering - prevents Vercel from caching this route
+export const dynamic = 'force-dynamic';
+
 connect();
 
 export async function GET(request: NextRequest) {

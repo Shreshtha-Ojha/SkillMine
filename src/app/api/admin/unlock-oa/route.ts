@@ -3,6 +3,8 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import jwt from "jsonwebtoken";
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 // Helper to get user from request and check admin

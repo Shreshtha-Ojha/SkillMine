@@ -4,6 +4,8 @@ import PricingSettings from '@/models/pricingSettingsModel';
 import User from '@/models/userModel';
 import jwt from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 async function verifyAdmin(request: NextRequest) {

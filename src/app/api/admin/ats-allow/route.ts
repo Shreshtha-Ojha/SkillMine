@@ -3,6 +3,8 @@ import { connect } from '@/dbConfig/dbConfig';
 import getUserFromRequest from '@/lib/getUserFromRequest';
 import User from '@/models/userModel';
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 export async function PUT(req: Request) {

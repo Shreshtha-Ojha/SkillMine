@@ -4,6 +4,8 @@ import Skill from '@/models/skillModel';
 import getUserFromRequest from '@/lib/getUserFromRequest';
 import JSON5 from 'json5';
 
+export const dynamic = 'force-dynamic';
+
 connect();
 
 export async function GET(request: NextRequest) {
