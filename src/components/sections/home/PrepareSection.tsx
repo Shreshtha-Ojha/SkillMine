@@ -9,7 +9,7 @@ const topics = [
   { icon: Boxes, label: "System Design", path: "/explore/roadmap/6952c8fabd516ee01ba0fa6a" },
   { icon: Cpu, label: "OS", path: "/explore/roadmap/6952cf98bd516ee01ba0ff46" },
   { icon: Globe, label: "Web Dev", path: "/explore" },
-  { icon: Database, label: "DBMS", path: "/prepare-interviews" },
+  { icon: Database, label: "DBMS", path: "/explore/roadmap/695b4cfa5cc7aa485cd5c994" },
   { icon: Lock, label: "Security", path: "/prepare-interviews" },
   { icon: Users, label: "Interview Experiences", path: "/interview-experiences" },
   { icon: FileText, label: "ATS Checker (Testing)", path: "/ats-checker" },
