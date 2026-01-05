@@ -25,7 +25,7 @@
 
 ---
 
-## 💡 Motivation
+##  Motivation
 
 > **"Preparation is the key to success."** – Alexander Graham Bell
 
