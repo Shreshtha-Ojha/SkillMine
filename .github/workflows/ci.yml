@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx next lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm run test
+
+# Not run here yet, as follow-ups:
+# - Cypress e2e (cypress/e2e/*.cy.ts) needs a live MongoDB + Gemini API key
+#   available as repo secrets before it can run in Actions.
+# - k6 perf tests (.github/workflows/k6-smoke.yml) stay manual-dispatch-only;
+#   they need a deployed BASE_URL, not a good fit for a PR gate.

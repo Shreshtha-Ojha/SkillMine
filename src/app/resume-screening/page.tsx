@@ -8,9 +8,15 @@ import Link from "next/link";
 
 export default function ResumeScreeningPage() {
   const router = useRouter();
-   const user = useCurrentUser();
+  const user = useCurrentUser();
 
- if (user === undefined) {
+  useEffect(() => {
+    if (!user) return;
+    // Redirect to ATS Checker page (bulk screening deprecated)
+    router.replace("/ats-checker");
+  }, [user, router]);
+
+  if (user === undefined) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div>
@@ -53,12 +59,6 @@ export default function ResumeScreeningPage() {
       </div>
     );
   }
-
-
-  useEffect(() => {
-    // Redirect to ATS Checker page (bulk screening deprecated)
-    router.replace("/ats-checker");
-  }, [router]);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">

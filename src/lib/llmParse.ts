@@ -29,16 +29,27 @@ function normalizeParsed(p: any) {
       }
     }
     const v = out.scores[target];
-    if (v != null && typeof v !== 'number') {
-      const n = parseFloat(String(v).replace(/[^0-9.\-]/g, ''));
+    // Clamp regardless of type: the LLM can return an out-of-range *numeric*
+    // score just as easily as an out-of-range string one.
+    if (v != null) {
+      const n = typeof v === 'number' ? v : parseFloat(String(v).replace(/[^0-9.\-]/g, ''));
       out.scores[target] = Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : out.scores[target];
     }
   }
 
+  // Splits a delimited string (or passes through an array) into a string[].
+  // Defined up front so the initial coercion below and the later
+  // re-normalization both split the same way instead of double-wrapping.
+  const toStringArray = (v: any) => {
+    if (!v && v !== 0) return [];
+    if (Array.isArray(v)) return v.map(String);
+    return String(v).split(/[;,\n]+/).map(s => s.trim()).filter(Boolean);
+  };
+
   out.finalATSReadySummary = out.finalATSReadySummary || out.overallVerdict || '';
   out.detailedGuidelines = Array.isArray(out.detailedGuidelines) ? out.detailedGuidelines : (out.detailedGuidelines ? [out.detailedGuidelines] : []);
-  out.missingCriticalKeywords = Array.isArray(out.missingCriticalKeywords) ? out.missingCriticalKeywords : (out.missingCriticalKeywords ? [out.missingCriticalKeywords] : []);
-  out.topActionItems = Array.isArray(out.topActionItems) ? out.topActionItems : (out.topActionItems ? [out.topActionItems] : []);
+  out.missingCriticalKeywords = toStringArray(out.missingCriticalKeywords);
+  out.topActionItems = toStringArray(out.topActionItems);
   out.jobDescriptionReview = out.jobDescriptionReview || {};
   // Normalize detailedGuidelines entries into expected shape
   out.detailedGuidelines = (out.detailedGuidelines || []).map((g: any) => {
@@ -80,14 +91,9 @@ function normalizeParsed(p: any) {
     };
   });
 
-  // Normalize missingCriticalKeywords and topActionItems to arrays of strings
-  const toStringArray = (v:any) => {
-    if (!v && v !== 0) return [];
-    if (Array.isArray(v)) return v.map(String);
-    return String(v).split(/[;,\n]+/).map(s => s.trim()).filter(Boolean);
-  };
-  out.missingCriticalKeywords = toStringArray(out.missingCriticalKeywords);
-  out.topActionItems = Array.isArray(out.topActionItems) ? out.topActionItems.map(String) : toStringArray(out.topActionItems);
+  // missingCriticalKeywords/topActionItems are already string[] at this point
+  // (coerced up front, and topActionItems may have been merged with
+  // actionMatches extracted from detailedGuidelines above).
 
   // Normalize jobDescriptionReview fields (aliases -> canonical keys)
   const jd = out.jobDescriptionReview || {};
