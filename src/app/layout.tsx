@@ -41,9 +41,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
         <style dangerouslySetInnerHTML={{ __html: `
           body {
-            background: url('/bg.png') no-repeat center top !important;
+            background-color: #0a0908 !important;
+            background-image:
+              radial-gradient(ellipse 80% 50% at 20% -10%, rgba(212, 175, 55, 0.12), transparent),
+              radial-gradient(ellipse 80% 50% at 80% 0%, rgba(61, 184, 173, 0.10), transparent) !important;
+            background-repeat: no-repeat !important;
             background-size: cover !important;
-            background-color: #36454F !important;
+            background-attachment: fixed !important;
           }
         `}} />
       </head>
