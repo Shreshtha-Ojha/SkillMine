@@ -51,7 +51,7 @@ We're building the platform we wished existed during our own interview preparati
 | **Company-wise DSA Questions** | 450+ companies' LeetCode problems with frequency & acceptance data |
 | **AI Mock Interviews** | Practice with AI interviewer using voice/text with real-time feedback |
 | **Top Interviews** | Curated interview rounds with leaderboard rankings |
-| **Learning Roadmaps** | Step-by-step guides for Web Dev, ML, DSA, and more |
+| **Learning Roadmaps** | Step-by-step guides for Web Dev, DSA, DBMS, and more |
 | **Technical Blogs** | Community-driven blogs with likes & comments |
 | **Certifications** | Earn verifiable certificates on roadmap completion |
 | **Placement Data** | Real compensation data from top tech companies |

@@ -185,12 +185,12 @@ const dbmsRoadmap = {
 
 async function seedDBMSRoadmap() {
   try {
-    if (!process.env.MONGODB_URI) {
+    if (!process.env.MONGO_URL) {
       throw new Error('MONGO_URL not found in environment variables. Make sure .env.local exists.');
     }
 
     console.log('Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGO_URL);
     console.log('Connected to MongoDB');
 
     // Check if DBMS roadmap already exists
