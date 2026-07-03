@@ -3,6 +3,16 @@ import InterviewResult from "@/models/interviewModel";
 import mongoose from "mongoose";
 import { connect } from "@/dbConfig/dbConfig";
 import { generateContent } from "@/lib/gemini";
+import getUserFromRequest from "@/lib/getUserFromRequest";
+import { allowRequest } from "@/lib/server/rateLimiter";
+
+const MAX_FEEDBACK_LENGTH = 5000;
+
+function clampScore(rawScore: unknown, max = 10): number {
+  const score = Number(rawScore);
+  if (!Number.isFinite(score)) return 0;
+  return Math.min(max, Math.max(0, score));
+}
 
 // Increase timeout for Vercel/serverless functions
 export const maxDuration = 30; // 30 seconds max timeout
@@ -29,6 +39,25 @@ function extractAndCleanJson(raw: string | undefined | null): string {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: 10 feedback requests per IP per minute (mirrors /api/interview/ask)
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ||
+             req.headers.get("x-real-ip") ||
+             "unknown";
+  if (!allowRequest(`interview-feedback:${ip}`, 10, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please slow down." },
+      { status: 429 }
+    );
+  }
+
+  const authedUser = await getUserFromRequest(req);
+  if (!authedUser) {
+    return NextResponse.json(
+      { error: "Please login to submit interview feedback" },
+      { status: 401 }
+    );
+  }
+
   const body = await req.json();
   console.log("[Interview Feedback] Incoming body:", body);
 
@@ -39,7 +68,7 @@ export async function POST(req: NextRequest) {
 
   // Support both single and batch feedback
   if (Array.isArray(body.questions) && Array.isArray(body.answers)) {
-    const { topic, questions, answers, user } = body;
+    const { topic, questions, answers } = body;
     // Strict scoring prompt for Gemini
     const prompt = `You are an expert technical interviewer. Here are the interview questions and my answers. Please provide constructive, actionable feedback for my overall performance and a single overall score out of 10. Be very strict cut marks as much as possible : only give a score of 8, 9, or 10 for truly perfect, expert-level answers. Give 0, 1, 2, 3, or 4 for poor, incorrect, or missing answers. If the answers are mostly wrong or missing, give 0. Respond ONLY in this exact JSON format (no markdown, no code block): { "feedback": "...", "score": 7 }\n\nQuestions and Answers:\n${questions.map((q: string, i: number) => `Q${i+1}: ${q}\nA${i+1}: ${answers[i] || "(skipped)"}`).join("\n")}`;
     console.log("[Interview Feedback] Batch prompt:", prompt);
@@ -71,6 +100,11 @@ export async function POST(req: NextRequest) {
       score = scoreMatch ? Number(scoreMatch[1]) : 0;
       console.error("[Interview Feedback] Batch parse error (fallback used):", err, geminiText);
     }
+    if (typeof feedback !== "string" || !feedback.trim()) {
+      feedback = "Sorry, could not get feedback. Please try again.";
+    }
+    feedback = feedback.slice(0, MAX_FEEDBACK_LENGTH);
+    score = clampScore(score);
     // Save the whole interview result using new model fields
     const saved = await InterviewResult.create({
       topic,
@@ -78,13 +112,13 @@ export async function POST(req: NextRequest) {
       answers,
       feedback,
       score,
-      user: user || undefined
+      user: authedUser._id
     });
     return NextResponse.json({ feedback, score, _id: saved._id });
   }
 
   // Single question feedback (default, not used for full interview save)
-  const { topic, question, answer, user } = body;
+  const { question, answer } = body;
   const singlePrompt = `You are an expert technical interviewer. Here is the interview question and my answer. Please provide constructive, actionable feedback and a single score out of 10. Be very strict: only give a score of 8, 9, or 10 for truly perfect, expert-level answers. Give 5, 6, or 7 only for partially correct answers. Give 0, 1, 2, 3, or 4 for poor, incorrect, or missing answers. If the answer is mostly wrong or missing, give 0. Respond ONLY in this exact JSON format (no markdown, no code block): { "feedback": "...", "score": 7 }\n\nQuestion: ${question}\nAnswer: ${answer}`;
   console.log("[Interview Feedback] Single prompt:", singlePrompt);
   
@@ -115,6 +149,11 @@ export async function POST(req: NextRequest) {
     score = scoreMatch ? Number(scoreMatch[1]) : 0;
     console.error("[Interview Feedback] Single parse error (fallback used):", err, singleGeminiText);
   }
+  if (typeof feedback !== "string" || !feedback.trim()) {
+    feedback = "Sorry, could not get feedback. Please try again.";
+  }
+  feedback = feedback.slice(0, MAX_FEEDBACK_LENGTH);
+  score = clampScore(score);
   // Do not save single question feedback as a full interview result
   return NextResponse.json({ feedback, score });
 }

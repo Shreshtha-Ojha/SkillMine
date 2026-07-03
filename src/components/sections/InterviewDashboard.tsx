@@ -114,6 +114,9 @@ export default function InterviewDashboard() {
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
+  // Guards re-entrant calls (e.g. a fast double-click) within the same tick,
+  // before React has had a chance to re-render the `disabled` state.
+  const isAdvancingRef = useRef(false);
   const user = useCurrentUser();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const router = useRouter();
@@ -334,18 +337,20 @@ export default function InterviewDashboard() {
   // Submit answer (combines speech-to-text and typed text)
   const submitAnswer = async () => {
     // On mobile, only use typed text; on desktop, combine transcript and typed text
-    const combinedAnswer = isMobile 
-      ? textAnswer.trim() 
+    const combinedAnswer = isMobile
+      ? textAnswer.trim()
       : [transcript, textAnswer].filter(Boolean).join(' ').trim();
     if (!combinedAnswer) return;
-    
+    if (isAdvancingRef.current) return;
+    isAdvancingRef.current = true;
+
     setLoading(true);
     // Save answer
     const updatedAnswers = [...answers];
     updatedAnswers[currentQuestion - 1] = combinedAnswer;
     setAnswers(updatedAnswers);
     setLoading(false);
-    
+
     if (currentQuestion < numQuestions) {
       setCurrentQuestion(currentQuestion + 1);
       setQuestion(questions[currentQuestion]);
@@ -365,10 +370,13 @@ export default function InterviewDashboard() {
       SpeechRecognition.stopListening();
       setMicEnabled(false);
     }
+    isAdvancingRef.current = false;
   };
 
   // Move to next question
   const nextQuestion = () => {
+    if (isAdvancingRef.current) return;
+    isAdvancingRef.current = true;
     if (currentQuestion < numQuestions && questions[currentQuestion]) {
       setCurrentQuestion(currentQuestion + 1);
       setQuestion(questions[currentQuestion]);
@@ -390,6 +398,7 @@ export default function InterviewDashboard() {
       SpeechRecognition.stopListening();
       setMicEnabled(false);
     }
+    isAdvancingRef.current = false;
   };
 
   // Skip question

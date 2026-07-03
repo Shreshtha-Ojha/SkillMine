@@ -87,6 +87,80 @@ describe('Interview Flow', () => {
         expect(response.status).to.be.oneOf([200, 429, 400, 401]);
       });
     });
+
+    it('should reject unauthenticated requests to generate questions', () => {
+      cy.request({
+        method: 'POST',
+        url: '/api/interview/ask',
+        body: { topic: 'JavaScript', experience: '2 years', skills: 'React' },
+        failOnStatusCode: false,
+      }).then((response) => {
+        // No auth cookie/header sent -> must not silently succeed
+        expect(response.status).to.be.oneOf([401, 429]);
+      });
+    });
+
+    it('should reject unauthenticated requests to submit feedback', () => {
+      // Locks in the fix: /api/interview/feedback previously had no auth check
+      // and trusted a client-supplied `user` id.
+      cy.request({
+        method: 'POST',
+        url: '/api/interview/feedback',
+        body: {
+          topic: 'JavaScript',
+          questions: ['What is a closure?'],
+          answers: ['A function with preserved scope'],
+          user: 'some-other-users-id',
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.be.oneOf([401, 429]);
+      });
+    });
+  });
+
+  describe('Interview Feedback Page rendering', () => {
+    it('should render topic, score, and feedback text from the detail API', () => {
+      cy.intercept('GET', '/api/interview/feedback/detail*', {
+        statusCode: 200,
+        body: {
+          topic: 'JavaScript',
+          questions: ['What is a closure?'],
+          answers: ['A function bundled with its lexical scope'],
+          feedback: 'Solid understanding of closures, explain more with examples next time.',
+          score: 7,
+        },
+      }).as('getFeedbackDetail');
+
+      cy.visit('/interview/feedback?id=mock-feedback-id');
+      cy.wait('@getFeedbackDetail');
+
+      cy.contains('JavaScript').should('be.visible');
+      cy.contains('7').should('be.visible');
+      cy.contains('Solid understanding of closures').should('be.visible');
+    });
+
+    it('should not crash when the detail API returns malformed/out-of-range data', () => {
+      cy.on('uncaught:exception', () => false);
+
+      cy.intercept('GET', '/api/interview/feedback/detail*', {
+        statusCode: 200,
+        body: {
+          topic: '',
+          questions: [],
+          answers: [],
+          feedback: '',
+          score: 999, // out of the documented 0-10 range
+        },
+      }).as('getMalformedDetail');
+
+      cy.visit('/interview/feedback?id=mock-malformed-id');
+      cy.wait('@getMalformedDetail');
+
+      // Page should still render its shell rather than crash to a blank/error screen
+      cy.get('body').should('be.visible');
+      cy.contains('Interview Feedback').should('be.visible');
+    });
   });
 
   describe('Mock Interview Subscription', () => {
