@@ -1,3 +1,41 @@
+/**
+ * Purpose
+ * -------
+ * User registration endpoint for the manual email/password auth path.
+ *
+ * Authentication
+ * - None required (public endpoint). Rate limited to prevent abuse.
+ *
+ * Rate Limiting
+ * - 5 attempts per IP per 60 seconds. Tighter than login because account
+ *   creation is more expensive (bcrypt hash + DB write + email send).
+ *
+ * Database Interactions
+ * - Reads: checks for existing user by email, then by username.
+ * - Writes: creates a new User document with `isVerified: false`.
+ *
+ * External Services
+ * - `sendEmail` (Nodemailer/Gmail SMTP) — sends a verification link.
+ *   Email failure is non-fatal: the user account is still created and the
+ *   UI prompts the user to resend verification manually.
+ *
+ * Failure Cases
+ * - 400: Missing fields, invalid email format, weak password, duplicate email/username.
+ * - 429: Rate limit exceeded.
+ * - 503: MongoDB connection error.
+ * - 500: Unexpected error.
+ *
+ * Security Considerations
+ * - Passwords are bcrypt-hashed with salt factor 10 before storage.
+ * - New accounts start as `isVerified: false` — they cannot log in until the
+ *   email link is clicked, preventing enumeration via login error messages.
+ * - MongoDB duplicate key error (code 11000) is caught explicitly to return a
+ *   clean 400 rather than leaking the raw DB error message.
+ *
+ * TODO: Consolidate admin-email check (duplicated here, login route, authOptions,
+ * middleware) into a shared `isAdminEmail(email)` utility.
+ */
+
 import {connect} from "@/dbConfig/dbConfig";
 import { sendEmail } from "@/helpers/mailer";
 import User from "@/models/userModel";

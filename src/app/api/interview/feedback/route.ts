@@ -1,3 +1,43 @@
+/**
+ * Purpose
+ * -------
+ * Generates AI feedback for a completed mock interview session and persists the result.
+ * Handles both batch feedback (full interview, saved to DB) and single-question
+ * feedback (preview mode, not saved).
+ *
+ * Authentication
+ * - Required. Uses `getUserFromRequest` to verify the JWT and resolve the User document.
+ *   The user ID for the saved record comes from the verified token — never from the
+ *   request body — to prevent one user from writing results under another's account.
+ *
+ * Rate Limiting
+ * - 10 requests per IP per 60 seconds via the in-memory token-bucket limiter.
+ *   Controls Gemini API cost and prevents abuse of the AI feedback endpoint.
+ *
+ * Database Interactions
+ * - Reads: none.
+ * - Writes: creates one `InterviewResult` document on batch (full interview) submission.
+ *   Single-question requests are not persisted.
+ *
+ * External Services
+ * - Google Gemini (`generateContent`) — strict scoring prompt instructs the model
+ *   to give 0-4 for poor answers and 8-10 only for expert answers.
+ *
+ * Failure Cases
+ * - 401: No valid auth token.
+ * - 429: Rate limit exceeded.
+ * - Gemini unavailable: returns a fallback "could not generate feedback" message
+ *   with score 0 rather than a 500, so the UI degrades gracefully.
+ * - Malformed Gemini JSON: falls back to regex extraction before returning defaults.
+ *
+ * Security Considerations
+ * - `feedback` is clamped to 5000 characters and `score` is clamped to [0, 10]
+ *   before both are returned and persisted. LLM output is treated as untrusted input.
+ *
+ * TODO: Use `generateContentWithConfig` (with retry + timeout) instead of
+ * `generateContent` so transient Gemini overloads don't surface as user errors.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import InterviewResult from "@/models/interviewModel";
 import mongoose from "mongoose";

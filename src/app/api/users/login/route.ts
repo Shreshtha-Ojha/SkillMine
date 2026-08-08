@@ -1,3 +1,41 @@
+/**
+ * Purpose
+ * -------
+ * Email/password login endpoint — the manual auth path that runs in parallel
+ * with the Google OAuth flow handled by NextAuth.
+ *
+ * Authentication
+ * - None required (this route creates the session).
+ *
+ * Rate Limiting
+ * - 10 attempts per IP per 60 seconds via the in-memory token-bucket limiter.
+ *   Brute-force protection against credential stuffing attacks.
+ *
+ * Database Interactions
+ * - Reads the User document by email.
+ * - Does NOT write on success; token state is stateless (JWT).
+ *
+ * Failure Cases
+ * - 400: Missing email or password in request body.
+ * - 401: User not found, or bcrypt comparison fails.
+ * - 403: User exists but email is unverified.
+ * - 429: Rate limit exceeded.
+ * - 503: MongoDB connection failure.
+ * - 500: Unexpected server error.
+ *
+ * Security Considerations
+ * - Error messages for "user not found" and "wrong password" are deliberately
+ *   identical ("Invalid email or password") to prevent user enumeration.
+ * - The token cookie is `httpOnly` so XSS cannot read it from JavaScript.
+ * - The token is also returned in the response body so the client-side callback
+ *   page can store it in the cookie for the Google OAuth code path consistency.
+ * - Admin status is derived from the `ADMINS` env var at mint time, not stored
+ *   in the DB, so promoting/demoting an admin requires no DB migration.
+ *
+ * TODO: Consolidate the admin-email check (duplicated here, in authOptions.ts,
+ * and in middleware.ts) into a single shared `isAdminEmail(email)` utility.
+ */
+
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import bcryptjs from "bcryptjs";

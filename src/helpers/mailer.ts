@@ -1,3 +1,32 @@
+/**
+ * Purpose
+ * -------
+ * Transactional email sender for account verification and password reset flows.
+ *
+ * Responsibilities
+ * - Generate a time-limited token, persist it on the User document, and send
+ *   a branded HTML email containing the action link.
+ *
+ * Used by
+ * - /api/users/signup — sends a verification email on new account creation.
+ * - /api/users/resendverification — resends the verification link on request.
+ * - /api/users/password/send — initiates password reset.
+ *
+ * Interview Talking Points
+ * - The token is a bcrypt hash of the user's MongoDB ObjectId, then stripped of
+ *   non-alphanumeric characters for URL safety. This means the token is not
+ *   reversible — the server verifies it by re-hashing, not by decoding.
+ * - Token expiry (`Date.now() + 3600000`) is stored on the User document, not
+ *   inside the token itself, so the server controls the expiry window and it
+ *   cannot be forged client-side.
+ * - The domain for the action link is read from env vars at send time so staging
+ *   and production deployments generate correct links without code changes.
+ *
+ * TODO: Move to a transactional email service (SendGrid, Resend) with delivery
+ * receipts and bounce handling. Gmail SMTP is not reliable at scale and has
+ * strict daily sending limits.
+ */
+
 import User from '@/models/userModel';
 import nodemailer from 'nodemailer';
 import bcryptjs from "bcryptjs";
@@ -8,6 +37,18 @@ interface SendEmailParams {
     userId: string;
 }
 
+/**
+ * Sends a transactional email for account verification or password reset.
+ *
+ * Why token is stored on the User document:
+ * The token expiry is enforced server-side (not inside the JWT) so the server
+ * controls the window and it cannot be extended by the user. The token itself
+ * is a bcrypt hash of the user ID — not reversible, only verifiable.
+ *
+ * @param email      Recipient email address.
+ * @param emailType  "VERIFY" writes a verifyToken; "RESET" is handled separately.
+ * @param userId     MongoDB ObjectId of the user — used as the hash input.
+ */
 export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) => {
     try {
         // Hash the userId as a token

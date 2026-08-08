@@ -1,3 +1,30 @@
+/**
+ * Purpose
+ * -------
+ * Next.js Edge Middleware — fast, pre-render route protection for page routes.
+ *
+ * Responsibilities
+ * - Block unauthenticated users from protected pages (/interview, /profile, etc.)
+ * - Block non-admin users from /admin/* routes.
+ * - Redirect authenticated users away from auth pages (/auth/login, /auth/signup).
+ *
+ * Used by
+ * - Next.js runtime automatically — runs on every request matched by `config.matcher`.
+ *
+ * Interview Talking Points
+ * - This middleware decodes the JWT payload (base64) but does NOT cryptographically
+ *   verify the signature. That is intentional: Edge runtime lacks the Node.js crypto
+ *   primitives that `jsonwebtoken` needs. The real security boundary is `getUserFromRequest`
+ *   inside each API route, which performs full signature verification.
+ * - API routes are excluded entirely. A crafted request can bypass a middleware redirect
+ *   but cannot forge a valid signature, so the API layer is the authoritative gate.
+ * - The `ADMINS` env var is the source of truth for admin status — checking it here and
+ *   inside authOptions/login keeps the admin list in one place without a DB round-trip.
+ *
+ * TODO: Migrate admin check to Web Crypto API signature verification so a tampered
+ * `isAdmin: true` claim in an unsigned or weakly-signed token cannot slip through.
+ */
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 

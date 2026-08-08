@@ -1,3 +1,35 @@
+/**
+ * Purpose
+ * -------
+ * The central User document — the root identity record for every platform feature.
+ *
+ * Relationships
+ * - Referenced by InterviewResult.user, TopInterview.createdBy/endedBy/winners,
+ *   Resume.user, BlogRequest.authorId, InterviewExperience.authorId, and most
+ *   payment-related collections.
+ * - Embeds all roadmap progress, certification attempts, coding profile stats,
+ *   and purchase history directly (denormalized for read performance).
+ *
+ * Business Rules
+ * - `isVerified` must be true before a credentials user can log in.
+ *   Google OAuth users are auto-verified on creation.
+ * - Admin status is dual-gated: the `isAdmin` field OR membership in the
+ *   `ADMINS` environment variable. The env var is checked at token-mint time
+ *   so ownership can be changed without a DB migration.
+ * - `atsChecker.used` is the server-side usage counter for the ATS feature.
+ *   It must not be trusted from the client — only incremented server-side.
+ * - `mockInterviewUsage` tracks the daily count by storing a `YYYY-MM-DD`
+ *   date string alongside the count; the API resets the count when the date changes.
+ * - `profileSlug` has a sparse unique index so many users can have `null`
+ *   (no custom slug) without violating uniqueness.
+ * - The `delete mongoose.models.User` guard prevents Mongoose's
+ *   "OverwriteModelError" in Next.js dev mode where modules are hot-reloaded.
+ *
+ * TODO: Extract `completedRoadmaps`, `sampleTestAttempt`, and `codingProfiles`
+ * into separate collections as user data grows — large embedded arrays degrade
+ * MongoDB document update performance.
+ */
+
 import mongoose, { Schema } from "mongoose";
 
 // Define the schema

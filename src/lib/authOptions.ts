@@ -1,3 +1,35 @@
+/**
+ * Purpose
+ * -------
+ * NextAuth.js configuration — handles Google OAuth sign-in and bridges it into
+ * the platform's custom JWT session shape.
+ *
+ * Responsibilities
+ * - Register Google as the only OAuth provider.
+ * - On first Google sign-in, upsert a User document in MongoDB with a synthetic
+ *   password placeholder (Google users never authenticate with a password).
+ * - Mint a `jsonwebtoken` JWT that matches the same shape used by the manual
+ *   email/password flow, stored as `session.accessToken`.
+ * - Propagate user identity and admin status into the NextAuth session object.
+ *
+ * Used by
+ * - `src/app/api/auth/[...nextauth]/route.ts` — mounts this config on the NextAuth handler.
+ * - `src/auth/callback/page.tsx` — reads `session.accessToken` after OAuth redirect
+ *   and stores it in the `token` cookie so `getUserFromRequest` can find it.
+ *
+ * Interview Talking Points
+ * - Two auth systems exist side-by-side: NextAuth (Google) and a manual JWT flow
+ *   (email/password). They converge on the same JWT shape so `getUserFromRequest`
+ *   and middleware work identically for both.
+ * - Admin status is derived from the `ADMINS` env var at sign-in time and baked
+ *   into the token, avoiding a DB lookup on every request.
+ * - The `jwt` callback re-queries MongoDB on Google sign-in to ensure the token
+ *   always reflects the persisted user ID, not a transient OAuth profile ID.
+ *
+ * TODO: Consolidate the admin-email check (currently duplicated across authOptions,
+ * login route, and middleware) into a single shared `isAdminEmail(email)` helper.
+ */
+
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { connect } from "@/dbConfig/dbConfig";

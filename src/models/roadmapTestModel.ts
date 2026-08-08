@@ -1,3 +1,32 @@
+/**
+ * Purpose
+ * -------
+ * Two models for the Roadmap Certification Test feature:
+ * - `RoadmapTest` — the admin-managed test definition for a roadmap topic.
+ * - `TestAttempt` — a single user attempt against a RoadmapTest.
+ *
+ * Relationships
+ * - `RoadmapTest.roadmapId` links to a Roadmap document (string key, not ObjectId)
+ *   — one roadmap can have exactly one test (enforced by `unique: true`).
+ * - `TestAttempt.testId` references RoadmapTest; `TestAttempt.userId` is a string
+ *   reference to User.
+ *
+ * Business Rules
+ * - Tests auto-expire 4 days after creation (`expiresAt`) to force regeneration
+ *   of fresh questions and prevent question sets from circulating indefinitely.
+ * - Admins can store 100+ MCQs in `mcqQuestions`; the route randomly selects 60
+ *   for each attempt, stored in `mcqSnapshot` so results are reproducible.
+ * - `passed` is true when `percentage >= passingPercentage` (default 60%).
+ * - `canRetry` on a TestAttempt is set by an admin, not computed automatically,
+ *   so retries are granted deliberately rather than on any automated condition.
+ * - Compound indexes on `{ userId, roadmapId }` and `{ testId, userId }` support
+ *   the common query pattern of "find this user's attempt for this roadmap."
+ *
+ * TODO: Move `mcqSnapshot` to a separate GridFS document or S3 object for
+ * attempts with very large question sets — large arrays in MongoDB documents
+ * have a 16 MB document size limit.
+ */
+
 import mongoose, { Schema } from "mongoose";
 
 // MCQ Question schema (used for certification tests)

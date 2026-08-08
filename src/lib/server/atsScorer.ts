@@ -1,3 +1,37 @@
+/**
+ * Purpose
+ * -------
+ * Deterministic, offline ATS scoring engine — computes a full resume analysis
+ * report without calling any external API.
+ *
+ * Responsibilities
+ * - Score a resume against a job description across six dimensions:
+ *   keyword match, formatting structure, impact/metrics, readability,
+ *   grammar quality, and a weighted ATS compatibility composite.
+ * - Identify missing critical keywords from the JD.
+ * - Evaluate the quality of the JD itself (clarity, realism, red flags).
+ * - Generate 10 structured guideline sections with actionable recommendations.
+ *
+ * Used by
+ * - /api/ats/process — primary ATS analysis route (offline scoring + optional
+ *   Gemini enrichment).
+ * - /api/resume/screen and /api/resume/bulk-screen — batch resume screening.
+ *
+ * Interview Talking Points
+ * - The offline scorer exists so users get instant feedback even when Gemini is
+ *   unavailable or rate-limited. The Gemini call is additive, not required.
+ * - All scores are clamped to [0, 100] with integer rounding so the UI never
+ *   receives out-of-range values regardless of edge-case inputs.
+ * - The ATS composite is intentionally weighted toward keyword match (36%) because
+ *   real ATS systems primarily filter on exact keyword presence.
+ * - `extractTopSkills` scans for a hardcoded list of common tech keywords first,
+ *   then falls back to frequency analysis. This avoids surface-level resume
+ *   skills like "a", "the" appearing as highlights.
+ *
+ * TODO: Make the keyword weight distribution configurable so different job
+ * categories (e.g. design roles vs. engineering) can use different scoring models.
+ */
+
 function tokens(text = '') {
   return String(text || '').toLowerCase().split(/\W+/).filter(Boolean);
 }
@@ -65,6 +99,19 @@ export function extractTopSkills(resume: string, limit = 8) {
   return unique(Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]).slice(0,limit));
 }
 
+/**
+ * Computes a full ATS report for a resume against an optional job description.
+ *
+ * Why this is offline (no LLM call):
+ * Instant feedback on resume upload requires sub-second response. Calling Gemini
+ * would add 3-10 seconds of latency and cost per analysis. The offline scorer
+ * runs in <50ms and produces a report good enough to guide the user. Routes can
+ * optionally augment this with a Gemini call for richer narrative feedback.
+ *
+ * @param resumeText  Plain text extracted from the user's resume.
+ * @param jdText      Job description text (may be empty; scoring degrades gracefully).
+ * @returns ATSReport — a fully typed report with scores, guidelines, and action items.
+ */
 export function scoreResume(resumeText: string, jdText: string) {
   const grammarQuality = simpleGrammarScore(resumeText);
   const formattingStructure = formattingStructureScore(resumeText);

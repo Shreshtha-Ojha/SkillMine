@@ -1,3 +1,27 @@
+/**
+ * Purpose
+ * -------
+ * Singleton pricing configuration document — allows admins to update the
+ * platform's premium subscription price without a code deployment.
+ *
+ * Business Rules
+ * - Only one document may exist (key = "pricing"). The `pre("save")` hook
+ *   enforces this at the DB layer by rejecting a second document with the
+ *   same key but a different `_id`. This is intentional: having two pricing
+ *   documents would create ambiguity in payment validation.
+ * - `premium` has a minimum of 9 because that is Instamojo's minimum
+ *   transaction amount. Setting a price below this would cause payment
+ *   creation to fail at the gateway level.
+ * - `updatedBy` records the admin's user ID for audit purposes.
+ *
+ * Relationships
+ * - Read by `src/helpers/getPricing.ts`, which is called by payment routes
+ *   to validate the requested amount against the authoritative server-side price.
+ *
+ * TODO: Add an audit log collection to track price change history over time,
+ * rather than only storing the current value and the last editor.
+ */
+
 import mongoose from "mongoose";
 
 export interface IPricingSettings {

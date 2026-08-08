@@ -1,3 +1,33 @@
+/**
+ * Purpose
+ * -------
+ * Defensive LLM JSON parser — converts raw Gemini text output into a validated,
+ * normalized data structure safe to persist or render.
+ *
+ * Responsibilities
+ * - Try three progressively more lenient extraction strategies before giving up.
+ * - Normalize field aliases (e.g. `atsScore` → `atsCompatibility`) produced by
+ *   prompt variations or model regressions.
+ * - Clamp all numeric score fields to [0, 100] regardless of what the model returns.
+ * - Coerce string/scalar values in array fields into proper arrays.
+ *
+ * Used by
+ * - /api/ats/process and /api/ai/gemini-ats — ATS report generation.
+ * - /api/resume/screen and /api/resume/bulk-screen — resume analysis.
+ *
+ * Interview Talking Points
+ * - LLM output is treated as untrusted input, identical to user-submitted data.
+ *   Even a well-prompted model can return out-of-range scores, wrong field names,
+ *   markdown fences, or trailing commas — all of which break strict JSON.parse.
+ * - The three-stage fallback (strict JSON → JSON5 → balanced-brace extraction)
+ *   recovers from the most common failure modes without silently discarding data.
+ * - Score clamping is done here rather than in each route so the safety invariant
+ *   is in one place; adding a new consumer automatically gets clamped values.
+ *
+ * TODO: Add a JSON schema validation step after parsing so callers get typed
+ * guarantees rather than `any`, and missing required fields surface early.
+ */
+
 import JSON5 from 'json5';
 
 type ParseResult = {
@@ -112,6 +142,29 @@ function normalizeParsed(p: any) {
   return out;
 }
 
+/**
+ * Parses raw LLM text output into a validated, normalised object.
+ *
+ * Why this exists:
+ * Gemini responses are not guaranteed to be valid JSON even when the prompt
+ * explicitly requests it. The model may wrap output in markdown fences, use
+ * trailing commas, return aliased field names, or emit out-of-range scores.
+ * This function is the single safe entry point for all structured LLM output.
+ *
+ * Three-stage fallback strategy:
+ * 1. Direct JSON.parse / JSON5.parse on the full text.
+ * 2. Extract content from a markdown code fence, then parse.
+ * 3. Walk the string character-by-character to find the outermost balanced
+ *    brace/bracket pair, then parse the extracted substring.
+ *
+ * After parsing, `normalizeParsed` is always called to:
+ * - Resolve field-name aliases produced by prompt variations.
+ * - Clamp all score fields to [0, 100].
+ * - Coerce scalar/string values in expected array fields.
+ *
+ * @returns ParseResult with `parsed: null` when all strategies fail,
+ *          so callers can decide whether to surface an error or use defaults.
+ */
 export function parseLLMJson(text: string): ParseResult {
   let parsed: any = null;
   let parseMethod: string | null = null;

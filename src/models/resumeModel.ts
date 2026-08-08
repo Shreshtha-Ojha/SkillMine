@@ -1,3 +1,29 @@
+/**
+ * Purpose
+ * -------
+ * Stores a user's structured resume data used by the resume builder feature.
+ * Distinct from the raw PDF resume used in ATS checking — this is the platform's
+ * own structured representation that drives PDF generation.
+ *
+ * Relationships
+ * - `user` is an ObjectId ref to the User collection. One user has at most one
+ *   resume document (the route uses upsert semantics on the user's ID).
+ *
+ * Business Rules
+ * - All sub-schemas use `{ _id: false }` to avoid generating unnecessary ObjectIds
+ *   for embedded sub-documents that are never queried individually.
+ * - `templateStyle` controls which PDF template is rendered client-side. Adding a
+ *   new template requires updating this enum and the builder component.
+ * - The `pre('save')` hook auto-updates `lastUpdated` so the builder can display
+ *   "last edited" without the caller explicitly setting the field.
+ * - `project.description` is `string[]` (bullet points) rather than a single
+ *   string so the PDF template can render each point as a separate line.
+ *
+ * TODO: Add a version field and store snapshots of previous resume states so
+ * users can revert to an earlier version — especially important before the ATS
+ * checker rewrites their content.
+ */
+
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IEducation {

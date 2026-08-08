@@ -1,3 +1,41 @@
+/**
+ * Purpose
+ * -------
+ * Offline ATS resume analysis endpoint — extracts text from an uploaded PDF or
+ * accepts raw resume text, then runs the deterministic scoring engine.
+ *
+ * Authentication
+ * - None required. This endpoint is intentionally public so users can try the
+ *   ATS checker before creating an account. Usage tracking and gating is handled
+ *   at the feature level (see atsChecker.used on the User model).
+ *
+ * Rate Limiting
+ * - None at this route level. The calling UI and the feature-level usage counter
+ *   on the User document serve as the primary limit.
+ *   TODO: Add IP-based rate limiting here consistent with other AI routes.
+ *
+ * Database Interactions
+ * - None. This route is stateless — it scores and returns without persisting.
+ *
+ * External Services
+ * - `extractTextFromPDF` / `extractTextWithOCR` (pdfjs-dist, tesseract.js) —
+ *   server-side PDF extraction. Falls back through multiple strategies:
+ *   pdfjs text layer → OCR → UTF-8 decode → DOCX XML extraction.
+ * - `scoreResume` from `atsScorer` — fully offline, no external API call.
+ *
+ * Failure Cases
+ * - 400: Missing file (multipart) or missing `resumeText` (JSON).
+ * - 500: Unexpected processing error (surfaced as `error.message`).
+ *
+ * Interview Talking Points
+ * - `scoreResume` is dynamically imported (`await import(...)`) to defer loading
+ *   the scoring module until the first request, reducing cold-start bundle size.
+ * - The OCR fallback triggers only when the pdfjs text layer yields <200
+ *   non-whitespace characters, indicating a scanned/image-based PDF.
+ * - DOCX support is opportunistic — it extracts `<w:t>` nodes from the raw
+ *   buffer and uses the result only if it yields more text than pdfjs did.
+ */
+
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { extractTextFromPDF, extractTextWithOCR } from '@/lib/server/pdfExtract';

@@ -1,3 +1,35 @@
+/**
+ * Purpose
+ * -------
+ * Root layout — the single HTML shell that wraps every page in the application.
+ *
+ * Responsibilities
+ * - Set global HTML metadata (title, description, Open Graph, robots).
+ * - Apply the global CSS baseline and fixed background gradient.
+ * - Mount all application-wide context providers in the correct nesting order.
+ * - Render Vercel Analytics unconditionally (no user data sent, GDPR-safe).
+ *
+ * Provider nesting order (outermost → innermost):
+ * 1. AuthProvider — NextAuth SessionProvider, needed by any component that
+ *    calls `useSession()`.
+ * 2. DataCacheProvider — SWR global config, shared across all data-fetching hooks.
+ * 3. CheckedDataProvider — lightweight cookie-based login state for UI toggles
+ *    that don't need the full session object.
+ * 4. ClientToaster — toast notification system (must be inside all providers so
+ *    toasts can be triggered from any component).
+ * 5. PremiumBanner — wrapped in Suspense because it fetches pricing data.
+ * 6. ErrorBoundary — catches render errors in the page tree without crashing
+ *    the entire app.
+ *
+ * Interview Talking Points
+ * - `suppressHydrationWarning` on `<html>` and `<body>` silences React's warning
+ *   about server/client HTML mismatches caused by browser extensions injecting
+ *   attributes (e.g. dark-mode extensions, password managers).
+ * - The background gradient is injected via a `dangerouslySetInnerHTML` style
+ *   tag to guarantee it renders before any CSS-in-JS or Tailwind loads,
+ *   preventing a flash of unstyled background on slow connections.
+ */
+
 import { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';

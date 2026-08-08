@@ -1,3 +1,33 @@
+/**
+ * Purpose
+ * -------
+ * Server-side PDF text extraction for resume processing, with an optional
+ * OCR fallback for image-based PDFs.
+ *
+ * Responsibilities
+ * - Extract selectable text from a PDF buffer using pdfjs-dist.
+ * - Fall back to OCR (tesseract.js + canvas) when the PDF contains scanned images
+ *   with no embedded text layer.
+ *
+ * Used by
+ * - /api/resume/extract-text — powers the ATS checker and resume screening flows.
+ * - /api/ats/process — extracts raw text before sending to Gemini for analysis.
+ *
+ * Interview Talking Points
+ * - `eval('require')` is used instead of a top-level `require` because Next.js
+ *   bundles server code through webpack, and optional peer dependencies like
+ *   `pdfjs-dist` and `tesseract.js` are not guaranteed to be installed. Dynamic
+ *   require lets the module load successfully even if those packages are absent,
+ *   returning an empty result instead of crashing the server.
+ * - The function returns `{ text: '', pages: 0 }` on failure rather than throwing
+ *   so callers can degrade gracefully (e.g. show a "could not extract" message)
+ *   without wrapping every call in try/catch.
+ *
+ * TODO: Replace eval-based dynamic require with a proper optional import pattern
+ * or move PDF extraction to a dedicated microservice to avoid bundling pdfjs
+ * in the main Next.js server bundle.
+ */
+
 import type { Buffer } from 'buffer';
 
 // Server-side PDF extraction using pdfjs-dist when available.
