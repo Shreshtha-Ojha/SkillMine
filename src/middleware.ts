@@ -11,7 +11,6 @@
  * Used by
  * - Next.js runtime automatically — runs on every request matched by `config.matcher`.
  *
- * Interview Talking Points
  * - This middleware decodes the JWT payload (base64) but does NOT cryptographically
  *   verify the signature. That is intentional: Edge runtime lacks the Node.js crypto
  *   primitives that `jsonwebtoken` needs. The real security boundary is `getUserFromRequest`
