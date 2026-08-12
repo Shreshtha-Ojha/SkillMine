@@ -14,7 +14,8 @@ export default function SignupPage() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-
+  
+//client-side validation - This gives immediate UX feedback. Not a security boundary
   const onSignup = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -30,7 +31,7 @@ export default function SignupPage() {
       try {
         setLoading(true);
         toast.dismiss();
-        const response = await axios.post("/api/users/signup", user);
+        const response = await axios.post("/api/users/signup", user); //triggers to go to src/app/api/users/signup/route.ts
         toast.success(response.data.message || "Account created!");
         router.push("/auth/remindverify");
       } catch (error) {
