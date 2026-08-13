@@ -1,3 +1,21 @@
+// SIGNUP PAGE — CLIENT ENTRY POINT
+//
+// 1. Client Component because form state/events/navigation are interactive.
+// 2. Collects username/email/password.
+// 3. Client-side validation = UX only, NOT a security boundary.
+// 4. POST /api/users/signup → server performs real validation + hashing + DB work.
+// 5. Success → remindverify page; user isn't authenticated yet because email verification is required.
+// 6. Google signup follows separate NextAuth OAuth flow.
+// 7. loading/finally prevents stale loading state.
+// 8. Potential improvements:
+//    - derive buttonDisabled instead of storing derived state
+//    - axios.isAxiosError() instead of instanceof AxiosError
+//
+// SECURITY:
+// Never trust client validation. Never store plaintext passwords.
+//```
+
+
 "use client";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
@@ -10,12 +28,12 @@ import { useHydrated } from "@/hooks/useHydrated";
 export default function SignupPage() {
   const router = useRouter();
   const hydrated = useHydrated();
-  const [user, setUser] = useState({ email: "", password: "", username: "" });
+  const [user, setUser] = useState({ email: "", password: "", username: "" }); //form state
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   
-//client-side validation - This gives immediate UX feedback. Not a security boundary
+//client-side validation 
   const onSignup = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -33,7 +51,7 @@ export default function SignupPage() {
         toast.dismiss();
         const response = await axios.post("/api/users/signup", user); //triggers to go to src/app/api/users/signup/route.ts
         toast.success(response.data.message || "Account created!");
-        router.push("/auth/remindverify");
+        router.push("/auth/remindverify"); //
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.code === 'ERR_NETWORK' || !error.response) {
@@ -102,7 +120,7 @@ export default function SignupPage() {
             <input
               type="text"
               value={user.username}
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              onChange={(e) => setUser({ ...user, username: e.target.value })} // React controlled input
               placeholder="johndoe"
               className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-[rgba(126,16,44,0.25)] transition-all"
             />
@@ -113,7 +131,7 @@ export default function SignupPage() {
             <input
               type="email"
               value={user.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              onChange={(e) => setUser({ ...user, email: e.target.value })} // React controlled input
               placeholder="you@example.com"
               className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-[rgba(126,16,44,0.25)] transition-all"
             />
@@ -124,7 +142,7 @@ export default function SignupPage() {
             <input
               type="password"
               value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              onChange={(e) => setUser({ ...user, password: e.target.value })} // React controlled input
               placeholder="••••••••"
               className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-[rgba(126,16,44,0.25)] transition-all"
             />
