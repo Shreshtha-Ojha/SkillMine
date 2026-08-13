@@ -1,7 +1,10 @@
 /**
  * Purpose
+  * User registration endpoint for the manual email/password auth path.
  * -------
- * User registration endpoint for the manual email/password auth path.
+ Flow:
+// request → rate limit → parse/validate → uniqueness checks
+// → bcrypt hash → determine admin → DB insert → verification email
  *
  * Authentication
  * - None required (public endpoint). Rate limited to prevent abuse.
@@ -34,6 +37,7 @@
  *
  * TODO: Consolidate admin-email check (duplicated here, login route, authOptions,
  * middleware) into a shared `isAdminEmail(email)` utility.
+ * Maybe we don't want to return the entire saved user object? Why send the hashed password back to the browser.(check for security - userModel and Mongoose sanitization)
  */
 
 import {connect} from "@/dbConfig/dbConfig";
@@ -48,7 +52,7 @@ connect();
 export async function POST(request:NextRequest){
     try {
         // Rate limiting: 5 signups per IP per minute
-        const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ||
+        const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || //check @/lib/server/rateLimiter for ratelimiter details
                    request.headers.get("x-real-ip") ||
                    "unknown";
         if (!allowRequest(`signup:${ip}`, 5, 60_000)) {
