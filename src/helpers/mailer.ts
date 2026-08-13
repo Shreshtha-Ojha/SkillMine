@@ -12,7 +12,7 @@
  * - /api/users/resendverification — resends the verification link on request.
  * - /api/users/password/send — initiates password reset.
  *
- * Interview Talking Points
+ * 
  * - The token is a bcrypt hash of the user's MongoDB ObjectId, then stripped of
  *   non-alphanumeric characters for URL safety. This means the token is not
  *   reversible — the server verifies it by re-hashing, not by decoding.
